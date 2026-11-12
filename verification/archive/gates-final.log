@@ -1,0 +1,160 @@
+### NOVA backend – full gate run 2026-11-12T12:28:47Z
+Python 3.11.2
+aiosqlite==0.22.1
+alembic==1.20.1
+fastapi==0.162.5
+httpx==0.28.1
+mypy==2.4.1
+pydantic==2.14.3
+pytest==9.2.0
+ruff==0.17.4
+SQLAlchemy==2.0.57
+uvicorn==0.54.0
+
+== ruff check ==
+All checks passed!
+== ruff format ==
+108 files already formatted
+== mypy ==
+Success: no issues found in 80 source files
+== content ==
+15 missions / 95 actions checked – 0 errors, 0 warnings
+== audit ==
+NOVA route audit
+========================================================================
+  routes_total           75
+  http_published         67
+  operations             67
+  websockets             1
+  mounts                 1
+  guarded_operations     15
+  schemas                136
+  findings               {'info': 24}
+
+  · 24 operation(s) still expose free-form object fields
+
+0 error(s), 0 warning(s)
+== contract ==
+✓ /tmp/arena/tenants/0ff8e5f8-6ae6-4651-87ab-14158c7f650b/sessions/dea2a0c1-f579-51ed-95b3-0c2b13fb0a1a/workspace/repo/NOVA/backend/docs/openapi.json is up to date (67 operations)
+== pytest ==
+........................................................................ [ 16%]
+........................................................................ [ 32%]
+........................................................................ [ 49%]
+........................................................................ [ 65%]
+........................................................................ [ 82%]
+........................................................................ [ 98%]
+.....                                                                    [100%]
+=============================== warnings summary ===============================
+.venv/lib/python3.11/site-packages/fastapi/testclient.py:1
+  /tmp/arena/tenants/0ff8e5f8-6ae6-4651-87ab-14158c7f650b/sessions/dea2a0c1-f579-51ed-95b3-0c2b13fb0a1a/workspace/repo/NOVA/backend/.venv/lib/python3.11/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.11.2-final-0 ________________
+
+Name                                   Stmts   Miss  Cover   Missing
+--------------------------------------------------------------------
+app/api/legacy.py                         48      3    94%   75, 82, 89
+app/api/v1/content.py                     40      0   100%
+app/api/v1/earth.py                       29      0   100%
+app/api/v1/games.py                       56      1    98%   151
+app/api/v1/loadout.py                     25      3    88%   46, 58, 75
+app/api/v1/meta.py                        29      1    97%   47
+app/api/v1/missions.py                    29      0   100%
+app/api/v1/nasa.py                        25      0   100%
+app/api/v1/science.py                     27      0   100%
+app/api/v1/simulations.py                 30      0   100%
+app/api/v1/stream.py                     244     24    90%   124, 127-128, 161, 166-167, 257, 262-263, 289-290, 300-301, 307-308, 317-318, 323, 332, 334, 341, 352-354
+app/config.py                             68      1    99%   114
+app/core/cache.py                         42      0   100%
+app/core/cancellation.py                  32      1    97%   42
+app/core/errors.py                        97      0   100%
+app/core/locks.py                         28      1    96%   41
+app/core/logging.py                       42     10    76%   30-45
+app/core/middleware.py                    63      1    98%   91
+app/core/openapi.py                      100      4    96%   159, 231, 239, 271
+app/core/ratelimit.py                     37      9    76%   33, 48-54, 57
+app/core/routing.py                      108     15    86%   75, 101-103, 127-129, 137, 140, 201-204, 213-214
+app/core/security.py                      36      4    89%   53, 57-58, 61
+app/core/utils.py                         60      9    85%   41, 65-71, 95, 103
+app/db/base.py                             6      0   100%
+app/db/models.py                          92      0   100%
+app/db/repositories.py                   181     15    92%   45-46, 70, 167-170, 247-257, 286-287, 343, 535-538
+app/db/session.py                         85     10    88%   33, 41, 80, 93, 104-106, 113, 119-120
+app/dependencies.py                       55      5    91%   130, 143-146
+app/domain/catalog.py                     56      4    93%   24, 59-60, 65
+app/domain/enums.py                       63      0   100%
+app/domain/state.py                      107      0   100%
+app/integrations/nasa_client.py           75      0   100%
+app/missions/definitions.py              196     11    94%   110, 162, 252, 254, 272, 282, 288-289, 291, 295, 300
+app/missions/engine.py                   349     41    88%   58-63, 104-106, 214-220, 320, 353, 377, 400-403, 549-550, 571-573, 585, 593-600, 604, 606, 608, 610, 613-615, 618, 694-695, 846
+app/missions/registry.py                  27      2    93%   44-45
+app/missions/validation.py               339     77    77%   68, 73-76, 88, 137-146, 174, 176, 182, 202, 210, 218, 226, 234-244, 252, 271, 280, 288-289, 301, 314, 347, 350, 354, 358, 371, 379-389, 398, 412-419, 429, 449, 457, 465, 473, 481, 496, 505, 514, 524, 542-549, 561, 577, 587, 595, 599, 607, 648, 685-687, 691, 697, 712, 719, 727, 739-745, 748, 760, 768, 776, 785, 789, 797, 816
+app/schemas/common.py                     44      0   100%
+app/schemas/content.py                    51      0   100%
+app/schemas/earth.py                      84      0   100%
+app/schemas/events.py                     28      0   100%
+app/schemas/game.py                      133      0   100%
+app/schemas/legacy.py                     41      1    98%   25
+app/schemas/loadout.py                    65      0   100%
+app/schemas/mission.py                   137      0   100%
+app/schemas/nasa.py                       82      0   100%
+app/schemas/science.py                    86      0   100%
+app/schemas/simulation.py                 56      0   100%
+app/services/action_hooks.py              70      3    96%   74, 91, 135
+app/services/earth_service.py            126      5    96%   108-109, 132-134
+app/services/game_service.py             465     57    88%   75, 218, 243, 251, 337, 351-355, 428, 443-444, 447, 449-450, 484, 526, 556, 594, 601-604, 716, 840-844, 852-874, 881-885, 928-929
+app/services/science_service.py          145      9    94%   93, 101, 109, 232-234, 255, 288-289
+app/services/simulation_service.py        97      1    99%   99
+app/simulations/base.py                   52      2    96%   57, 61
+app/simulations/crew_vitals.py           108      2    98%   109, 180
+app/simulations/earth_trends.py          105      6    94%   40-41, 154, 178, 204, 206
+app/simulations/factory.py                33      2    94%   66-67
+app/simulations/lunar_lander.py          138      1    99%   129
+app/simulations/microgravity_fire.py     150      5    97%   89, 185, 264, 268, 270
+app/simulations/rover_traverse.py        151      6    96%   108, 117-118, 128, 177-178
+app/systems/achievements.py              212     26    88%   92, 94, 118-119, 123, 126, 139, 158, 182, 200-201, 219-223, 228, 239-241, 253-256, 294-295
+app/systems/continuity.py                117     14    88%   48, 123-126, 128-131, 141, 145, 158, 161, 185
+app/systems/event_bus.py                  74      0   100%
+app/systems/events.py                     20      1    95%   47
+app/systems/inventory_system.py          123     15    88%   38, 81, 106, 156-158, 162, 169-172, 174-176, 191
+app/systems/oxygen_system.py              55      0   100%
+app/systems/resource_manager.py           65      2    97%   96-97
+app/systems/scoring.py                    36      0   100%
+--------------------------------------------------------------------
+TOTAL                                   6075    410    93%
+437 passed, 1 warning in 176.62s (0:02:56)
+PYTEST_EXIT=0
+== playthrough ==
+/tmp/arena/tenants/0ff8e5f8-6ae6-4651-87ab-14158c7f650b/sessions/dea2a0c1-f579-51ed-95b3-0c2b13fb0a1a/workspace/repo/NOVA/backend/.venv/lib/python3.11/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+
+──────────────────────────────────────────────────────────────────────────
+MISSION                        SCORE  GRADE  MISTAKES  STEPS
+──────────────────────────────────────────────────────────────────────────
+training_prep                 100.0%      S         0      7
+analog_systems_check          100.0%      S         0      4
+analog_device_fault           100.0%      S         0      6
+analog_emergency              100.0%      S         0      8
+analog_power_link             100.0%      S         0      6
+analog_comms_blackout         100.0%      S         0      5
+analog_water_leak             100.0%      S         0      4
+analog_water_recycling        100.0%      S         0      6
+mars_arrival                  100.0%      S         0      8
+mars_rover_traverse           100.0%      S         0      6
+crew_health                   100.0%      S         0      9
+freefall_fire                 100.0%      S         0      8
+martian_guide                 100.0%      S         0      7
+lunar_landing                 100.0%      S         0      7
+earth_trends                  100.0%      S         0      6
+──────────────────────────────────────────────────────────────────────────
+Missions completed : 15 / 15
+Readiness          : 100.0 (S)
+Average score      : 100.0%
+Playtime           : 259.5 s
+Actions            : 93 ok / 0 mistakes
+
+✓ campaign completed
+PLAYTHROUGH_EXIT=0
+### done 2026-11-12T12:32:03Z

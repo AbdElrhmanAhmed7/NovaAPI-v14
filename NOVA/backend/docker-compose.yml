@@ -1,0 +1,28 @@
+# NOVA gameplay backend + a persistent SQLite volume.
+#
+#   docker compose up --build
+#   open http://localhost:8000/          (Mission Control console)
+#
+# Put secrets in a .env file next to this one; never commit it.
+
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      NOVA_ENVIRONMENT: prod
+      NOVA_DATABASE_URL: sqlite+aiosqlite:////data/nova.db
+      NOVA_AUTO_CREATE_TABLES: "false"
+      NOVA_AUTH_ENABLED: "${NOVA_AUTH_ENABLED:-false}"
+      NOVA_SECRET_KEY: "${NOVA_SECRET_KEY:-change-me-in-production}"
+      NOVA_NASA_API_KEY: "${NOVA_NASA_API_KEY:-DEMO_KEY}"
+      NOVA_NASA_ENABLED: "${NOVA_NASA_ENABLED:-true}"
+      NOVA_FRONTEND_ORIGINS: "${NOVA_FRONTEND_ORIGINS:-http://localhost:5173}"
+      NOVA_RATE_LIMIT_ENABLED: "true"
+    volumes:
+      - nova-data:/data
+    restart: unless-stopped
+
+volumes:
+  nova-data:

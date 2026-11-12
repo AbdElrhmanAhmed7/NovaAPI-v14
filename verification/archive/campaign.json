@@ -1,0 +1,2194 @@
+{
+  "game_id": "nova_be93f9b3bfcc4c5e9796",
+  "player_name": "Autopilot",
+  "missions_completed": 15,
+  "missions_total": 15,
+  "average_score_pct": 100.0,
+  "readiness": 100.0,
+  "readiness_grade": "S",
+  "total_playtime_seconds": 259.5,
+  "reports": [
+    {
+      "mission_id": "training_prep",
+      "title": {
+        "en": "Mission Preparation",
+        "ar": "Mission Preparation"
+      },
+      "stage": 1,
+      "environment": "training_facility",
+      "status": "completed",
+      "elapsed_seconds": 0.16,
+      "mistakes": 0,
+      "attempts": 7,
+      "objectives": [
+        {
+          "id": "review_brief",
+          "title": {
+            "en": "Review the mission brief",
+            "ar": "Review the mission brief"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 8.0
+        },
+        {
+          "id": "collect_oxygen",
+          "title": {
+            "en": "Collect the oxygen cylinder",
+            "ar": "Collect the oxygen cylinder"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 10.0
+        },
+        {
+          "id": "take_repair_tools",
+          "title": {
+            "en": "Take the repair kit",
+            "ar": "Take the repair kit"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 10.0
+        },
+        {
+          "id": "take_scanner",
+          "title": {
+            "en": "Take scanner, multimeter and data core",
+            "ar": "Take scanner, multimeter and data core"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 10.0
+        },
+        {
+          "id": "inspect_rover",
+          "title": {
+            "en": "Inspect and ready the rover",
+            "ar": "Inspect and ready the rover"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 10.0
+        },
+        {
+          "id": "suit_check",
+          "title": {
+            "en": "Run the suit integrity check",
+            "ar": "Run the suit integrity check"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 8.0
+        },
+        {
+          "id": "confirm_readiness",
+          "title": {
+            "en": "Sign off mission readiness",
+            "ar": "Sign off mission readiness"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 12.0
+        }
+      ],
+      "earned_points": 68.0,
+      "max_points": 68.0,
+      "mistake_penalty": 0.0,
+      "time_bonus": 8.0,
+      "efficiency_bonus": 0.0,
+      "score": 76.0,
+      "score_pct": 100.0,
+      "grade": "S",
+      "passed": true,
+      "resources": {
+        "water": 100,
+        "oxygen": 105,
+        "power": 70,
+        "fuel": 40
+      },
+      "continuity_modifiers": [
+        {
+          "key": "prep:power",
+          "label": "Preparation quality → starting power",
+          "value": 8.0,
+          "source_mission": "training_prep",
+          "reason": "Every station visited: full power reserve granted.",
+          "kind": "resource",
+          "applied": false
+        },
+        {
+          "key": "prep_readiness",
+          "label": "Preparation grade → readiness",
+          "value": 8.0,
+          "source_mission": "training_prep",
+          "reason": "Flawless preparation.",
+          "kind": "readiness",
+          "applied": true
+        }
+      ],
+      "readiness": 86.0,
+      "readiness_grade": "A",
+      "unlocked_missions": [
+        "analog_systems_check"
+      ],
+      "science_notes": [
+        {
+          "topic": {
+            "en": "EVA preparation is a checklist, not a formality",
+            "ar": "EVA preparation is a checklist, not a formality"
+          },
+          "detail": {
+            "en": "NASA astronauts pre-breathe and verify suit, consumables and tools before every EVA; missing consumables shorten the usable EVA time.",
+            "ar": "NASA astronauts pre-breathe and verify suit, consumables and tools before every EVA; missing consumables shorten the usable EVA time."
+          },
+          "source": "NASA – Extravehicular Activity (EVA) operations",
+          "url": "https://www.nasa.gov/missions/station/spacewalks/",
+          "simulated": true
+        }
+      ],
+      "disclaimer": "Educational game simulation. Resource numbers are simplified for gameplay, not real mission planning data.",
+      "summary": {
+        "en": "Preparation complete. Loadout quality now feeds the Mission Continuity System.",
+        "ar": "Preparation complete. Loadout quality now feeds the Mission Continuity System."
+      },
+      "generated_at": "2026-11-12T12:31:50.884538+00:00"
+    },
+    {
+      "mission_id": "analog_systems_check",
+      "title": {
+        "en": "Habitat Systems Survey",
+        "ar": "Habitat Systems Survey"
+      },
+      "stage": 2,
+      "environment": "earth_analog",
+      "status": "completed",
+      "elapsed_seconds": 0.1,
+      "mistakes": 0,
+      "attempts": 4,
+      "objectives": [
+        {
+          "id": "check_ventilation",
+          "title": {
+            "en": "Check the ventilation loop",
+            "ar": "Check the ventilation loop"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 10.0
+        },
+        {
+          "id": "check_power_bus",
+          "title": {
+            "en": "Measure the power bus",
+            "ar": "Measure the power bus"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 10.0
+        },
+        {
+          "id": "check_water_loop",
+          "title": {
+            "en": "Scan the water manifold",
+            "ar": "Scan the water manifold"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 12.0
+        },
+        {
+          "id": "log_system_report",
+          "title": {
+            "en": "Log the systems report",
+            "ar": "Log the systems report"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 8.0
+        }
+      ],
+      "earned_points": 40.0,
+      "max_points": 40.0,
+      "mistake_penalty": 0.0,
+      "time_bonus": 8.0,
+      "efficiency_bonus": 0.0,
+      "score": 48.0,
+      "score_pct": 100.0,
+      "grade": "S",
+      "passed": true,
+      "resources": {
+        "water": 100,
+        "oxygen": 105,
+        "power": 73,
+        "fuel": 40
+      },
+      "continuity_modifiers": [
+        {
+          "key": "survey:power",
+          "label": "Survey discipline → power reserve",
+          "value": 5.0,
+          "source_mission": "analog_systems_check",
+          "reason": "Clean survey: habitat bus left balanced.",
+          "kind": "resource",
+          "applied": false
+        }
+      ],
+      "readiness": 94.4,
+      "readiness_grade": "A",
+      "unlocked_missions": [
+        "analog_water_leak",
+        "analog_power_link",
+        "analog_device_fault"
+      ],
+      "science_notes": [
+        {
+          "topic": {
+            "en": "Analog habitats",
+            "ar": "Analog habitats"
+          },
+          "detail": {
+            "en": "NASA uses analog missions (NEEMO, HERA, Desert RATS) to rehearse isolation, procedures and hardware failures before flight.",
+            "ar": "NASA uses analog missions (NEEMO, HERA, Desert RATS) to rehearse isolation, procedures and hardware failures before flight."
+          },
+          "source": "NASA – Analog Missions",
+          "url": "https://www.nasa.gov/analog-missions/",
+          "simulated": false
+        }
+      ],
+      "disclaimer": "Educational game simulation. Readings are invented for gameplay.",
+      "summary": {
+        "en": "Survey complete: a live water leak, a power module to connect and a suspect device.",
+        "ar": "Survey complete: a live water leak, a power module to connect and a suspect device."
+      },
+      "generated_at": "2026-11-12T12:31:51.045596+00:00"
+    },
+    {
+      "mission_id": "analog_device_fault",
+      "title": {
+        "en": "Faulty Science Device",
+        "ar": "Faulty Science Device"
+      },
+      "stage": 2,
+      "environment": "earth_analog",
+      "status": "completed",
+      "elapsed_seconds": 0.17,
+      "mistakes": 0,
+      "attempts": 6,
+      "objectives": [
+        {
+          "id": "scan_device",
+          "title": {
+            "en": "Scan the atmosphere analyser",
+            "ar": "Scan the atmosphere analyser"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 12.0
+        },
+        {
+          "id": "measure_circuit",
+          "title": {
+            "en": "Measure the regulator circuit",
+            "ar": "Measure the regulator circuit"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 12.0
+        },
+        {
+          "id": "take_coolant",
+          "title": {
+            "en": "Take a coolant canister",
+            "ar": "Take a coolant canister"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 6.0
+        },
+        {
+          "id": "cool_unit",
+          "title": {
+            "en": "Cool the unit down",
+            "ar": "Cool the unit down"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 12.0
+        },
+        {
+          "id": "replace_board",
+          "title": {
+            "en": "Replace the regulator board",
+            "ar": "Replace the regulator board"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 18.0
+        },
+        {
+          "id": "calibrate_device",
+          "title": {
+            "en": "Calibrate and certify",
+            "ar": "Calibrate and certify"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 12.0
+        }
+      ],
+      "earned_points": 72.0,
+      "max_points": 72.0,
+      "mistake_penalty": 0.0,
+      "time_bonus": 8.0,
+      "efficiency_bonus": 0.0,
+      "score": 80.0,
+      "score_pct": 100.0,
+      "grade": "S",
+      "passed": true,
+      "resources": {
+        "water": 100,
+        "oxygen": 105,
+        "power": 74,
+        "fuel": 40
+      },
+      "continuity_modifiers": [
+        {
+          "key": "service:multimeter",
+          "label": "Tool care → multimeter condition",
+          "value": 5.0,
+          "source_mission": "analog_device_fault",
+          "reason": "Well-kept instrument.",
+          "kind": "equipment",
+          "applied": false
+        },
+        {
+          "key": "service:scanner",
+          "label": "Tool care → scanner condition",
+          "value": 4.0,
+          "source_mission": "analog_device_fault",
+          "reason": "Scanner healthy.",
+          "kind": "equipment",
+          "applied": false
+        }
+      ],
+      "readiness": 97.76,
+      "readiness_grade": "S",
+      "unlocked_missions": [
+        "analog_emergency"
+      ],
+      "science_notes": [
+        {
+          "topic": {
+            "en": "Calibration is part of the measurement",
+            "ar": "Calibration is part of the measurement"
+          },
+          "detail": {
+            "en": "Spaceflight instruments are re-calibrated against known references in flight; without it, a repaired sensor still produces unusable science.",
+            "ar": "Spaceflight instruments are re-calibrated against known references in flight; without it, a repaired sensor still produces unusable science."
+          },
+          "source": "NASA – instrument calibration practices (curated summary)",
+          "url": "https://science.nasa.gov/",
+          "simulated": true
+        }
+      ],
+      "disclaimer": "Educational game simulation. Temperatures and voltages are invented.",
+      "summary": {
+        "en": "Device repaired and calibrated. Tool condition carries forward.",
+        "ar": "Device repaired and calibrated. Tool condition carries forward."
+      },
+      "generated_at": "2026-11-12T12:31:51.243050+00:00"
+    },
+    {
+      "mission_id": "analog_emergency",
+      "title": {
+        "en": "Emergency Drill",
+        "ar": "Emergency Drill"
+      },
+      "stage": 2,
+      "environment": "earth_analog",
+      "status": "completed",
+      "elapsed_seconds": 0.2,
+      "mistakes": 0,
+      "attempts": 8,
+      "objectives": [
+        {
+          "id": "acknowledge_alarm",
+          "title": {
+            "en": "Acknowledge the alarm",
+            "ar": "Acknowledge the alarm"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 8.0
+        },
+        {
+          "id": "isolate_electrical",
+          "title": {
+            "en": "Isolate the electrical bay",
+            "ar": "Isolate the electrical bay"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 12.0
+        },
+        {
+          "id": "open_emergency_locker",
+          "title": {
+            "en": "Open the emergency locker",
+            "ar": "Open the emergency locker"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 8.0
+        },
+        {
+          "id": "don_protection",
+          "title": {
+            "en": "Don mask and gloves",
+            "ar": "Don mask and gloves"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 10.0
+        },
+        {
+          "id": "suppress_smoke",
+          "title": {
+            "en": "Suppress the fire",
+            "ar": "Suppress the fire"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 20.0
+        },
+        {
+          "id": "evacuate_crew",
+          "title": {
+            "en": "Evacuate the crew",
+            "ar": "Evacuate the crew"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 14.0
+        },
+        {
+          "id": "restore_systems",
+          "title": {
+            "en": "Restore ventilation and power",
+            "ar": "Restore ventilation and power"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 12.0
+        },
+        {
+          "id": "submit_training_report",
+          "title": {
+            "en": "Submit the training report",
+            "ar": "Submit the training report"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 12.0
+        }
+      ],
+      "earned_points": 96.0,
+      "max_points": 96.0,
+      "mistake_penalty": 0.0,
+      "time_bonus": 10.0,
+      "efficiency_bonus": 0.0,
+      "score": 106.0,
+      "score_pct": 100.0,
+      "grade": "S",
+      "passed": true,
+      "resources": {
+        "water": 100,
+        "oxygen": 104,
+        "power": 76,
+        "fuel": 40
+      },
+      "continuity_modifiers": [
+        {
+          "key": "training_readiness",
+          "label": "Training grade → mission readiness",
+          "value": 12.0,
+          "source_mission": "analog_emergency",
+          "reason": "Outstanding drill performance.",
+          "kind": "readiness",
+          "applied": true
+        },
+        {
+          "key": "training:oxygen",
+          "label": "Drill discipline → oxygen reserve",
+          "value": 6.0,
+          "source_mission": "analog_emergency",
+          "reason": "No safety mistakes: extra oxygen margin.",
+          "kind": "resource",
+          "applied": false
+        }
+      ],
+      "readiness": 100.0,
+      "readiness_grade": "S",
+      "unlocked_missions": [
+        "mars_arrival"
+      ],
+      "science_notes": [
+        {
+          "topic": {
+            "en": "Fire response order",
+            "ar": "Fire response order"
+          },
+          "detail": {
+            "en": "ISS fire response: warn the crew, isolate power to the affected rack, don protection, then suppress and clean the atmosphere.",
+            "ar": "ISS fire response: warn the crew, isolate power to the affected rack, don protection, then suppress and clean the atmosphere."
+          },
+          "source": "NASA – ISS emergency procedures (curated summary)",
+          "url": "https://www.nasa.gov/missions/station/",
+          "simulated": true
+        }
+      ],
+      "disclaimer": "Educational game simulation. Not a real fire-response procedure.",
+      "summary": {
+        "en": "Earth Analog training complete. Your readiness index now decides how Mars treats you.",
+        "ar": "Earth Analog training complete. Your readiness index now decides how Mars treats you."
+      },
+      "generated_at": "2026-11-12T12:31:51.468401+00:00"
+    },
+    {
+      "mission_id": "analog_power_link",
+      "title": {
+        "en": "Connect the Power Module",
+        "ar": "Connect the Power Module"
+      },
+      "stage": 2,
+      "environment": "earth_analog",
+      "status": "completed",
+      "elapsed_seconds": 0.14,
+      "mistakes": 0,
+      "attempts": 6,
+      "objectives": [
+        {
+          "id": "inspect_bus",
+          "title": {
+            "en": "Inspect the distribution bus",
+            "ar": "Inspect the distribution bus"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 10.0
+        },
+        {
+          "id": "isolate_breaker",
+          "title": {
+            "en": "Isolate the main breaker",
+            "ar": "Isolate the main breaker"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 12.0
+        },
+        {
+          "id": "fetch_power_module",
+          "title": {
+            "en": "Collect the power module and panel",
+            "ar": "Collect the power module and panel"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 8.0
+        },
+        {
+          "id": "connect_module",
+          "title": {
+            "en": "Connect the power module",
+            "ar": "Connect the power module"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 16.0
+        },
+        {
+          "id": "deploy_solar",
+          "title": {
+            "en": "Deploy the solar panel",
+            "ar": "Deploy the solar panel"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 12.0
+        },
+        {
+          "id": "energise_bus",
+          "title": {
+            "en": "Energise the bus",
+            "ar": "Energise the bus"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 14.0
+        }
+      ],
+      "earned_points": 72.0,
+      "max_points": 72.0,
+      "mistake_penalty": 0.0,
+      "time_bonus": 8.0,
+      "efficiency_bonus": 0.0,
+      "score": 80.0,
+      "score_pct": 100.0,
+      "grade": "S",
+      "passed": true,
+      "resources": {
+        "water": 100,
+        "oxygen": 110,
+        "power": 100,
+        "fuel": 40
+      },
+      "continuity_modifiers": [
+        {
+          "key": "power:power",
+          "label": "Power discipline → power reserve",
+          "value": 10.0,
+          "source_mission": "analog_power_link",
+          "reason": "Clean, isolated installation: extra reserve.",
+          "kind": "resource",
+          "applied": false
+        }
+      ],
+      "readiness": 100.0,
+      "readiness_grade": "S",
+      "unlocked_missions": [
+        "analog_comms_blackout",
+        "analog_water_recycling"
+      ],
+      "science_notes": [
+        {
+          "topic": {
+            "en": "Lock-out / tag-out",
+            "ar": "Lock-out / tag-out"
+          },
+          "detail": {
+            "en": "Electrical work in spaceflight hardware follows lock-out/tag-out: energy sources are isolated and labelled before maintenance.",
+            "ar": "Electrical work in spaceflight hardware follows lock-out/tag-out: energy sources are isolated and labelled before maintenance."
+          },
+          "source": "NASA-STD-8719.24 (payload electrical safety, summarised)",
+          "url": "https://standards.nasa.gov/",
+          "simulated": true
+        }
+      ],
+      "disclaimer": "Educational game simulation. Voltages and energy units are simplified.",
+      "summary": {
+        "en": "Habitat bus is online with solar support.",
+        "ar": "Habitat bus is online with solar support."
+      },
+      "generated_at": "2026-11-12T12:31:51.664695+00:00"
+    },
+    {
+      "mission_id": "analog_comms_blackout",
+      "title": {
+        "en": "Communications Blackout",
+        "ar": "Communications Blackout"
+      },
+      "stage": 2,
+      "environment": "earth_analog",
+      "status": "completed",
+      "elapsed_seconds": 0.15,
+      "mistakes": 0,
+      "attempts": 5,
+      "objectives": [
+        {
+          "id": "diagnose_link",
+          "title": {
+            "en": "Diagnose the link",
+            "ar": "Diagnose the link"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 12.0
+        },
+        {
+          "id": "fetch_antenna_kit",
+          "title": {
+            "en": "Collect the antenna kit",
+            "ar": "Collect the antenna kit"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 6.0
+        },
+        {
+          "id": "realign_antenna",
+          "title": {
+            "en": "Realign the antenna",
+            "ar": "Realign the antenna"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 16.0
+        },
+        {
+          "id": "restore_link",
+          "title": {
+            "en": "Restore the link",
+            "ar": "Restore the link"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 16.0
+        },
+        {
+          "id": "send_status_report",
+          "title": {
+            "en": "Send the status report",
+            "ar": "Send the status report"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 10.0
+        }
+      ],
+      "earned_points": 60.0,
+      "max_points": 60.0,
+      "mistake_penalty": 0.0,
+      "time_bonus": 8.0,
+      "efficiency_bonus": 0.0,
+      "score": 68.0,
+      "score_pct": 100.0,
+      "grade": "S",
+      "passed": true,
+      "resources": {
+        "water": 100,
+        "oxygen": 110,
+        "power": 105,
+        "fuel": 40
+      },
+      "continuity_modifiers": [
+        {
+          "key": "comms:power",
+          "label": "Comms recovery → power reserve",
+          "value": 6.0,
+          "source_mission": "analog_comms_blackout",
+          "reason": "Fast, clean recovery left the radio budget intact.",
+          "kind": "resource",
+          "applied": false
+        }
+      ],
+      "readiness": 100.0,
+      "readiness_grade": "S",
+      "unlocked_missions": [],
+      "science_notes": [
+        {
+          "topic": {
+            "en": "Deep-space links are directional",
+            "ar": "Deep-space links are directional"
+          },
+          "detail": {
+            "en": "NASA's Deep Space Network uses large steerable dishes; pointing accuracy and link margin decide whether a spacecraft can be heard at all.",
+            "ar": "NASA's Deep Space Network uses large steerable dishes; pointing accuracy and link margin decide whether a spacecraft can be heard at all."
+          },
+          "source": "NASA – Deep Space Network",
+          "url": "https://www.nasa.gov/communicating-with-missions/dsn/",
+          "simulated": false
+        }
+      ],
+      "disclaimer": "Educational game simulation. Link budgets are simplified.",
+      "summary": {
+        "en": "Communications restored and logged.",
+        "ar": "Communications restored and logged."
+      },
+      "generated_at": "2026-11-12T12:31:51.843493+00:00"
+    },
+    {
+      "mission_id": "analog_water_leak",
+      "title": {
+        "en": "Water Leak Repair",
+        "ar": "Water Leak Repair"
+      },
+      "stage": 2,
+      "environment": "earth_analog",
+      "status": "completed",
+      "elapsed_seconds": 0.17,
+      "mistakes": 0,
+      "attempts": 4,
+      "objectives": [
+        {
+          "id": "scan_leak",
+          "title": {
+            "en": "Locate the leak with the scanner",
+            "ar": "Locate the leak with the scanner"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 12.0
+        },
+        {
+          "id": "close_valve",
+          "title": {
+            "en": "Close the isolation valve",
+            "ar": "Close the isolation valve"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 14.0
+        },
+        {
+          "id": "repair_pipe",
+          "title": {
+            "en": "Repair the pipe",
+            "ar": "Repair the pipe"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 18.0
+        },
+        {
+          "id": "verify_pressure",
+          "title": {
+            "en": "Re-pressurise and verify",
+            "ar": "Re-pressurise and verify"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 10.0
+        }
+      ],
+      "earned_points": 54.0,
+      "max_points": 54.0,
+      "mistake_penalty": 0.0,
+      "time_bonus": 9.99,
+      "efficiency_bonus": 0.0,
+      "score": 63.99,
+      "score_pct": 100.0,
+      "grade": "S",
+      "passed": true,
+      "resources": {
+        "water": 112,
+        "oxygen": 110,
+        "power": 103,
+        "fuel": 40
+      },
+      "continuity_modifiers": [
+        {
+          "key": "leak:water",
+          "label": "Leak handling → water reserve",
+          "value": 8.0,
+          "source_mission": "analog_water_leak",
+          "reason": "Correct order, no spillage: water reserve bonus.",
+          "kind": "resource",
+          "applied": false
+        }
+      ],
+      "readiness": 100.0,
+      "readiness_grade": "S",
+      "unlocked_missions": [],
+      "science_notes": [
+        {
+          "topic": {
+            "en": "Isolate before you repair",
+            "ar": "Isolate before you repair"
+          },
+          "detail": {
+            "en": "On the ISS, fluid lines are isolated with quick-disconnects and valves before any maintenance so a repair cannot drain the loop.",
+            "ar": "On the ISS, fluid lines are isolated with quick-disconnects and valves before any maintenance so a repair cannot drain the loop."
+          },
+          "source": "NASA – ISS Environmental Control and Life Support System (ECLSS)",
+          "url": "https://www.nasa.gov/reference/environmental-control-and-life-support-system-eclss/",
+          "simulated": true
+        }
+      ],
+      "disclaimer": "Educational game simulation. Pressure and water values are simplified.",
+      "summary": {
+        "en": "Leak isolated and repaired. Water discipline now carries into the next stages.",
+        "ar": "Leak isolated and repaired. Water discipline now carries into the next stages."
+      },
+      "generated_at": "2026-11-12T12:31:52.042478+00:00"
+    },
+    {
+      "mission_id": "analog_water_recycling",
+      "title": {
+        "en": "Start the Water Recycler",
+        "ar": "Start the Water Recycler"
+      },
+      "stage": 2,
+      "environment": "earth_analog",
+      "status": "completed",
+      "elapsed_seconds": 0.18,
+      "mistakes": 0,
+      "attempts": 6,
+      "objectives": [
+        {
+          "id": "inspect_recycler",
+          "title": {
+            "en": "Inspect the recycler",
+            "ar": "Inspect the recycler"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 10.0
+        },
+        {
+          "id": "take_filter",
+          "title": {
+            "en": "Take a filter cartridge",
+            "ar": "Take a filter cartridge"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 6.0
+        },
+        {
+          "id": "install_filter",
+          "title": {
+            "en": "Install the fresh filter",
+            "ar": "Install the fresh filter"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 14.0
+        },
+        {
+          "id": "prime_pump",
+          "title": {
+            "en": "Prime the pump",
+            "ar": "Prime the pump"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 12.0
+        },
+        {
+          "id": "start_recycling",
+          "title": {
+            "en": "Start the recycling loop",
+            "ar": "Start the recycling loop"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 18.0
+        },
+        {
+          "id": "verify_quality",
+          "title": {
+            "en": "Verify water quality",
+            "ar": "Verify water quality"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 10.0
+        }
+      ],
+      "earned_points": 70.0,
+      "max_points": 70.0,
+      "mistake_penalty": 0.0,
+      "time_bonus": 8.0,
+      "efficiency_bonus": 0.0,
+      "score": 78.0,
+      "score_pct": 100.0,
+      "grade": "S",
+      "passed": true,
+      "resources": {
+        "water": 145,
+        "oxygen": 110,
+        "power": 90,
+        "fuel": 40
+      },
+      "continuity_modifiers": [
+        {
+          "key": "recycling:water",
+          "label": "Recycling efficiency → Mars water",
+          "value": 12.0,
+          "source_mission": "analog_water_recycling",
+          "reason": "Tanks nearly full at handover.",
+          "kind": "resource",
+          "applied": false
+        }
+      ],
+      "readiness": 100.0,
+      "readiness_grade": "S",
+      "unlocked_missions": [],
+      "science_notes": [
+        {
+          "topic": {
+            "en": "Closing the water loop",
+            "ar": "Closing the water loop"
+          },
+          "detail": {
+            "en": "The ISS Water Recovery System distills urine and processes cabin condensate; NASA has demonstrated recovering about 98% of water aboard the station.",
+            "ar": "The ISS Water Recovery System distills urine and processes cabin condensate; NASA has demonstrated recovering about 98% of water aboard the station."
+          },
+          "source": "NASA – Water Recovery System / ECLSS announcement (2023)",
+          "url": "https://www.nasa.gov/missions/station/nasa-achieves-water-recovery-milestone-on-international-space-station/",
+          "simulated": false
+        }
+      ],
+      "disclaimer": "Educational game simulation. Recovery rates are simplified.",
+      "summary": {
+        "en": "Closed water loop running. Efficiency carries to Mars.",
+        "ar": "Closed water loop running. Efficiency carries to Mars."
+      },
+      "generated_at": "2026-11-12T12:31:52.250346+00:00"
+    },
+    {
+      "mission_id": "mars_arrival",
+      "title": {
+        "en": "Mars Arrival & Exploration",
+        "ar": "Mars Arrival & Exploration"
+      },
+      "stage": 3,
+      "environment": "mars_surface",
+      "status": "completed",
+      "elapsed_seconds": 0.25,
+      "mistakes": 0,
+      "attempts": 8,
+      "objectives": [
+        {
+          "id": "exit_lander",
+          "title": {
+            "en": "Exit the lander",
+            "ar": "Exit the lander"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 10.0
+        },
+        {
+          "id": "survey_area",
+          "title": {
+            "en": "Survey the landing zone",
+            "ar": "Survey the landing zone"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 14.0
+        },
+        {
+          "id": "map_hazards",
+          "title": {
+            "en": "Map terrain hazards",
+            "ar": "Map terrain hazards"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 14.0
+        },
+        {
+          "id": "unload_cargo",
+          "title": {
+            "en": "Unload the science cargo",
+            "ar": "Unload the science cargo"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 8.0
+        },
+        {
+          "id": "measure_radiation",
+          "title": {
+            "en": "Measure surface radiation",
+            "ar": "Measure surface radiation"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 12.0
+        },
+        {
+          "id": "select_base_site",
+          "title": {
+            "en": "Select the base site",
+            "ar": "Select the base site"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 14.0
+        },
+        {
+          "id": "deploy_antenna",
+          "title": {
+            "en": "Deploy the comms antenna",
+            "ar": "Deploy the comms antenna"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 14.0
+        },
+        {
+          "id": "establish_base",
+          "title": {
+            "en": "Establish the research base",
+            "ar": "Establish the research base"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 18.0
+        }
+      ],
+      "earned_points": 104.0,
+      "max_points": 104.0,
+      "mistake_penalty": 0.0,
+      "time_bonus": 10.0,
+      "efficiency_bonus": 0.0,
+      "score": 114.0,
+      "score_pct": 100.0,
+      "grade": "S",
+      "passed": true,
+      "resources": {
+        "water": 150,
+        "oxygen": 108,
+        "power": 96,
+        "fuel": 40
+      },
+      "continuity_modifiers": [
+        {
+          "key": "arrival:oxygen",
+          "label": "EVA discipline → oxygen reserve",
+          "value": 10.0,
+          "source_mission": "mars_arrival",
+          "reason": "Efficient EVA left a healthy oxygen margin.",
+          "kind": "resource",
+          "applied": false
+        }
+      ],
+      "readiness": 100.0,
+      "readiness_grade": "S",
+      "unlocked_missions": [
+        "mars_rover_traverse",
+        "crew_health",
+        "lunar_landing"
+      ],
+      "science_notes": [
+        {
+          "topic": {
+            "en": "Radiation on the Martian surface",
+            "ar": "Radiation on the Martian surface"
+          },
+          "detail": {
+            "en": "Curiosity's Radiation Assessment Detector measured about 0.67 millisieverts per day on the surface – far above Earth's background, which drives habitat shielding design.",
+            "ar": "Curiosity's Radiation Assessment Detector measured about 0.67 millisieverts per day on the surface – far above Earth's background, which drives habitat shielding design."
+          },
+          "source": "NASA/JPL – Curiosity RAD results (Hassler et al., Science 2014)",
+          "url": "https://mars.nasa.gov/msl/mission/instruments/rad/",
+          "simulated": false
+        },
+        {
+          "topic": {
+            "en": "Landing-site selection",
+            "ar": "Landing-site selection"
+          },
+          "detail": {
+            "en": "Real sites are chosen for engineering safety (slope, rocks, elevation) and science value; Jezero Crater was selected for its ancient river delta.",
+            "ar": "Real sites are chosen for engineering safety (slope, rocks, elevation) and science value; Jezero Crater was selected for its ancient river delta."
+          },
+          "source": "NASA – Mars 2020 Perseverance landing site",
+          "url": "https://science.nasa.gov/mission/mars-2020-perseverance/landing-site/",
+          "simulated": false
+        }
+      ],
+      "disclaimer": "Educational game simulation. Distances, resources and radiation values are simplified.",
+      "summary": {
+        "en": "Base established. Long-range traverses and crew care are now available.",
+        "ar": "Base established. Long-range traverses and crew care are now available."
+      },
+      "generated_at": "2026-11-12T12:31:52.531897+00:00"
+    },
+    {
+      "mission_id": "mars_rover_traverse",
+      "title": {
+        "en": "Long-Range Rover Traverse",
+        "ar": "Long-Range Rover Traverse"
+      },
+      "stage": 3,
+      "environment": "mars_surface",
+      "status": "completed",
+      "elapsed_seconds": 148.5,
+      "mistakes": 0,
+      "attempts": 5,
+      "objectives": [
+        {
+          "id": "board_rover",
+          "title": {
+            "en": "Board the rover",
+            "ar": "Board the rover"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 8.0
+        },
+        {
+          "id": "set_nav_target",
+          "title": {
+            "en": "Set the navigation target",
+            "ar": "Set the navigation target"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 8.0
+        },
+        {
+          "id": "drive_traverse",
+          "title": {
+            "en": "Complete the traverse",
+            "ar": "Complete the traverse"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 26.0
+        },
+        {
+          "id": "disembark_rover",
+          "title": {
+            "en": "Disembark at the site",
+            "ar": "Disembark at the site"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 8.0
+        },
+        {
+          "id": "deploy_transponder",
+          "title": {
+            "en": "Deploy the navigation beacon",
+            "ar": "Deploy the navigation beacon"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 10.0
+        }
+      ],
+      "earned_points": 60.0,
+      "max_points": 60.0,
+      "mistake_penalty": 0.0,
+      "time_bonus": 7.52,
+      "efficiency_bonus": 0.0,
+      "score": 67.52,
+      "score_pct": 100.0,
+      "grade": "S",
+      "passed": true,
+      "resources": {
+        "water": 150,
+        "oxygen": 118,
+        "power": 89,
+        "fuel": 40
+      },
+      "continuity_modifiers": [
+        {
+          "key": "traverse:power",
+          "label": "Driving efficiency → power reserve",
+          "value": 8.0,
+          "source_mission": "mars_rover_traverse",
+          "reason": "Efficient driving preserved the battery.",
+          "kind": "resource",
+          "applied": false
+        }
+      ],
+      "readiness": 100.0,
+      "readiness_grade": "S",
+      "unlocked_missions": [
+        "martian_guide"
+      ],
+      "science_notes": [
+        {
+          "topic": {
+            "en": "Rover driving is slow and careful",
+            "ar": "Rover driving is slow and careful"
+          },
+          "detail": {
+            "en": "Perseverance drives tens to a few hundred metres per sol; terrain relative navigation and hazard avoidance matter more than speed.",
+            "ar": "Perseverance drives tens to a few hundred metres per sol; terrain relative navigation and hazard avoidance matter more than speed."
+          },
+          "source": "NASA – Mars 2020 Perseverance mobility",
+          "url": "https://science.nasa.gov/mission/mars-2020-perseverance/",
+          "simulated": true
+        }
+      ],
+      "disclaimer": "Educational game simulation. Rover dynamics are game-scaled, not a mobility model.",
+      "summary": {
+        "en": "Far sites reached. Geological sampling is now possible.",
+        "ar": "Far sites reached. Geological sampling is now possible."
+      },
+      "generated_at": "2026-11-12T12:31:57.638310+00:00"
+    },
+    {
+      "mission_id": "crew_health",
+      "title": {
+        "en": "Health Monitoring",
+        "ar": "Health Monitoring"
+      },
+      "stage": 4,
+      "environment": "medical_bay",
+      "status": "completed",
+      "elapsed_seconds": 39.0,
+      "mistakes": 0,
+      "attempts": 8,
+      "objectives": [
+        {
+          "id": "reach_medical_station",
+          "title": {
+            "en": "Reach the medical station",
+            "ar": "Reach the medical station"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 6.0
+        },
+        {
+          "id": "collect_medical_supplies",
+          "title": {
+            "en": "Collect supplies from the locker",
+            "ar": "Collect supplies from the locker"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 8.0
+        },
+        {
+          "id": "attach_bio_monitor",
+          "title": {
+            "en": "Attach the bio-monitor",
+            "ar": "Attach the bio-monitor"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 14.0
+        },
+        {
+          "id": "review_vitals",
+          "title": {
+            "en": "Review the vitals readout",
+            "ar": "Review the vitals readout"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 10.0
+        },
+        {
+          "id": "administer_oxygen",
+          "title": {
+            "en": "Provide oxygen support",
+            "ar": "Provide oxygen support"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 16.0
+        },
+        {
+          "id": "give_hydration_salts",
+          "title": {
+            "en": "Give hydration salts and rest",
+            "ar": "Give hydration salts and rest"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 16.0
+        },
+        {
+          "id": "stabilise_crew",
+          "title": {
+            "en": "Keep the crew member stable",
+            "ar": "Keep the crew member stable"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 20.0
+        },
+        {
+          "id": "log_medical_report",
+          "title": {
+            "en": "Log the medical report",
+            "ar": "Log the medical report"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 10.0
+        }
+      ],
+      "earned_points": 100.0,
+      "max_points": 100.0,
+      "mistake_penalty": 0.0,
+      "time_bonus": 7.35,
+      "efficiency_bonus": 0.0,
+      "score": 107.35,
+      "score_pct": 100.0,
+      "grade": "S",
+      "passed": true,
+      "resources": {
+        "water": 147,
+        "oxygen": 113,
+        "power": 96,
+        "fuel": 40
+      },
+      "continuity_modifiers": [
+        {
+          "key": "medical:water",
+          "label": "Medical discipline → water reserve",
+          "value": 6.0,
+          "source_mission": "crew_health",
+          "reason": "No wasted consumables.",
+          "kind": "resource",
+          "applied": false
+        },
+        {
+          "key": "medical_readiness",
+          "label": "Crew care → readiness",
+          "value": 6.0,
+          "source_mission": "crew_health",
+          "reason": "Fast, correct stabilisation.",
+          "kind": "readiness",
+          "applied": true
+        }
+      ],
+      "readiness": 100.0,
+      "readiness_grade": "S",
+      "unlocked_missions": [
+        "freefall_fire"
+      ],
+      "science_notes": [
+        {
+          "topic": {
+            "en": "Physiology changes in spaceflight",
+            "ar": "Physiology changes in spaceflight"
+          },
+          "detail": {
+            "en": "Microgravity shifts body fluids headward, reduces plasma volume and deconditions the cardiovascular system; hydration and exercise are standard countermeasures.",
+            "ar": "Microgravity shifts body fluids headward, reduces plasma volume and deconditions the cardiovascular system; hydration and exercise are standard countermeasures."
+          },
+          "source": "NASA – Human Research Program (curated summary)",
+          "url": "https://www.nasa.gov/hrp/",
+          "simulated": true
+        }
+      ],
+      "disclaimer": "Educational game simulation with invented vital signs. This is NOT medical guidance and must never be used for real health decisions.",
+      "summary": {
+        "en": "Crew stabilised inside the simulation. Emergency response training unlocked.",
+        "ar": "Crew stabilised inside the simulation. Emergency response training unlocked."
+      },
+      "generated_at": "2026-11-12T12:31:59.452816+00:00"
+    },
+    {
+      "mission_id": "freefall_fire",
+      "title": {
+        "en": "Flame in Freefall",
+        "ar": "Flame in Freefall"
+      },
+      "stage": 5,
+      "environment": "orbital_station",
+      "status": "completed",
+      "elapsed_seconds": 12.5,
+      "mistakes": 0,
+      "attempts": 7,
+      "objectives": [
+        {
+          "id": "reach_incident_zone",
+          "title": {
+            "en": "Reach the incident zone",
+            "ar": "Reach the incident zone"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 6.0
+        },
+        {
+          "id": "isolate_zone",
+          "title": {
+            "en": "Isolate the zone",
+            "ar": "Isolate the zone"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 14.0
+        },
+        {
+          "id": "collect_fire_gear",
+          "title": {
+            "en": "Collect protection and extinguisher",
+            "ar": "Collect protection and extinguisher"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 8.0
+        },
+        {
+          "id": "equip_extinguisher",
+          "title": {
+            "en": "Equip extinguisher and gloves",
+            "ar": "Equip extinguisher and gloves"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 10.0
+        },
+        {
+          "id": "suppress_fire",
+          "title": {
+            "en": "Suppress the fire",
+            "ar": "Suppress the fire"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 26.0
+        },
+        {
+          "id": "restore_ventilation",
+          "title": {
+            "en": "Restore ventilation and scrubbers",
+            "ar": "Restore ventilation and scrubbers"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 14.0
+        },
+        {
+          "id": "verify_atmosphere",
+          "title": {
+            "en": "Verify atmosphere and safety systems",
+            "ar": "Verify atmosphere and safety systems"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 14.0
+        }
+      ],
+      "earned_points": 92.0,
+      "max_points": 92.0,
+      "mistake_penalty": 0.0,
+      "time_bonus": 9.77,
+      "efficiency_bonus": 0.0,
+      "score": 101.77,
+      "score_pct": 100.0,
+      "grade": "S",
+      "passed": true,
+      "resources": {
+        "water": 150,
+        "oxygen": 113,
+        "power": 89,
+        "fuel": 40
+      },
+      "continuity_modifiers": [
+        {
+          "key": "fire:oxygen",
+          "label": "Atmosphere management → oxygen reserve",
+          "value": 8.0,
+          "source_mission": "freefall_fire",
+          "reason": "Careful CO2 use kept the cabin breathable.",
+          "kind": "resource",
+          "applied": false
+        },
+        {
+          "key": "fire_readiness",
+          "label": "Emergency response → readiness",
+          "value": 8.0,
+          "source_mission": "freefall_fire",
+          "reason": "Textbook suppression.",
+          "kind": "readiness",
+          "applied": true
+        }
+      ],
+      "readiness": 100.0,
+      "readiness_grade": "S",
+      "unlocked_missions": [],
+      "science_notes": [
+        {
+          "topic": {
+            "en": "Flames without buoyancy",
+            "ar": "Flames without buoyancy"
+          },
+          "detail": {
+            "en": "In microgravity, hot gas does not rise, so flames become spherical, burn cooler and can persist at lower oxygen levels; NASA's FLEX experiments even observed 'cool flames' continuing after the visible flame went out.",
+            "ar": "In microgravity, hot gas does not rise, so flames become spherical, burn cooler and can persist at lower oxygen levels; NASA's FLEX experiments even observed 'cool flames' continuing after the visible flame went out."
+          },
+          "source": "NASA – Flame Extinguishment Experiment (FLEX/FLEX-2)",
+          "url": "https://www.nasa.gov/mission_pages/station/research/experiments/1177.html",
+          "simulated": true
+        },
+        {
+          "topic": {
+            "en": "Why CO2 extinguishers",
+            "ar": "Why CO2 extinguishers"
+          },
+          "detail": {
+            "en": "The ISS uses CO2 extinguishers because water or powder would float freely and damage equipment; CO2 displaces oxygen locally, which is itself a crew hazard.",
+            "ar": "The ISS uses CO2 extinguishers because water or powder would float freely and damage equipment; CO2 displaces oxygen locally, which is itself a crew hazard."
+          },
+          "source": "NASA – ISS fire safety hardware (curated summary)",
+          "url": "https://www.nasa.gov/missions/station/",
+          "simulated": true
+        }
+      ],
+      "disclaimer": "Educational game simulation. Fire and atmosphere physics are simplified for gameplay.",
+      "summary": {
+        "en": "Fire suppressed and the cabin certified safe.",
+        "ar": "Fire suppressed and the cabin certified safe."
+      },
+      "generated_at": "2026-11-12T12:32:00.185911+00:00"
+    },
+    {
+      "mission_id": "martian_guide",
+      "title": {
+        "en": "Martian Guide – Geological Sampling",
+        "ar": "Martian Guide – Geological Sampling"
+      },
+      "stage": 6,
+      "environment": "mars_lab",
+      "status": "completed",
+      "elapsed_seconds": 0.24,
+      "mistakes": 0,
+      "attempts": 7,
+      "objectives": [
+        {
+          "id": "drive_to_outcrop",
+          "title": {
+            "en": "Drive to the outcrop",
+            "ar": "Drive to the outcrop"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 10.0
+        },
+        {
+          "id": "disembark_at_site",
+          "title": {
+            "en": "Disembark at the site",
+            "ar": "Disembark at the site"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 8.0
+        },
+        {
+          "id": "scan_outcrop",
+          "title": {
+            "en": "Scan the rock and soil",
+            "ar": "Scan the rock and soil"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 14.0
+        },
+        {
+          "id": "collect_sample",
+          "title": {
+            "en": "Drill and seal a core sample",
+            "ar": "Drill and seal a core sample"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 18.0
+        },
+        {
+          "id": "return_to_lab",
+          "title": {
+            "en": "Return to the lab",
+            "ar": "Return to the lab"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 10.0
+        },
+        {
+          "id": "analyse_sample",
+          "title": {
+            "en": "Analyse the sample",
+            "ar": "Analyse the sample"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 18.0
+        },
+        {
+          "id": "log_findings",
+          "title": {
+            "en": "Log the finding in the science database",
+            "ar": "Log the finding in the science database"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 12.0
+        }
+      ],
+      "earned_points": 90.0,
+      "max_points": 90.0,
+      "mistake_penalty": 0.0,
+      "time_bonus": 10.0,
+      "efficiency_bonus": 0.0,
+      "score": 100.0,
+      "score_pct": 100.0,
+      "grade": "S",
+      "passed": true,
+      "resources": {
+        "water": 150,
+        "oxygen": 118,
+        "power": 78,
+        "fuel": 36
+      },
+      "continuity_modifiers": [
+        {
+          "key": "science:power",
+          "label": "Lab discipline → power reserve",
+          "value": 8.0,
+          "source_mission": "martian_guide",
+          "reason": "Efficient lab work.",
+          "kind": "resource",
+          "applied": false
+        },
+        {
+          "key": "science:core_drill",
+          "label": "Drill care → drill condition",
+          "value": 5.0,
+          "source_mission": "martian_guide",
+          "reason": "Drill in good shape.",
+          "kind": "equipment",
+          "applied": false
+        }
+      ],
+      "readiness": 100.0,
+      "readiness_grade": "S",
+      "unlocked_missions": [
+        "earth_trends"
+      ],
+      "science_notes": [
+        {
+          "topic": {
+            "en": "Mars is mostly basalt",
+            "ar": "Mars is mostly basalt"
+          },
+          "detail": {
+            "en": "The Martian crust is dominantly basaltic; olivine-rich and clay-bearing units record how much water altered the rock.",
+            "ar": "The Martian crust is dominantly basaltic; olivine-rich and clay-bearing units record how much water altered the rock."
+          },
+          "source": "NASA Mars Exploration Program – Mars facts",
+          "url": "https://mars.nasa.gov/all-about-mars/facts/",
+          "simulated": false
+        },
+        {
+          "topic": {
+            "en": "Sample caching",
+            "ar": "Sample caching"
+          },
+          "detail": {
+            "en": "Perseverance seals rock cores in ultra-clean tubes and caches them for a future Mars Sample Return campaign.",
+            "ar": "Perseverance seals rock cores in ultra-clean tubes and caches them for a future Mars Sample Return campaign."
+          },
+          "source": "NASA – Mars Sample Return / Perseverance sampling",
+          "url": "https://science.nasa.gov/mission/mars-sample-return/",
+          "simulated": false
+        }
+      ],
+      "disclaimer": "Educational game simulation. Compositions are generated from curated mineral ranges, not measured from a real sample.",
+      "summary": {
+        "en": "Sample analysed and logged. The science database is now live.",
+        "ar": "Sample analysed and logged. The science database is now live."
+      },
+      "generated_at": "2026-11-12T12:32:00.482114+00:00"
+    },
+    {
+      "mission_id": "lunar_landing",
+      "title": {
+        "en": "Lunar Landing Navigator",
+        "ar": "Lunar Landing Navigator"
+      },
+      "stage": 7,
+      "environment": "simulation_center",
+      "status": "completed",
+      "elapsed_seconds": 59.5,
+      "mistakes": 0,
+      "attempts": 6,
+      "objectives": [
+        {
+          "id": "enter_simulator",
+          "title": {
+            "en": "Enter the landing simulator",
+            "ar": "Enter the landing simulator"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 6.0
+        },
+        {
+          "id": "review_landing_brief",
+          "title": {
+            "en": "Review altitude, speed and fuel",
+            "ar": "Review altitude, speed and fuel"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 8.0
+        },
+        {
+          "id": "configure_descent",
+          "title": {
+            "en": "Choose a descent strategy",
+            "ar": "Choose a descent strategy"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 8.0
+        },
+        {
+          "id": "fly_descent",
+          "title": {
+            "en": "Fly the powered descent",
+            "ar": "Fly the powered descent"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 30.0
+        },
+        {
+          "id": "evaluate_landing",
+          "title": {
+            "en": "Review the landing score",
+            "ar": "Review the landing score"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 12.0
+        },
+        {
+          "id": "exit_simulator",
+          "title": {
+            "en": "Exit the simulator",
+            "ar": "Exit the simulator"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 6.0
+        }
+      ],
+      "earned_points": 70.0,
+      "max_points": 70.0,
+      "mistake_penalty": 0.0,
+      "time_bonus": 9.01,
+      "efficiency_bonus": 0.0,
+      "score": 79.01,
+      "score_pct": 100.0,
+      "grade": "S",
+      "passed": true,
+      "resources": {
+        "water": 150,
+        "oxygen": 118,
+        "power": 80,
+        "fuel": 36
+      },
+      "continuity_modifiers": [
+        {
+          "key": "landing:power",
+          "label": "Simulator performance → power reserve",
+          "value": 8.0,
+          "source_mission": "lunar_landing",
+          "reason": "Precise landing, minimal fuel.",
+          "kind": "resource",
+          "applied": false
+        },
+        {
+          "key": "landing_readiness",
+          "label": "Piloting skill → readiness",
+          "value": 8.0,
+          "source_mission": "lunar_landing",
+          "reason": "Excellent piloting.",
+          "kind": "readiness",
+          "applied": true
+        }
+      ],
+      "readiness": 100.0,
+      "readiness_grade": "S",
+      "unlocked_missions": [],
+      "science_notes": [
+        {
+          "topic": {
+            "en": "No atmosphere, no parachutes",
+            "ar": "No atmosphere, no parachutes"
+          },
+          "detail": {
+            "en": "The Moon's surface gravity is about 1.62 m/s² and it has no meaningful atmosphere, so every landing must be propulsive – Apollo's LM used a throttleable descent engine.",
+            "ar": "The Moon's surface gravity is about 1.62 m/s² and it has no meaningful atmosphere, so every landing must be propulsive – Apollo's LM used a throttleable descent engine."
+          },
+          "source": "NASA – Moon facts / Apollo Lunar Module",
+          "url": "https://science.nasa.gov/moon/facts/",
+          "simulated": false
+        }
+      ],
+      "disclaimer": "Educational game simulation. The lander model is simplified 2-D physics, not a flight-certified simulator.",
+      "summary": {
+        "en": "Lunar landing certified inside the simulator.",
+        "ar": "Lunar landing certified inside the simulator."
+      },
+      "generated_at": "2026-11-12T12:32:02.824989+00:00"
+    },
+    {
+      "mission_id": "earth_trends",
+      "title": {
+        "en": "Earth Trends – Observation Station",
+        "ar": "Earth Trends – Observation Station"
+      },
+      "stage": 8,
+      "environment": "earth_observation",
+      "status": "completed",
+      "elapsed_seconds": 0.18,
+      "mistakes": 0,
+      "attempts": 6,
+      "objectives": [
+        {
+          "id": "enter_observation_station",
+          "title": {
+            "en": "Enter the observation station",
+            "ar": "Enter the observation station"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 6.0
+        },
+        {
+          "id": "select_region",
+          "title": {
+            "en": "Select a region",
+            "ar": "Select a region"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 10.0
+        },
+        {
+          "id": "enable_layer",
+          "title": {
+            "en": "Enable a data layer",
+            "ar": "Enable a data layer"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 12.0
+        },
+        {
+          "id": "compare_periods",
+          "title": {
+            "en": "Compare two periods",
+            "ar": "Compare two periods"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 18.0
+        },
+        {
+          "id": "interpret_change",
+          "title": {
+            "en": "Interpret the change",
+            "ar": "Interpret the change"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 12.0
+        },
+        {
+          "id": "save_report",
+          "title": {
+            "en": "Save the observation report",
+            "ar": "Save the observation report"
+          },
+          "completed": true,
+          "optional": false,
+          "points": 14.0
+        }
+      ],
+      "earned_points": 72.0,
+      "max_points": 72.0,
+      "mistake_penalty": 0.0,
+      "time_bonus": 8.0,
+      "efficiency_bonus": 0.0,
+      "score": 80.0,
+      "score_pct": 100.0,
+      "grade": "S",
+      "passed": true,
+      "resources": {
+        "water": 150,
+        "oxygen": 118,
+        "power": 82,
+        "fuel": 36
+      },
+      "continuity_modifiers": [
+        {
+          "key": "earth_readiness",
+          "label": "Science reporting → final readiness",
+          "value": 8.0,
+          "source_mission": "earth_trends",
+          "reason": "Publication-quality analysis.",
+          "kind": "readiness",
+          "applied": true
+        }
+      ],
+      "readiness": 100.0,
+      "readiness_grade": "S",
+      "unlocked_missions": [],
+      "science_notes": [
+        {
+          "topic": {
+            "en": "Reading Earth from orbit",
+            "ar": "Reading Earth from orbit"
+          },
+          "detail": {
+            "en": "MODIS NDVI (MOD13Q1) tracks vegetation greenness, MODIS land surface temperature (MOD11) tracks heat, and GPM IMERG tracks precipitation. NASA POWER serves monthly aggregates of these climate variables without an API key.",
+            "ar": "MODIS NDVI (MOD13Q1) tracks vegetation greenness, MODIS land surface temperature (MOD11) tracks heat, and GPM IMERG tracks precipitation. NASA POWER serves monthly aggregates of these climate variables without an API key."
+          },
+          "source": "NASA – MODIS / GPM / POWER",
+          "url": "https://power.larc.nasa.gov/",
+          "simulated": false
+        }
+      ],
+      "disclaimer": "Educational analysis. Bundled grids are clearly labelled 'simulated'; live NASA POWER data is labelled 'live'.",
+      "summary": {
+        "en": "NOVA campaign complete: Explore. Experience. Execute.",
+        "ar": "NOVA campaign complete: Explore. Experience. Execute."
+      },
+      "generated_at": "2026-11-12T12:32:03.036691+00:00"
+    }
+  ],
+  "stats": {
+    "actions": 93,
+    "successful_actions": 93,
+    "mistakes": 0,
+    "missions_completed": 15,
+    "missions_failed": 0,
+    "samples_collected": 1,
+    "samples_logged": 1,
+    "distance_metres": 720.0,
+    "eva_seconds": 0.0,
+    "playtime_seconds": 259.5,
+    "resources_consumed": {
+      "power": 86,
+      "oxygen": 13,
+      "water": 3,
+      "fuel": 4
+    },
+    "resources_recovered": {
+      "oxygen": 51,
+      "power": 108,
+      "water": 53
+    }
+  },
+  "achievements": {
+    "unlocked": 19,
+    "total": 20,
+    "points": 600,
+    "points_possible": 650,
+    "completion_pct": 95.0
+  },
+  "autopilot": [
+    {
+      "mission_id": "training_prep",
+      "score_pct": 100.0,
+      "grade": "S",
+      "mistakes": 0,
+      "steps": 7,
+      "simulation": null
+    },
+    {
+      "mission_id": "analog_systems_check",
+      "score_pct": 100.0,
+      "grade": "S",
+      "mistakes": 0,
+      "steps": 4,
+      "simulation": null
+    },
+    {
+      "mission_id": "analog_device_fault",
+      "score_pct": 100.0,
+      "grade": "S",
+      "mistakes": 0,
+      "steps": 6,
+      "simulation": null
+    },
+    {
+      "mission_id": "analog_emergency",
+      "score_pct": 100.0,
+      "grade": "S",
+      "mistakes": 0,
+      "steps": 8,
+      "simulation": null
+    },
+    {
+      "mission_id": "analog_power_link",
+      "score_pct": 100.0,
+      "grade": "S",
+      "mistakes": 0,
+      "steps": 6,
+      "simulation": null
+    },
+    {
+      "mission_id": "analog_comms_blackout",
+      "score_pct": 100.0,
+      "grade": "S",
+      "mistakes": 0,
+      "steps": 5,
+      "simulation": null
+    },
+    {
+      "mission_id": "analog_water_leak",
+      "score_pct": 100.0,
+      "grade": "S",
+      "mistakes": 0,
+      "steps": 4,
+      "simulation": null
+    },
+    {
+      "mission_id": "analog_water_recycling",
+      "score_pct": 100.0,
+      "grade": "S",
+      "mistakes": 0,
+      "steps": 6,
+      "simulation": null
+    },
+    {
+      "mission_id": "mars_arrival",
+      "score_pct": 100.0,
+      "grade": "S",
+      "mistakes": 0,
+      "steps": 8,
+      "simulation": null
+    },
+    {
+      "mission_id": "mars_rover_traverse",
+      "score_pct": 100.0,
+      "grade": "S",
+      "mistakes": 0,
+      "steps": 6,
+      "simulation": null
+    },
+    {
+      "mission_id": "crew_health",
+      "score_pct": 100.0,
+      "grade": "S",
+      "mistakes": 0,
+      "steps": 9,
+      "simulation": null
+    },
+    {
+      "mission_id": "freefall_fire",
+      "score_pct": 100.0,
+      "grade": "S",
+      "mistakes": 0,
+      "steps": 8,
+      "simulation": null
+    },
+    {
+      "mission_id": "martian_guide",
+      "score_pct": 100.0,
+      "grade": "S",
+      "mistakes": 0,
+      "steps": 7,
+      "simulation": null
+    },
+    {
+      "mission_id": "lunar_landing",
+      "score_pct": 100.0,
+      "grade": "S",
+      "mistakes": 0,
+      "steps": 7,
+      "simulation": null
+    },
+    {
+      "mission_id": "earth_trends",
+      "score_pct": 100.0,
+      "grade": "S",
+      "mistakes": 0,
+      "steps": 6,
+      "simulation": null
+    }
+  ]
+}

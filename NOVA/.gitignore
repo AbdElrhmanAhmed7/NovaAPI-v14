@@ -1,0 +1,21 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Node / frontend build output
+node_modules/
+dist/
+.vite/
+
+# Local env & editor
+.env
+.vscode/
+.idea/
+.DS_Store

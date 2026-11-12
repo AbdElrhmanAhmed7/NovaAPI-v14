@@ -1,0 +1,1345 @@
+{
+  "summary": {
+    "routes_total": 75,
+    "http_published": 67,
+    "operations": 67,
+    "websockets": 1,
+    "mounts": 1,
+    "guarded_operations": 15,
+    "schemas": 136,
+    "by_tag": {
+      "Content": 7,
+      "Earth Trends": 5,
+      "Games": 14,
+      "Legacy (Prototype-01 compatible)": 6,
+      "Loadout": 6,
+      "Meta": 3,
+      "Missions": 7,
+      "NASA open data": 6,
+      "Science": 6,
+      "Simulations": 7,
+      "Stream": 1
+    },
+    "findings": {
+      "info": 24
+    }
+  },
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/api/v1/content/catalogue",
+      "tag": "Content",
+      "summary": "Items, resources, environments and controls",
+      "response_model": "CatalogueResponse",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/content/controls",
+      "tag": "Content",
+      "summary": "Keyboard/mouse bindings expected by the game client",
+      "response_model": "ControlsResponse",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/content/items",
+      "tag": "Content",
+      "summary": "Item catalogue",
+      "response_model": "list[ItemView]",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/content/missions",
+      "tag": "Content",
+      "summary": "Every mission blueprint (designer-facing, no player state)",
+      "response_model": "list[MissionBlueprintSummary]",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/content/missions/{mission_id}",
+      "tag": "Content",
+      "summary": "One mission blueprint in full detail",
+      "response_model": "MissionBlueprint",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "404",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/content/resources",
+      "tag": "Content",
+      "summary": "Resource definitions (units, caps, critical levels)",
+      "response_model": "list[ResourceView]",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/content/validation",
+      "tag": "Content",
+      "summary": "Static mission-content validation report",
+      "response_model": "ContentValidationResponse",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/earth/catalogue",
+      "tag": "Earth Trends",
+      "summary": "Regions, layers, periods and live-data capability",
+      "response_model": "EarthCatalogueResponse",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/earth/compare",
+      "tag": "Earth Trends",
+      "summary": "Compare two periods (preview, nothing saved)",
+      "response_model": "EarthComparisonResponse",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [
+        "narrative"
+      ],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/games/{game_id}/earth/reports",
+      "tag": "Earth Trends",
+      "summary": "Archived Earth reports for this campaign",
+      "response_model": "list[EarthReportResponse]",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "404",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/games/{game_id}/earth/reports",
+      "tag": "Earth Trends",
+      "summary": "Run the analysis and archive it as a mission report",
+      "response_model": "EarthReportResponse",
+      "status_code": 200,
+      "guarded": true,
+      "idempotent": false,
+      "errors_documented": [
+        "401",
+        "404",
+        "409",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/games/{game_id}/earth/reports/{report_id}",
+      "tag": "Earth Trends",
+      "summary": "One archived Earth report (full grids)",
+      "response_model": "EarthReportResponse",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "404",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/games",
+      "tag": "Games",
+      "summary": "List saved sessions",
+      "response_model": "list[GameListItem]",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/games",
+      "tag": "Games",
+      "summary": "Create a game session",
+      "response_model": "GameCreatedResponse",
+      "status_code": 201,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "409",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/games/import",
+      "tag": "Games",
+      "summary": "Restore an exported save as a new session",
+      "response_model": "SaveImportResponse",
+      "status_code": 201,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [
+        "restored"
+      ],
+      "deprecated": false
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/games/{game_id}",
+      "tag": "Games",
+      "summary": "Delete a save (and its events, reports and samples)",
+      "response_model": "MessageResponse",
+      "status_code": 200,
+      "guarded": true,
+      "idempotent": false,
+      "errors_documented": [
+        "401",
+        "404",
+        "409",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/games/{game_id}",
+      "tag": "Games",
+      "summary": "Full authoritative snapshot (HUD bootstrap)",
+      "response_model": "GameStatePayload",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "404",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [
+        "resources",
+        "resource_caps",
+        "inventory",
+        "suit",
+        "equipment",
+        "missions",
+        "missions_catalogue",
+        "continuity",
+        "stats",
+        "flags"
+      ],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/games/{game_id}/achievements",
+      "tag": "Games",
+      "summary": "Campaign badges with live progress for the locked ones",
+      "response_model": "AchievementsResponse",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "404",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [
+        "tiers"
+      ],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/games/{game_id}/continuity",
+      "tag": "Games",
+      "summary": "Mission Continuity System: readiness and carry-over modifiers",
+      "response_model": "ContinuityResponse",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "404",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [
+        "modifiers",
+        "pending",
+        "history"
+      ],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/games/{game_id}/events",
+      "tag": "Games",
+      "summary": "Poll the event log (cursor based)",
+      "response_model": "EventPage",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "404",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/games/{game_id}/export",
+      "tag": "Games",
+      "summary": "Download a portable save bundle (state + reports + samples + runs)",
+      "response_model": "SaveBundle",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "404",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [
+        "state",
+        "mission_results",
+        "science_samples",
+        "simulation_runs",
+        "earth_reports"
+      ],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/games/{game_id}/reports",
+      "tag": "Games",
+      "summary": "Campaign report (all completed missions)",
+      "response_model": "CampaignReport",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "404",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [
+        "reports",
+        "stats"
+      ],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/games/{game_id}/reports/{mission_id}",
+      "tag": "Games",
+      "summary": "One mission report",
+      "response_model": "MissionReport",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "404",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [
+        "objectives",
+        "continuity_modifiers",
+        "science_notes"
+      ],
+      "deprecated": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/games/{game_id}/resume",
+      "tag": "Games",
+      "summary": "Resume a save and re-issue its session token",
+      "response_model": "GameCreatedResponse",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "404",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/games/{game_id}/tick",
+      "tag": "Games",
+      "summary": "Advance life support (call from the client game loop)",
+      "response_model": "TickResponse",
+      "status_code": 200,
+      "guarded": true,
+      "idempotent": false,
+      "errors_documented": [
+        "401",
+        "404",
+        "409",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [
+        "resources"
+      ],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/leaderboard",
+      "tag": "Games",
+      "summary": "Top campaigns by readiness",
+      "response_model": "list[LeaderboardEntry]",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "POST",
+      "path": "/games",
+      "tag": "Legacy (Prototype-01 compatible)",
+      "summary": "[Legacy] Create a prototype-style session",
+      "response_model": "LegacyGameState",
+      "status_code": 201,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [
+        "resources",
+        "inventory",
+        "missions"
+      ],
+      "deprecated": true
+    },
+    {
+      "method": "GET",
+      "path": "/games/{game_id}/inventory",
+      "tag": "Legacy (Prototype-01 compatible)",
+      "summary": "[Legacy] Inventory",
+      "response_model": "dict[str, int]",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "404",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": true
+    },
+    {
+      "method": "GET",
+      "path": "/games/{game_id}/missions/water-leak",
+      "tag": "Legacy (Prototype-01 compatible)",
+      "summary": "[Legacy] Water-leak mission state",
+      "response_model": "LegacyMissionState",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "404",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": true
+    },
+    {
+      "method": "POST",
+      "path": "/games/{game_id}/missions/water-leak/actions",
+      "tag": "Legacy (Prototype-01 compatible)",
+      "summary": "[Legacy] Execute a water-leak action",
+      "response_model": "LegacyActionResponse",
+      "status_code": 200,
+      "guarded": true,
+      "idempotent": false,
+      "errors_documented": [
+        "401",
+        "404",
+        "409",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [
+        "resources",
+        "inventory"
+      ],
+      "deprecated": true
+    },
+    {
+      "method": "GET",
+      "path": "/games/{game_id}/resources",
+      "tag": "Legacy (Prototype-01 compatible)",
+      "summary": "[Legacy] Resources",
+      "response_model": "dict[str, int]",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "404",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": true
+    },
+    {
+      "method": "GET",
+      "path": "/games/{game_id}/state",
+      "tag": "Legacy (Prototype-01 compatible)",
+      "summary": "[Legacy] Game state",
+      "response_model": "LegacyGameState",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "404",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [
+        "resources",
+        "inventory",
+        "missions"
+      ],
+      "deprecated": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/games/{game_id}/inventory",
+      "tag": "Loadout",
+      "summary": "Inventory + tool condition",
+      "response_model": "InventoryResponse",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "404",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [
+        "inventory",
+        "equipment"
+      ],
+      "deprecated": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/games/{game_id}/inventory/maintain",
+      "tag": "Loadout",
+      "summary": "Service a worn tool (uses a maintenance kit, else habitat power)",
+      "response_model": "MaintenanceResponse",
+      "status_code": 200,
+      "guarded": true,
+      "idempotent": false,
+      "errors_documented": [
+        "401",
+        "404",
+        "409",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [
+        "inventory",
+        "resources"
+      ],
+      "deprecated": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/games/{game_id}/inventory/use",
+      "tag": "Loadout",
+      "summary": "Use a consumable (F key): oxygen tank, power cell, maintenance kit…",
+      "response_model": "ItemUseResponse",
+      "status_code": 200,
+      "guarded": true,
+      "idempotent": false,
+      "errors_documented": [
+        "401",
+        "404",
+        "409",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [
+        "changes",
+        "inventory",
+        "resources",
+        "equipment"
+      ],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/games/{game_id}/resources",
+      "tag": "Loadout",
+      "summary": "Water / oxygen / power / fuel",
+      "response_model": "ResourcesResponse",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "404",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [
+        "resources",
+        "caps",
+        "ratios"
+      ],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/games/{game_id}/suit",
+      "tag": "Loadout",
+      "summary": "Suit integrity, EVA state and oxygen drain rates",
+      "response_model": "SuitResponse",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "404",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [
+        "drain_rates"
+      ],
+      "deprecated": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/games/{game_id}/suit/eva",
+      "tag": "Loadout",
+      "summary": "Toggle EVA mode (leaving the pressurised habitat)",
+      "response_model": "EvaResponse",
+      "status_code": 200,
+      "guarded": true,
+      "idempotent": false,
+      "errors_documented": [
+        "401",
+        "404",
+        "409",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/health",
+      "tag": "Meta",
+      "summary": "Liveness probe",
+      "response_model": "HealthResponse",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ready",
+      "tag": "Meta",
+      "summary": "Readiness probe",
+      "response_model": "ReadinessResponse",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/version",
+      "tag": "Meta",
+      "summary": "Build and content versions",
+      "response_model": "VersionResponse",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/games/{game_id}/missions",
+      "tag": "Missions",
+      "summary": "Mission catalogue with this player's progress",
+      "response_model": "list[MissionCatalogueEntry]",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "404",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/games/{game_id}/missions/{mission_id}",
+      "tag": "Missions",
+      "summary": "Mission state: objectives, availability and unmet preconditions",
+      "response_model": "MissionView",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "404",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [
+        "simulation_state"
+      ],
+      "deprecated": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/games/{game_id}/missions/{mission_id}/actions",
+      "tag": "Missions",
+      "summary": "Perform one interaction (scan, close valve, repair, collect…)",
+      "response_model": "MissionActionResponse",
+      "status_code": 200,
+      "guarded": true,
+      "idempotent": true,
+      "errors_documented": [
+        "401",
+        "404",
+        "409",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [
+        "changes",
+        "resources",
+        "inventory",
+        "report",
+        "side_effects"
+      ],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/games/{game_id}/missions/{mission_id}/interactions",
+      "tag": "Missions",
+      "summary": "World objects + currently possible interactions (for 3D prompts)",
+      "response_model": "InteractionMap",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "404",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/games/{game_id}/missions/{mission_id}/report",
+      "tag": "Missions",
+      "summary": "Debrief for a completed mission",
+      "response_model": "MissionReport",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "404",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [
+        "objectives",
+        "continuity_modifiers",
+        "science_notes"
+      ],
+      "deprecated": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/games/{game_id}/missions/{mission_id}/restart",
+      "tag": "Missions",
+      "summary": "Retry an unfinished mission (kept mistakes, spent resources stay spent)",
+      "response_model": "MissionRestartResponse",
+      "status_code": 200,
+      "guarded": true,
+      "idempotent": false,
+      "errors_documented": [
+        "401",
+        "404",
+        "409",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [
+        "mission",
+        "resources"
+      ],
+      "deprecated": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/games/{game_id}/missions/{mission_id}/start",
+      "tag": "Missions",
+      "summary": "Enter a mission (applies pending continuity modifiers)",
+      "response_model": "MissionStartResponse",
+      "status_code": 200,
+      "guarded": true,
+      "idempotent": false,
+      "errors_documented": [
+        "401",
+        "404",
+        "409",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [
+        "resources"
+      ],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/nasa/apod",
+      "tag": "NASA open data",
+      "summary": "Astronomy Picture of the Day",
+      "response_model": "ApodResponse",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "422",
+        "429",
+        "500",
+        "502"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/nasa/donki",
+      "tag": "NASA open data",
+      "summary": "Space weather events (DONKI)",
+      "response_model": "DonkiResponse",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "422",
+        "429",
+        "500",
+        "502"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/nasa/epic",
+      "tag": "NASA open data",
+      "summary": "EPIC full-disk Earth imagery",
+      "response_model": "EpicResponse",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "422",
+        "429",
+        "500",
+        "502"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/nasa/mars-photos",
+      "tag": "NASA open data",
+      "summary": "Mars rover photography",
+      "response_model": "MarsPhotosResponse",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "422",
+        "429",
+        "500",
+        "502"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/nasa/neo",
+      "tag": "NASA open data",
+      "summary": "Near-Earth object feed",
+      "response_model": "NeoResponse",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "422",
+        "429",
+        "500",
+        "502"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/nasa/status",
+      "tag": "NASA open data",
+      "summary": "Integration status and cache statistics",
+      "response_model": "NasaStatusResponse",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/games/{game_id}/science",
+      "tag": "Science",
+      "summary": "The player's science database",
+      "response_model": "ScienceDatabaseResponse",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "404",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [
+        "by_rock_type"
+      ],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/games/{game_id}/science/samples",
+      "tag": "Science",
+      "summary": "Collected samples",
+      "response_model": "list[SampleRecord]",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "404",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/games/{game_id}/science/samples/{sample_id}",
+      "tag": "Science",
+      "summary": "One sample with its composition and analysis",
+      "response_model": "SampleRecord",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "404",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [
+        "composition"
+      ],
+      "deprecated": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/games/{game_id}/science/samples/{sample_id}/analyse",
+      "tag": "Science",
+      "summary": "Run the spectrometer (tool condition affects confidence)",
+      "response_model": "SampleAnalysisResponse",
+      "status_code": 200,
+      "guarded": true,
+      "idempotent": false,
+      "errors_documented": [
+        "401",
+        "404",
+        "409",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/games/{game_id}/science/samples/{sample_id}/log",
+      "tag": "Science",
+      "summary": "Record the finding in the science database",
+      "response_model": "SampleLogResponse",
+      "status_code": 200,
+      "guarded": true,
+      "idempotent": false,
+      "errors_documented": [
+        "401",
+        "404",
+        "409",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/science/reference",
+      "tag": "Science",
+      "summary": "Curated mineral signatures and sampling sites",
+      "response_model": "ScienceReferenceResponse",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/games/{game_id}/missions/{mission_id}/simulation",
+      "tag": "Simulations",
+      "summary": "Current telemetry",
+      "response_model": "SimulationResponse",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "404",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/games/{game_id}/missions/{mission_id}/simulation/reset",
+      "tag": "Simulations",
+      "summary": "Abort the current run and start a fresh one",
+      "response_model": "SimulationResponse",
+      "status_code": 200,
+      "guarded": true,
+      "idempotent": false,
+      "errors_documented": [
+        "401",
+        "404",
+        "409",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/games/{game_id}/missions/{mission_id}/simulation/scene",
+      "tag": "Simulations",
+      "summary": "Static geometry: terrain profile, waypoints, hazards",
+      "response_model": "SimulationSceneResponse",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "404",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/games/{game_id}/missions/{mission_id}/simulation/start",
+      "tag": "Simulations",
+      "summary": "Start a run (draws habitat power)",
+      "response_model": "SimulationResponse",
+      "status_code": 200,
+      "guarded": true,
+      "idempotent": false,
+      "errors_documented": [
+        "401",
+        "404",
+        "409",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/games/{game_id}/missions/{mission_id}/simulation/tick",
+      "tag": "Simulations",
+      "summary": "Advance the model with player intent",
+      "response_model": "SimulationResponse",
+      "status_code": 200,
+      "guarded": true,
+      "idempotent": false,
+      "errors_documented": [
+        "401",
+        "404",
+        "409",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/games/{game_id}/simulation-runs",
+      "tag": "Simulations",
+      "summary": "History of simulation attempts",
+      "response_model": "list[SimulationRunRecord]",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "404",
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/simulations",
+      "tag": "Simulations",
+      "summary": "Available simulators",
+      "response_model": "list[SimulationDescriptor]",
+      "status_code": 200,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [
+        "422",
+        "429",
+        "500"
+      ],
+      "loose_fields": [],
+      "deprecated": false
+    },
+    {
+      "method": "WS",
+      "path": "/api/v1/games/{game_id}/stream",
+      "tag": "Stream",
+      "summary": "Live event tail (read model)",
+      "response_model": "—",
+      "status_code": null,
+      "guarded": false,
+      "idempotent": false,
+      "errors_documented": [],
+      "loose_fields": [],
+      "deprecated": false
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+name: backend
+
+on:
+  push:
+    paths: ["NOVA/backend/**", ".github/workflows/backend.yml"]
+  pull_request:
+    paths: ["NOVA/backend/**", ".github/workflows/backend.yml"]
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: NOVA/backend
+
+jobs:
+  quality:
+    name: lint · types · content · contract
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: NOVA/backend/requirements-dev.txt
+      - run: pip install -r requirements-dev.txt
+      - name: Ruff
+        run: |
+          ruff check .
+          ruff format --check .
+      - name: Mypy
+        run: mypy app scripts
+      - name: Mission content is winnable
+        run: python scripts/validate_content.py --strict
+      - name: Route audit (guards, typed responses, security)
+        run: python scripts/audit_routes.py --check
+      - name: Exported OpenAPI contract is fresh
+        run: python scripts/export_openapi.py --check
+      - name: Player-facing API text is English
+        run: python scripts/audit_player_text.py --json player-text.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: player-text
+          path: NOVA/backend/player-text.json
+
+  tests:
+    name: pytest (offline)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: NOVA/backend/requirements-dev.txt
+      - run: pip install -r requirements-dev.txt
+      - name: Test with coverage
+        run: pytest --cov=app --cov-report=term-missing --cov-report=xml
+      - uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: NOVA/backend/coverage.xml
+
+  campaign:
+    name: full campaign playthrough
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: NOVA/backend/requirements-dev.txt
+      - run: pip install -r requirements-dev.txt
+      - name: Play all 15 missions over the public API
+        run: python scripts/playthrough.py --in-process --json campaign.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: campaign-report
+          path: NOVA/backend/campaign.json

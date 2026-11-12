@@ -1,0 +1,163 @@
+{
+  "id": "freefall_fire",
+  "stage": 5,
+  "title": {"en": "Flame in Freefall", "ar": "Flame in Freefall"},
+  "summary": {"en": "A fire aboard the orbital station: isolate, protect, suppress with CO2, then restore the atmosphere.", "ar": "A fire aboard the orbital station: isolate, protect, suppress with CO2, then restore the atmosphere."},
+  "environment": "orbital_station",
+  "estimated_minutes": 9,
+  "requires_missions": ["crew_health"],
+  "simulation": "microgravity_fire",
+  "briefing": [
+    {"en": "Without buoyancy there is no upward plume: flames grow as slow spheres and can survive on less oxygen.", "ar": "Without buoyancy there is no upward plume: flames grow as slow spheres and can survive on less oxygen."},
+    {"en": "CO2 puts the fire out but also displaces breathable oxygen. Watch the cabin gauge.", "ar": "CO2 puts the fire out but also displaces breathable oxygen. Watch the cabin gauge."},
+    {"en": "Ventilation off during suppression, scrubber on afterwards.", "ar": "Ventilation off during suppression, scrubber on afterwards."}
+  ],
+  "objectives": [
+    {
+      "id": "reach_incident_zone",
+      "title": {"en": "Reach the incident zone", "ar": "Reach the incident zone"},
+      "hint": {"en": "Follow the alarm to the science rack.", "ar": "Follow the alarm to the science rack."},
+      "target": "science_rack",
+      "animation": "float_move",
+      "duration_ms": 1600,
+      "effects": {"world": {"fire.at_zone": true, "fire_active": true}},
+      "score": 6
+    },
+    {
+      "id": "isolate_zone",
+      "title": {"en": "Isolate the zone", "ar": "Isolate the zone"},
+      "hint": {"en": "Control panel: cut rack power and stop ventilation to starve the flow.", "ar": "Control panel: cut rack power and stop ventilation to starve the flow."},
+      "target": "zone_control_panel",
+      "animation": "confirm",
+      "duration_ms": 1800,
+      "requires": [{"type": "objective", "id": "reach_incident_zone"}],
+      "effects": {"sim": {"zone_isolated": true, "ventilation_on": false}, "world": {"fire.zone_isolated": true}, "flags_set": ["fire_isolated"], "resources": {"power": -2}},
+      "score": 14,
+      "success_message": {"en": "Zone isolated, airflow stopped.", "ar": "Zone isolated, airflow stopped."}
+    },
+    {
+      "id": "collect_fire_gear",
+      "title": {"en": "Collect protection and extinguisher", "ar": "Collect protection and extinguisher"},
+      "hint": {"en": "Emergency locker: CO2 extinguisher, thermal gloves, fire blanket.", "ar": "Emergency locker: CO2 extinguisher, thermal gloves, fire blanket."},
+      "target": "fire_locker",
+      "animation": "pickup",
+      "duration_ms": 1600,
+      "require_previous": false,
+      "effects": {"items": {"co2_extinguisher": 1, "thermal_gloves": 1, "fire_blanket": 1}},
+      "score": 8
+    },
+    {
+      "id": "equip_extinguisher",
+      "title": {"en": "Equip extinguisher and gloves", "ar": "Equip extinguisher and gloves"},
+      "hint": {"en": "You cannot discharge CO2 bare-handed in freefall.", "ar": "You cannot discharge CO2 bare-handed in freefall."},
+      "target": "fire_locker",
+      "animation": "equip",
+      "duration_ms": 1800,
+      "requires": [{"type": "item", "id": "co2_extinguisher"}, {"type": "item", "id": "thermal_gloves"}],
+      "effects": {"sim": {"extinguisher_equipped": true, "gloves_equipped": true}, "world": {"fire.equipped": true}},
+      "score": 10
+    },
+    {
+      "id": "suppress_fire",
+      "title": {"en": "Suppress the fire", "ar": "Suppress the fire"},
+      "hint": {"en": "Discharge CO2 in short bursts until the flame is out and the cabin is safe.", "ar": "Discharge CO2 in short bursts until the flame is out and the cabin is safe."},
+      "target": "science_rack",
+      "animation": "extinguish",
+      "duration_ms": 2000,
+      "requires": [{"type": "sim", "path": "status", "op": "eq", "value": "succeeded", "hint": {"en": "Run the fire simulation until the fire is out.", "ar": "Run the fire simulation until the fire is out."}}],
+      "effects": {"world": {"fire_active": false, "fire.suppressed": true}, "flags_set": ["fire_suppressed"], "equipment_wear": {"co2_extinguisher": 20}},
+      "score": 26,
+      "success_message": {"en": "Fire out. Cabin atmosphere recovering.", "ar": "Fire out. Cabin atmosphere recovering."}
+    },
+    {
+      "id": "restore_ventilation",
+      "title": {"en": "Restore ventilation and scrubbers", "ar": "Restore ventilation and scrubbers"},
+      "hint": {"en": "Restart airflow and the CO2 scrubber to clear combustion products.", "ar": "Restart airflow and the CO2 scrubber to clear combustion products."},
+      "target": "zone_control_panel",
+      "animation": "confirm",
+      "duration_ms": 2000,
+      "requires": [{"type": "sim", "path": "suppressed", "op": "eq", "value": true, "hint": {"en": "Put the fire out first.", "ar": "Put the fire out first."}}],
+      "effects": {"sim": {"ventilation_on": true, "scrubber_on": true}, "world": {"fire.ventilation_restored": true}, "resources": {"power": -3}},
+      "score": 14
+    },
+    {
+      "id": "verify_atmosphere",
+      "title": {"en": "Verify atmosphere and safety systems", "ar": "Verify atmosphere and safety systems"},
+      "hint": {"en": "Scan O2, CO2, smoke and temperature, then reset the alarm.", "ar": "Scan O2, CO2, smoke and temperature, then reset the alarm."},
+      "target": "safety_panel",
+      "animation": "scan",
+      "duration_ms": 2200,
+      "requires": [{"type": "item", "id": "scanner"}, {"type": "objective", "id": "restore_ventilation"}],
+      "effects": {"world": {"fire.atmosphere_safe": true}, "flags_set": ["fire_cleared"], "resources": {"power": -2}, "equipment_wear": {"scanner": 3}, "readiness": 2.0},
+      "score": 14,
+      "success_message": {"en": "Cabin nominal. Fire alarm reset.", "ar": "Cabin nominal. Fire alarm reset."}
+    }
+  ],
+  "hazards": [
+    {
+      "action": "equip_extinguisher",
+      "missing_any": ["thermal_gloves"],
+      "effects": {"readiness": -3.0},
+      "message": {"en": "The CO2 horn frosts instantly – you need thermal gloves.", "ar": "The CO2 horn frosts instantly – you need thermal gloves."},
+      "mistake_penalty": 6.0
+    },
+    {
+      "action": "restore_ventilation",
+      "missing_any": ["suppressed"],
+      "effects": {"resources": {"oxygen": -5}},
+      "message": {"en": "Restarting airflow feeds the fire with oxygen. Suppress it first.", "ar": "Restarting airflow feeds the fire with oxygen. Suppress it first."},
+      "mistake_penalty": 9.0
+    }
+  ],
+  "scoring": {"mistake_penalty": 6.0, "time_target_seconds": 540.0, "time_bonus_max": 10.0, "pass_score_pct": 60.0},
+  "completion": {
+    "effects": {"world": {"fire.done": true}},
+    "unlocks": [],
+    "summary": {"en": "Fire suppressed and the cabin certified safe.", "ar": "Fire suppressed and the cabin certified safe."},
+    "continuity": [
+      {
+        "key": "fire:oxygen",
+        "label": {"en": "Atmosphere management → oxygen reserve", "ar": "Atmosphere management → oxygen reserve"},
+        "kind": "resource",
+        "metric": "resource_pct:oxygen",
+        "bands": [
+          {"min": 70, "value": 8, "reason": {"en": "Careful CO2 use kept the cabin breathable.", "ar": "Careful CO2 use kept the cabin breathable."}},
+          {"min": 0, "value": -8, "reason": {"en": "Over-discharge left the cabin oxygen-poor.", "ar": "Over-discharge left the cabin oxygen-poor."}}
+        ]
+      },
+      {
+        "key": "fire_readiness",
+        "label": {"en": "Emergency response → readiness", "ar": "Emergency response → readiness"},
+        "kind": "readiness",
+        "metric": "sim:result.score_pct",
+        "bands": [
+          {"min": 80, "value": 8, "reason": {"en": "Textbook suppression.", "ar": "Textbook suppression."}},
+          {"min": 0, "value": -5, "reason": {"en": "Messy suppression.", "ar": "Messy suppression."}}
+        ]
+      }
+    ]
+  },
+  "science_notes": [
+    {
+      "topic": {"en": "Flames without buoyancy", "ar": "Flames without buoyancy"},
+      "detail": {"en": "In microgravity, hot gas does not rise, so flames become spherical, burn cooler and can persist at lower oxygen levels; NASA's FLEX experiments even observed 'cool flames' continuing after the visible flame went out.", "ar": "In microgravity, hot gas does not rise, so flames become spherical, burn cooler and can persist at lower oxygen levels; NASA's FLEX experiments even observed 'cool flames' continuing after the visible flame went out."},
+      "source": "NASA – Flame Extinguishment Experiment (FLEX/FLEX-2)",
+      "url": "https://www.nasa.gov/mission_pages/station/research/experiments/1177.html",
+      "simulated": true
+    },
+    {
+      "topic": {"en": "Why CO2 extinguishers", "ar": "Why CO2 extinguishers"},
+      "detail": {"en": "The ISS uses CO2 extinguishers because water or powder would float freely and damage equipment; CO2 displaces oxygen locally, which is itself a crew hazard.", "ar": "The ISS uses CO2 extinguishers because water or powder would float freely and damage equipment; CO2 displaces oxygen locally, which is itself a crew hazard."},
+      "source": "NASA – ISS fire safety hardware (curated summary)",
+      "url": "https://www.nasa.gov/missions/station/",
+      "simulated": true
+    }
+  ],
+  "world_objects": [
+    {"id": "science_rack", "label": {"en": "Burning Science Rack", "ar": "Burning Science Rack"}, "kind": "device", "position": [0, 0.8, 6], "interactions": ["reach_incident_zone", "suppress_fire"]},
+    {"id": "zone_control_panel", "label": {"en": "Zone Control Panel", "ar": "Zone Control Panel"}, "kind": "terminal", "position": [-3, 1.0, 4], "interactions": ["isolate_zone", "restore_ventilation"]},
+    {"id": "fire_locker", "label": {"en": "Fire Locker", "ar": "Fire Locker"}, "kind": "locker", "position": [3, 0.6, 3], "interactions": ["collect_fire_gear", "equip_extinguisher"]},
+    {"id": "safety_panel", "label": {"en": "Safety Panel", "ar": "Safety Panel"}, "kind": "terminal", "position": [4, 1.0, 6], "interactions": ["verify_atmosphere"]}
+  ],
+  "disclaimer": "Educational game simulation. Fire and atmosphere physics are simplified for gameplay."
+}

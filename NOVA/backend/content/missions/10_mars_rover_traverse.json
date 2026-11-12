@@ -1,0 +1,118 @@
+{
+  "id": "mars_rover_traverse",
+  "stage": 3,
+  "title": {"en": "Long-Range Rover Traverse", "ar": "Long-Range Rover Traverse"},
+  "summary": {"en": "Drive the rover to the far survey sites without wrecking it or draining the battery.", "ar": "Drive the rover to the far survey sites without wrecking it or draining the battery."},
+  "environment": "mars_surface",
+  "estimated_minutes": 9,
+  "requires_missions": ["mars_arrival"],
+  "simulation": "rover_traverse",
+  "briefing": [
+    {"en": "The rover is server-simulated: send throttle/heading or engage autopilot, then tick.", "ar": "The rover is server-simulated: send throttle/heading or engage autopilot, then tick."},
+    {"en": "Hazards damage the chassis; damage lowers top speed.", "ar": "Hazards damage the chassis; damage lowers top speed."}
+  ],
+  "objectives": [
+    {
+      "id": "board_rover",
+      "title": {"en": "Board the rover", "ar": "Board the rover"},
+      "hint": {"en": "Climb in and switch to rover activity (low oxygen drain).", "ar": "Climb in and switch to rover activity (low oxygen drain)."},
+      "target": "rover",
+      "animation": "enter_rover",
+      "duration_ms": 2200,
+      "requires": [{"type": "flag", "id": "base_established"}],
+      "effects": {"world": {"rover.boarded": true}, "flags_set": ["rover_boarded"]},
+      "score": 8
+    },
+    {
+      "id": "set_nav_target",
+      "title": {"en": "Set the navigation target", "ar": "Set the navigation target"},
+      "hint": {"en": "Pick a waypoint on the nav console, then drive.", "ar": "Pick a waypoint on the nav console, then drive."},
+      "target": "rover_console",
+      "animation": "read_terminal",
+      "duration_ms": 1200,
+      "requires": [{"type": "flag", "id": "rover_boarded"}],
+      "payload": [{"name": "waypoint", "type": "string", "choices": ["survey_ridge", "sample_site", "base_camp"], "default": "survey_ridge", "label": {"en": "Waypoint", "ar": "Waypoint"}}],
+      "effects": {"world": {"rover.nav_target": "{{payload.waypoint}}"}, "sim": {"autopilot": true}},
+      "score": 8
+    },
+    {
+      "id": "drive_traverse",
+      "title": {"en": "Complete the traverse", "ar": "Complete the traverse"},
+      "hint": {"en": "Reach Survey Ridge and Sample Site Alpha, then log the traverse.", "ar": "Reach Survey Ridge and Sample Site Alpha, then log the traverse."},
+      "target": "rover_console",
+      "animation": "drive",
+      "duration_ms": 1500,
+      "requires": [
+        {"type": "sim", "path": "status", "op": "eq", "value": "succeeded", "hint": {"en": "Finish the rover run first (POST simulation/tick).", "ar": "Finish the rover run first (POST simulation/tick)."}}
+      ],
+      "effects": {"world": {"rover.traverse_done": true}, "stats": {"distance_metres": 600.0}, "resources": {"power": -4}},
+      "score": 26,
+      "success_message": {"en": "Traverse logged. Both survey sites reached.", "ar": "Traverse logged. Both survey sites reached."}
+    },
+    {
+      "id": "disembark_rover",
+      "title": {"en": "Disembark at the site", "ar": "Disembark at the site"},
+      "hint": {"en": "Park, set the brake and step out.", "ar": "Park, set the brake and step out."},
+      "target": "rover",
+      "animation": "exit_rover",
+      "duration_ms": 2000,
+      "requires": [{"type": "objective", "id": "drive_traverse"}],
+      "effects": {"world": {"rover.boarded": false}, "flags_clear": ["rover_boarded"]},
+      "score": 8
+    },
+    {
+      "id": "deploy_transponder",
+      "title": {"en": "Deploy the navigation beacon", "ar": "Deploy the navigation beacon"},
+      "hint": {"en": "Leave a transponder so the return route is marked.", "ar": "Leave a transponder so the return route is marked."},
+      "target": "beacon_spot",
+      "animation": "place_marker",
+      "duration_ms": 1800,
+      "requires": [{"type": "item", "id": "rover_transponder"}, {"type": "objective", "id": "disembark_rover"}],
+      "effects": {"world": {"rover.beacon": true}, "flags_set": ["rover_beacon"], "resources": {"power": -1}},
+      "score": 10
+    }
+  ],
+  "hazards": [
+    {
+      "action": "drive_traverse",
+      "missing_any": ["status"],
+      "effects": {"resources": {"power": -2}},
+      "message": {"en": "The traverse is not finished – keep driving before you log it.", "ar": "The traverse is not finished – keep driving before you log it."},
+      "mistake_penalty": 4.0
+    }
+  ],
+  "scoring": {"mistake_penalty": 4.0, "time_target_seconds": 600.0, "time_bonus_max": 10.0, "pass_score_pct": 55.0},
+  "completion": {
+    "effects": {"world": {"mars.traverse_done": true}},
+    "unlocks": ["martian_guide"],
+    "summary": {"en": "Far sites reached. Geological sampling is now possible.", "ar": "Far sites reached. Geological sampling is now possible."},
+    "continuity": [
+      {
+        "key": "traverse:power",
+        "label": {"en": "Driving efficiency → power reserve", "ar": "Driving efficiency → power reserve"},
+        "kind": "resource",
+        "metric": "sim:result.score_pct",
+        "bands": [
+          {"min": 80, "value": 8, "reason": {"en": "Efficient driving preserved the battery.", "ar": "Efficient driving preserved the battery."}},
+          {"min": 50, "value": 3, "reason": {"en": "Acceptable traverse efficiency.", "ar": "Acceptable traverse efficiency."}},
+          {"min": 0, "value": -6, "reason": {"en": "Hazard hits and detours cost energy.", "ar": "Hazard hits and detours cost energy."}}
+        ]
+      }
+    ]
+  },
+  "science_notes": [
+    {
+      "topic": {"en": "Rover driving is slow and careful", "ar": "Rover driving is slow and careful"},
+      "detail": {"en": "Perseverance drives tens to a few hundred metres per sol; terrain relative navigation and hazard avoidance matter more than speed.", "ar": "Perseverance drives tens to a few hundred metres per sol; terrain relative navigation and hazard avoidance matter more than speed."},
+      "source": "NASA – Mars 2020 Perseverance mobility",
+      "url": "https://science.nasa.gov/mission/mars-2020-perseverance/",
+      "simulated": true
+    }
+  ],
+  "world_objects": [
+    {"id": "rover", "label": {"en": "Pressurised Rover", "ar": "Pressurised Rover"}, "kind": "vehicle", "position": [36, 0, -8], "interactions": ["board_rover", "disembark_rover"]},
+    {"id": "rover_console", "label": {"en": "Rover Console", "ar": "Rover Console"}, "kind": "terminal", "position": [36, 1.1, -7.4], "interactions": ["set_nav_target", "drive_traverse"]},
+    {"id": "beacon_spot", "label": {"en": "Beacon Spot", "ar": "Beacon Spot"}, "kind": "marker", "position": [420, 0, -60], "interactions": ["deploy_transponder"]}
+  ],
+  "disclaimer": "Educational game simulation. Rover dynamics are game-scaled, not a mobility model."
+}

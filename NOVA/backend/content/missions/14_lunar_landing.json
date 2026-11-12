@@ -1,0 +1,136 @@
+{
+  "id": "lunar_landing",
+  "stage": 7,
+  "title": {"en": "Lunar Landing Navigator", "ar": "Lunar Landing Navigator"},
+  "summary": {"en": "A separate simulator session: fly a powered descent and touch down inside the pad.", "ar": "A separate simulator session: fly a powered descent and touch down inside the pad."},
+  "environment": "simulation_center",
+  "estimated_minutes": 10,
+  "requires_missions": ["mars_arrival"],
+  "simulation": "lunar_lander",
+  "briefing": [
+    {"en": "This is a SIMULATOR on the training campus – the Moon is not Mars.", "ar": "This is a SIMULATOR on the training campus – the Moon is not Mars."},
+    {"en": "Lunar gravity is 1.62 m/s². There is no atmosphere, so no parachutes: only thrust.", "ar": "Lunar gravity is 1.62 m/s². There is no atmosphere, so no parachutes: only thrust."},
+    {"en": "Touch down under 3 m/s vertical, 1.5 m/s horizontal, within 8 degrees of vertical, on the pad.", "ar": "Touch down under 3 m/s vertical, 1.5 m/s horizontal, within 8 degrees of vertical, on the pad."}
+  ],
+  "objectives": [
+    {
+      "id": "enter_simulator",
+      "title": {"en": "Enter the landing simulator", "ar": "Enter the landing simulator"},
+      "hint": {"en": "Strap in and power up the console.", "ar": "Strap in and power up the console."},
+      "target": "simulator_pod",
+      "animation": "enter_pod",
+      "duration_ms": 2200,
+      "effects": {"world": {"simulator.entered": true}, "resources": {"power": -2}},
+      "score": 6
+    },
+    {
+      "id": "review_landing_brief",
+      "title": {"en": "Review altitude, speed and fuel", "ar": "Review altitude, speed and fuel"},
+      "hint": {"en": "Read the initial state and the terrain profile before burning.", "ar": "Read the initial state and the terrain profile before burning."},
+      "target": "sim_console",
+      "animation": "read_terminal",
+      "duration_ms": 1600,
+      "requires": [{"type": "objective", "id": "enter_simulator"}],
+      "effects": {"world": {"lander.briefed": true}},
+      "score": 8
+    },
+    {
+      "id": "configure_descent",
+      "title": {"en": "Choose a descent strategy", "ar": "Choose a descent strategy"},
+      "hint": {"en": "Conservative saves attitude control, aggressive saves fuel.", "ar": "Conservative saves attitude control, aggressive saves fuel."},
+      "target": "sim_console",
+      "animation": "confirm",
+      "duration_ms": 1200,
+      "requires": [{"type": "objective", "id": "review_landing_brief"}],
+      "payload": [{"name": "strategy", "type": "string", "choices": ["conservative", "aggressive"], "default": "conservative", "label": {"en": "Descent strategy", "ar": "Descent strategy"}}],
+      "effects": {"world": {"lander.strategy": "{{payload.strategy}}"}},
+      "score": 8
+    },
+    {
+      "id": "fly_descent",
+      "title": {"en": "Fly the powered descent", "ar": "Fly the powered descent"},
+      "hint": {"en": "Tick the simulator with throttle and attitude until you land safely.", "ar": "Tick the simulator with throttle and attitude until you land safely."},
+      "target": "sim_console",
+      "animation": "pilot",
+      "duration_ms": 1500,
+      "requires": [{"type": "sim", "path": "status", "op": "eq", "value": "succeeded", "hint": {"en": "Land safely inside the simulator first.", "ar": "Land safely inside the simulator first."}}],
+      "effects": {"world": {"lander.landed": true}, "flags_set": ["lunar_landed"]},
+      "score": 30,
+      "success_message": {"en": "Contact light. Engine stop. You are on the pad.", "ar": "Contact light. Engine stop. You are on the pad."}
+    },
+    {
+      "id": "evaluate_landing",
+      "title": {"en": "Review the landing score", "ar": "Review the landing score"},
+      "hint": {"en": "Accuracy, touchdown speeds, attitude and fuel usage.", "ar": "Accuracy, touchdown speeds, attitude and fuel usage."},
+      "target": "sim_console",
+      "animation": "read_terminal",
+      "duration_ms": 1600,
+      "requires": [{"type": "objective", "id": "fly_descent"}],
+      "effects": {"world": {"lander.evaluated": true}, "flags_set": ["lunar_certified"], "readiness": 4.0},
+      "score": 12
+    },
+    {
+      "id": "exit_simulator",
+      "title": {"en": "Exit the simulator", "ar": "Exit the simulator"},
+      "hint": {"en": "Session over – back to the campus.", "ar": "Session over – back to the campus."},
+      "target": "simulator_pod",
+      "animation": "exit_pod",
+      "duration_ms": 1800,
+      "requires": [{"type": "objective", "id": "evaluate_landing"}],
+      "effects": {"world": {"simulator.entered": false, "simulator.session_done": true}},
+      "score": 6
+    }
+  ],
+  "hazards": [
+    {
+      "action": "fly_descent",
+      "missing_any": ["status"],
+      "effects": {"resources": {"power": -2}},
+      "message": {"en": "You have not landed yet. Keep flying the descent (or reset the run).", "ar": "You have not landed yet. Keep flying the descent (or reset the run)."},
+      "mistake_penalty": 3.0
+    }
+  ],
+  "scoring": {"mistake_penalty": 3.0, "time_target_seconds": 600.0, "time_bonus_max": 10.0, "pass_score_pct": 55.0},
+  "completion": {
+    "effects": {"world": {"lander.done": true}},
+    "unlocks": ["earth_trends"],
+    "summary": {"en": "Lunar landing certified inside the simulator.", "ar": "Lunar landing certified inside the simulator."},
+    "continuity": [
+      {
+        "key": "landing:power",
+        "label": {"en": "Simulator performance → power reserve", "ar": "Simulator performance → power reserve"},
+        "kind": "resource",
+        "metric": "sim:result.score_pct",
+        "bands": [
+          {"min": 85, "value": 8, "reason": {"en": "Precise landing, minimal fuel.", "ar": "Precise landing, minimal fuel."}},
+          {"min": 60, "value": 3, "reason": {"en": "Safe landing.", "ar": "Safe landing."}},
+          {"min": 0, "value": -5, "reason": {"en": "Rough landing.", "ar": "Rough landing."}}
+        ]
+      },
+      {
+        "key": "landing_readiness",
+        "label": {"en": "Piloting skill → readiness", "ar": "Piloting skill → readiness"},
+        "kind": "readiness",
+        "metric": "sim:result.score_pct",
+        "bands": [
+          {"min": 85, "value": 8, "reason": {"en": "Excellent piloting.", "ar": "Excellent piloting."}},
+          {"min": 0, "value": -3, "reason": {"en": "Piloting needs work.", "ar": "Piloting needs work."}}
+        ]
+      }
+    ]
+  },
+  "science_notes": [
+    {
+      "topic": {"en": "No atmosphere, no parachutes", "ar": "No atmosphere, no parachutes"},
+      "detail": {"en": "The Moon's surface gravity is about 1.62 m/s² and it has no meaningful atmosphere, so every landing must be propulsive – Apollo's LM used a throttleable descent engine.", "ar": "The Moon's surface gravity is about 1.62 m/s² and it has no meaningful atmosphere, so every landing must be propulsive – Apollo's LM used a throttleable descent engine."},
+      "source": "NASA – Moon facts / Apollo Lunar Module",
+      "url": "https://science.nasa.gov/moon/facts/",
+      "simulated": false
+    }
+  ],
+  "world_objects": [
+    {"id": "simulator_pod", "label": {"en": "Landing Simulator Pod", "ar": "Landing Simulator Pod"}, "kind": "vehicle", "position": [-12, 0, 0], "interactions": ["enter_simulator", "exit_simulator"]},
+    {"id": "sim_console", "label": {"en": "Simulator Console", "ar": "Simulator Console"}, "kind": "terminal", "position": [-12, 1.1, 0.8], "interactions": ["review_landing_brief", "configure_descent", "fly_descent", "evaluate_landing"]}
+  ],
+  "disclaimer": "Educational game simulation. The lander model is simplified 2-D physics, not a flight-certified simulator."
+}

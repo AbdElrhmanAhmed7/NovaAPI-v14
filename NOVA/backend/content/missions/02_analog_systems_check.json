@@ -1,0 +1,107 @@
+{
+  "id": "analog_systems_check",
+  "stage": 2,
+  "title": {"en": "Habitat Systems Survey", "ar": "Habitat Systems Survey"},
+  "summary": {"en": "Inspect ventilation, the power bus and the water loop inside the Earth Analog habitat.", "ar": "Inspect ventilation, the power bus and the water loop inside the Earth Analog habitat."},
+  "environment": "earth_analog",
+  "estimated_minutes": 7,
+  "requires_missions": ["training_prep"],
+  "briefing": [
+    {"en": "An analog habitat mimics mission conditions on Earth so mistakes are cheap.", "ar": "An analog habitat mimics mission conditions on Earth so mistakes are cheap."},
+    {"en": "Carry your scanner and multimeter: readings, not guesses.", "ar": "Carry your scanner and multimeter: readings, not guesses."}
+  ],
+  "objectives": [
+    {
+      "id": "check_ventilation",
+      "title": {"en": "Check the ventilation loop", "ar": "Check the ventilation loop"},
+      "hint": {"en": "Ventilation panel: scan airflow and CO2 scrubber status.", "ar": "Ventilation panel: scan airflow and CO2 scrubber status."},
+      "target": "ventilation_panel",
+      "animation": "scan",
+      "duration_ms": 1800,
+      "requires": [{"type": "item", "id": "scanner"}],
+      "effects": {"world": {"analog.ventilation_ok": true}, "resources": {"power": -2}, "equipment_wear": {"scanner": 3}},
+      "score": 10,
+      "success_message": {"en": "Airflow nominal, scrubber at 92% capacity.", "ar": "Airflow nominal, scrubber at 92% capacity."}
+    },
+    {
+      "id": "check_power_bus",
+      "title": {"en": "Measure the power bus", "ar": "Measure the power bus"},
+      "hint": {"en": "Power panel: measure bus voltage with the multimeter.", "ar": "Power panel: measure bus voltage with the multimeter."},
+      "target": "power_panel",
+      "animation": "measure",
+      "duration_ms": 1600,
+      "requires": [{"type": "item", "id": "multimeter"}],
+      "effects": {"world": {"analog.power_bus_ok": true}, "resources": {"power": -1}, "equipment_wear": {"multimeter": 3}},
+      "score": 10,
+      "success_message": {"en": "Bus at 28.4 V – within tolerance.", "ar": "Bus at 28.4 V – within tolerance."}
+    },
+    {
+      "id": "check_water_loop",
+      "title": {"en": "Scan the water manifold", "ar": "Scan the water manifold"},
+      "hint": {"en": "Water manifold: a pressure drop hides somewhere in the loop.", "ar": "Water manifold: a pressure drop hides somewhere in the loop."},
+      "target": "water_manifold",
+      "animation": "scan",
+      "duration_ms": 2000,
+      "requires": [{"type": "item", "id": "scanner"}],
+      "effects": {"world": {"analog.water_loop_checked": true, "leak_active": true}, "flags_set": ["leak.suspected"], "resources": {"power": -2}, "equipment_wear": {"scanner": 4}},
+      "score": 12,
+      "success_message": {"en": "Pressure anomaly detected – a water leak is active.", "ar": "Pressure anomaly detected – a water leak is active."},
+      "science_note": "Water loops are monitored by pressure and flow deltas; a slow leak shows up as a pressure trend long before a puddle does."
+    },
+    {
+      "id": "log_system_report",
+      "title": {"en": "Log the systems report", "ar": "Log the systems report"},
+      "hint": {"en": "Data terminal: write your readings to the habitat log.", "ar": "Data terminal: write your readings to the habitat log."},
+      "target": "data_terminal",
+      "animation": "read_terminal",
+      "duration_ms": 1200,
+      "requires": [{"type": "item", "id": "data_core"}],
+      "effects": {"flags_set": ["analog.survey_logged"], "world": {"analog.survey_logged": true}},
+      "score": 8,
+      "success_message": {"en": "Survey logged. Maintenance tasks unlocked.", "ar": "Survey logged. Maintenance tasks unlocked."}
+    }
+  ],
+  "hazards": [
+    {
+      "action": "check_water_loop",
+      "missing_any": ["scanner"],
+      "effects": {"resources": {"power": -1}},
+      "message": {"en": "You cannot certify a water loop by looking at it. Bring the scanner.", "ar": "You cannot certify a water loop by looking at it. Bring the scanner."},
+      "mistake_penalty": 3.0
+    }
+  ],
+  "scoring": {"mistake_penalty": 4.0, "time_target_seconds": 360.0, "time_bonus_max": 8.0, "pass_score_pct": 55.0},
+  "completion": {
+    "effects": {"world": {"analog.survey_done": true}},
+    "unlocks": ["analog_water_leak", "analog_power_link", "analog_device_fault"],
+    "summary": {"en": "Survey complete: a live water leak, a power module to connect and a suspect device.", "ar": "Survey complete: a live water leak, a power module to connect and a suspect device."},
+    "continuity": [
+      {
+        "key": "survey:power",
+        "label": {"en": "Survey discipline → power reserve", "ar": "Survey discipline → power reserve"},
+        "kind": "resource",
+        "metric": "score_pct",
+        "bands": [
+          {"min": 90, "value": 5, "reason": {"en": "Clean survey: habitat bus left balanced.", "ar": "Clean survey: habitat bus left balanced."}},
+          {"min": 0, "value": -4, "reason": {"en": "Sloppy survey left loads unbalanced.", "ar": "Sloppy survey left loads unbalanced."}}
+        ]
+      }
+    ]
+  },
+  "science_notes": [
+    {
+      "topic": {"en": "Analog habitats", "ar": "Analog habitats"},
+      "detail": {"en": "NASA uses analog missions (NEEMO, HERA, Desert RATS) to rehearse isolation, procedures and hardware failures before flight.", "ar": "NASA uses analog missions (NEEMO, HERA, Desert RATS) to rehearse isolation, procedures and hardware failures before flight."},
+      "source": "NASA – Analog Missions",
+      "url": "https://www.nasa.gov/analog-missions/",
+      "simulated": false
+    }
+  ],
+  "world_objects": [
+    {"id": "ventilation_panel", "label": {"en": "Ventilation Panel", "ar": "Ventilation Panel"}, "kind": "device", "position": [-5, 0, -4], "interactions": ["check_ventilation"]},
+    {"id": "power_panel", "label": {"en": "Power Panel", "ar": "Power Panel"}, "kind": "device", "position": [5, 0, -4], "interactions": ["check_power_bus"]},
+    {"id": "water_manifold", "label": {"en": "Water Manifold", "ar": "Water Manifold"}, "kind": "pipe", "position": [-3, 0, 5], "interactions": ["check_water_loop"]},
+    {"id": "data_terminal", "label": {"en": "Data Terminal", "ar": "Data Terminal"}, "kind": "terminal", "position": [4, 0, 5], "interactions": ["log_system_report"]}
+  ],
+  "disclaimer": "Educational game simulation. Readings are invented for gameplay."
+}

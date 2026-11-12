@@ -1,0 +1,288 @@
+"""OpenAPI customisation – the published contract of the NOVA backend.
+
+FastAPI generates a good schema, but three things must be added by hand so the
+document is actually usable by the frontend team and by code generators:
+
+1. **Security schemes.** ``X-Session-Token`` / ``X-API-Key`` are declared as
+   real ``apiKey`` schemes, so Swagger UI grows an *Authorize* button and
+   generated clients know how to authenticate.
+2. **One error contract.** Every operation documents the shared error envelope
+   (``ErrorResponse``) with the status codes it can really return, instead of
+   each handler repeating prose. Explicit per-route descriptions always win.
+3. **Stable shape.** Deterministic key ordering and a ``servers`` block, so the
+   exported ``docs/openapi.json`` diffs cleanly in review and in CI.
+
+The result is exported by ``scripts/export_openapi.py`` and turned into
+TypeScript types for the React client.
+"""
+
+from __future__ import annotations
+
+import json
+from typing import Any
+
+from fastapi import FastAPI
+from fastapi.openapi.utils import get_openapi
+
+from app.core.errors import NovaError
+from app.core.routing import HTTP_METHODS, guarded_routes
+from app.dependencies import require_game_write
+from app.schemas.common import ErrorResponse
+
+#: Header names of the two optional authentication mechanisms.
+SESSION_HEADER = "X-Session-Token"
+API_KEY_HEADER = "X-API-Key"
+
+SECURITY_SCHEMES: dict[str, Any] = {
+    "SessionToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": SESSION_HEADER,
+        "description": (
+            "Per-save token returned by `POST /api/v1/games` (and `/resume`). "
+            "Required on writes only when `NOVA_AUTH_ENABLED=true`."
+        ),
+    },
+    "ApiKey": {
+        "type": "apiKey",
+        "in": "header",
+        "name": API_KEY_HEADER,
+        "description": (
+            "Optional trusted server-to-server key (`NOVA_API_KEY`). "
+            "Bypasses the per-session token check."
+        ),
+    },
+}
+
+#: Reusable error responses, keyed by status code as a string.
+ERROR_RESPONSES: dict[str, dict[str, Any]] = {
+    "401": {
+        "description": "Missing, malformed or expired session token (`authentication_failed`).",
+        "model": "ErrorResponse",
+    },
+    "404": {
+        "description": "Session, mission, sample or report not found (`*_not_found`).",
+        "model": "ErrorResponse",
+    },
+    "409": {
+        "description": (
+            "Gameplay rule conflict – wrong order, missing item, worn tool, locked mission "
+            "(`precondition_failed`, `mission_locked`, …)."
+        ),
+        "model": "ErrorResponse",
+    },
+    "422": {
+        "description": "Request validation failed (`validation_error`, `invalid_input`).",
+        "model": "ErrorResponse",
+    },
+    "429": {
+        "description": "Rate limit exceeded (`rate_limited`). Honour the `Retry-After` header.",
+        "model": "ErrorResponse",
+    },
+    "500": {
+        "description": "Unexpected server error (`internal_error`).",
+        "model": "ErrorResponse",
+    },
+    "502": {
+        "description": "Upstream NASA service unavailable and no fallback (`external_service`).",
+        "model": "ErrorResponse",
+    },
+}
+
+#: Codes every operation can produce, regardless of what it does.
+COMMON_ERRORS = ("422", "429", "500")
+
+#: Used when a handler documents a code the catalogue does not know yet.
+_FALLBACK_ERROR: dict[str, Any] = {
+    "description": "Request failed with the shared error envelope.",
+    "model": "ErrorResponse",
+}
+
+_ERROR_EXAMPLE: dict[str, Any] = {
+    "error": {
+        "code": "precondition_failed",
+        "message": "Close the isolation valve before repairing the pipe.",
+        "details": {
+            "unmet": [{"type": "flag", "id": "leak.valve_closed", "hint": "Turn the valve first."}]
+        },
+    },
+    "request_id": "req_6f1c2a9b",
+}
+
+
+def error_catalogue() -> list[dict[str, Any]]:
+    """Every domain error code, for the docs and for the frontend switch."""
+    seen: dict[str, type[NovaError]] = {}
+
+    def walk(cls: type[NovaError]) -> None:
+        for subclass in cls.__subclasses__():
+            seen.setdefault(subclass.code, subclass)
+            walk(subclass)
+
+    walk(NovaError)
+    return [
+        {"code": code, "status": cls.status_code, "message": cls.default_message}
+        for code, cls in sorted(seen.items())
+    ]
+
+
+def _guarded_operations(app: FastAPI) -> set[tuple[str, str]]:
+    """(path, method) pairs whose handler runs the session-token guard.
+
+    Uses :mod:`app.core.routing`: included routers are nested objects on
+    FastAPI >= 0.160, so a naive ``app.routes`` walk finds no guards at all.
+    """
+    guarded: set[tuple[str, str]] = set()
+    for route in guarded_routes(app, require_game_write):
+        for method in route.methods & HTTP_METHODS:
+            guarded.add((route.path, method))
+    return guarded
+
+
+def _is_autogenerated_validation_error(media: dict[str, Any]) -> bool:
+    """True for FastAPI's default 422 body (``HTTPValidationError``)."""
+    ref = media.get("schema", {}).get("$ref", "")
+    return ref.rsplit("/", 1)[-1] in {"HTTPValidationError", "ValidationError"}
+
+
+def _prune_validation_helpers(schema: dict[str, Any]) -> None:
+    """Drop FastAPI's validation helper schemas once nothing references them.
+
+    Every 422 now points at ``ErrorResponse`` (the shape the handler really
+    returns), which leaves ``HTTPValidationError`` / ``ValidationError``
+    orphaned. Keeping them would advertise types the API never emits.
+    """
+    schemas: dict[str, Any] = schema.get("components", {}).get("schemas", {})
+    document = json.dumps(schema)
+    for name in ("HTTPValidationError", "ValidationError"):
+        if name not in schemas:
+            continue
+        body = json.dumps(schemas[name])
+        # Count references outside the definition itself.
+        if document.count(f'"#/components/schemas/{name}"') == body.count(
+            f'"#/components/schemas/{name}"'
+        ):
+            del schemas[name]
+
+
+def _apply_error_responses(
+    operation: dict[str, Any],
+    *,
+    path: str,
+    method: str,
+    guarded: set[tuple[str, str]],
+) -> None:
+    responses: dict[str, Any] = operation.setdefault("responses", {})
+    wanted = list(COMMON_ERRORS)
+    if "{" in path:
+        wanted.append("404")
+    if (path, method) in guarded:
+        wanted += ["401", "409"]
+    if path.startswith("/api/v1/nasa/") and path != "/api/v1/nasa/status":
+        wanted.append("502")
+
+    # Also cover codes a handler documented itself (e.g. 409 on session-limit):
+    # a description without a body schema is half a contract.
+    declared = {str(code) for code in responses if str(code)[0] in "45"}
+    for status in sorted(set(wanted) | declared):
+        if status in responses:
+            # A handler already documented this code: keep its prose, but make
+            # sure the payload schema is the shared envelope.
+            entry = responses[status]
+            content = entry.setdefault("content", {})
+            media = content.setdefault("application/json", {})
+            if _is_autogenerated_validation_error(media):
+                # FastAPI documents 422 as HTTPValidationError, but the app's
+                # RequestValidationError handler answers with the NOVA envelope.
+                # Publishing the wrong shape breaks generated clients.
+                media["schema"] = {"$ref": "#/components/schemas/ErrorResponse"}
+            else:
+                media.setdefault("schema", {"$ref": "#/components/schemas/ErrorResponse"})
+            continue
+        spec = ERROR_RESPONSES.get(status, _FALLBACK_ERROR)
+        responses[status] = {
+            "description": spec["description"],
+            "content": {
+                "application/json": {
+                    "schema": {"$ref": f"#/components/schemas/{spec['model']}"},
+                    **({"example": _ERROR_EXAMPLE} if status == "409" else {}),
+                }
+            },
+        }
+
+    # Sort by status code so the exported document is stable.
+    operation["responses"] = dict(sorted(responses.items()))
+
+
+def _promote_security_headers(operation: dict[str, Any], *, guarded: bool) -> None:
+    """Move the auth headers out of `parameters` and into `security`."""
+    parameters = operation.get("parameters") or []
+    kept = [
+        parameter
+        for parameter in parameters
+        if not (
+            parameter.get("in") == "header"
+            and parameter.get("name") in {SESSION_HEADER, API_KEY_HEADER}
+        )
+    ]
+    if kept:
+        operation["parameters"] = kept
+    elif "parameters" in operation:
+        del operation["parameters"]
+    if guarded:
+        operation["security"] = [{"SessionToken": []}, {"ApiKey": []}]
+
+
+def customise_openapi(app: FastAPI) -> dict[str, Any]:
+    """Build (and cache) the published OpenAPI document."""
+    if app.openapi_schema:
+        return app.openapi_schema
+
+    schema = get_openapi(
+        title=app.title,
+        version=app.version,
+        openapi_version=app.openapi_version,
+        summary="Authoritative gameplay backend for the NOVA 3D web game.",
+        description=app.description,
+        routes=app.routes,
+        webhooks=app.webhooks.routes,
+        tags=app.openapi_tags,
+        servers=[{"url": "/", "description": "This deployment"}],
+        contact=app.contact,
+        license_info=app.license_info,
+    )
+
+    components = schema.setdefault("components", {})
+    components["securitySchemes"] = SECURITY_SCHEMES
+
+    # The error envelope is referenced by every operation, so it must exist in
+    # components even though no handler declares it as a response_model.
+    envelope = ErrorResponse.model_json_schema(ref_template="#/components/schemas/{model}")
+    definitions = envelope.pop("$defs", {})
+    schemas: dict[str, Any] = components.setdefault("schemas", {})
+    schemas.setdefault("ErrorResponse", envelope)
+    for name, definition in definitions.items():
+        schemas.setdefault(name, definition)
+
+    guarded = _guarded_operations(app)
+    for path, methods in schema.get("paths", {}).items():
+        for method, operation in methods.items():
+            if method not in {"get", "post", "put", "patch", "delete"}:
+                continue
+            is_guarded = (path, method) in guarded
+            _apply_error_responses(operation, path=path, method=method, guarded=guarded)
+            _promote_security_headers(operation, guarded=is_guarded)
+
+    # Documented vocabulary of error codes, consumed by the frontend.
+    schema["x-error-codes"] = error_catalogue()
+    schema["x-idempotency"] = {
+        "header": "Idempotency-Key",
+        "applies_to": "POST /api/v1/games/{game_id}/missions/{mission_id}/actions",
+        "behaviour": "Repeating a request with the same key replays the first result.",
+    }
+
+    _prune_validation_helpers(schema)
+    components["schemas"] = dict(sorted(components.get("schemas", {}).items()))
+    schema["paths"] = dict(sorted(schema["paths"].items()))
+    app.openapi_schema = schema
+    return schema

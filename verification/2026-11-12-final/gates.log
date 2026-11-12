@@ -1,0 +1,56 @@
+### NOVA verification · 2026-11-12T15:47:12Z
+root: /tmp/arena/tenants/13649f82-2a29-4bb9-be30-ca11051f0be9/sessions/66c85a39-3cbd-5285-89f9-2e18b620b51f/workspace/Final
+python: Python 3.11.2
+aiosqlite==0.22.1
+alembic==1.20.1
+fastapi==0.162.5
+httpx==0.28.1
+mypy==2.4.1
+pydantic==2.14.3
+pytest==9.2.0
+ruff==0.17.4
+SQLAlchemy==2.0.57
+uvicorn==0.54.0
+
+════════ ruff check ════════
+$ /tmp/arena/tenants/13649f82-2a29-4bb9-be30-ca11051f0be9/sessions/66c85a39-3cbd-5285-89f9-2e18b620b51f/workspace/Final/NOVA/backend/.venv/bin/ruff check .
+All checks passed!
+
+════════ ruff format ════════
+$ /tmp/arena/tenants/13649f82-2a29-4bb9-be30-ca11051f0be9/sessions/66c85a39-3cbd-5285-89f9-2e18b620b51f/workspace/Final/NOVA/backend/.venv/bin/ruff format --check .
+113 files already formatted
+
+════════ mypy ════════
+$ /tmp/arena/tenants/13649f82-2a29-4bb9-be30-ca11051f0be9/sessions/66c85a39-3cbd-5285-89f9-2e18b620b51f/workspace/Final/NOVA/backend/.venv/bin/mypy app scripts
+Success: no issues found in 82 source files
+
+════════ content ════════
+$ /tmp/arena/tenants/13649f82-2a29-4bb9-be30-ca11051f0be9/sessions/66c85a39-3cbd-5285-89f9-2e18b620b51f/workspace/Final/NOVA/backend/.venv/bin/python scripts/validate_content.py --strict
+15 missions / 95 actions checked – 0 errors, 0 warnings
+
+════════ route audit ════════
+$ /tmp/arena/tenants/13649f82-2a29-4bb9-be30-ca11051f0be9/sessions/66c85a39-3cbd-5285-89f9-2e18b620b51f/workspace/Final/NOVA/backend/.venv/bin/python scripts/audit_routes.py --check
+NOVA route audit
+========================================================================
+  routes_total           75
+  http_published         67
+  operations             67
+  websockets             1
+  mounts                 1
+  guarded_operations     15
+  schemas                136
+  findings               {'info': 24}
+
+  · 24 operation(s) still expose free-form object fields
+
+0 error(s), 0 warning(s)
+
+════════ openapi ════════
+$ /tmp/arena/tenants/13649f82-2a29-4bb9-be30-ca11051f0be9/sessions/66c85a39-3cbd-5285-89f9-2e18b620b51f/workspace/Final/NOVA/backend/.venv/bin/python scripts/export_openapi.py --check
+✓ /tmp/arena/tenants/13649f82-2a29-4bb9-be30-ca11051f0be9/sessions/66c85a39-3cbd-5285-89f9-2e18b620b51f/workspace/Final/NOVA/backend/docs/openapi.json is up to date (67 operations)
+
+════════ pytest ════════
+$ /tmp/arena/tenants/13649f82-2a29-4bb9-be30-ca11051f0be9/sessions/66c85a39-3cbd-5285-89f9-2e18b620b51f/workspace/Final/NOVA/backend/.venv/bin/pytest --cov=app --cov-report=term-missing
+........................................................................ [ 15%]
+........................................................................ [ 31%]
+..............

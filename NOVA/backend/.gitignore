@@ -1,0 +1,26 @@
+.venv/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+.env
+.vscode/
+.idea/
+.DS_Store
+
+# Tooling artefacts
+.ruff_cache/
+.mypy_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Local databases (saves are player data, not source)
+data/*.db
+data/*.db-wal
+data/*.db-shm
+*.sqlite3
+
+# Build output
+build/
+dist/
+*.egg-info/

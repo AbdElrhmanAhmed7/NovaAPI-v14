@@ -1,0 +1,32 @@
+.venv/bin/ruff check .
+All checks passed!
+.venv/bin/ruff format --check .
+110 files already formatted
+.venv/bin/mypy app scripts
+Success: no issues found in 81 source files
+.venv/bin/python scripts/validate_content.py --strict
+15 missions / 95 actions checked – 0 errors, 0 warnings
+.venv/bin/python scripts/audit_routes.py --check
+NOVA route audit
+========================================================================
+  routes_total           75
+  http_published         67
+  operations             67
+  websockets             1
+  mounts                 1
+  guarded_operations     15
+  schemas                136
+  findings               {'info': 24}
+
+  · 24 operation(s) still expose free-form object fields
+
+0 error(s), 0 warning(s)
+.venv/bin/python scripts/export_openapi.py --check
+✓ /tmp/arena/tenants/011b1b92-1029-4bf6-b00a-2123536da9bf/sessions/922dcc90-70e0-5845-bd05-c256b5848efa/workspace/repo/NOVA/backend/docs/openapi.json is up to date (67 operations)
+.venv/bin/pytest -q
+........................................................................ [ 16%]
+........................................................................ [ 32%]
+........................................................................ [ 49%]
+........................................................................ [ 65%]
+........................................................................ [ 82%]
+......................

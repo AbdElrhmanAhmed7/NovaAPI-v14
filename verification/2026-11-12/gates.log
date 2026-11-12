@@ -1,0 +1,325 @@
+### NOVA verification · 2026-11-12T13:47:47Z
+root: /tmp/arena/tenants/80081190-ee6b-4607-8929-b702521482ee/sessions/42a5aaf5-c095-57eb-a950-ebe37cb5ca75/workspace/nova
+python: Python 3.11.2
+aiosqlite==0.22.1
+alembic==1.20.1
+fastapi==0.162.5
+httpx==0.28.1
+mypy==2.4.1
+pydantic==2.14.3
+pytest==9.2.0
+ruff==0.17.4
+SQLAlchemy==2.0.57
+uvicorn==0.54.0
+
+════════ ruff check ════════
+$ /tmp/arena/tenants/80081190-ee6b-4607-8929-b702521482ee/sessions/42a5aaf5-c095-57eb-a950-ebe37cb5ca75/workspace/nova/NOVA/backend/.venv/bin/ruff check .
+All checks passed!
+
+════════ ruff format ════════
+$ /tmp/arena/tenants/80081190-ee6b-4607-8929-b702521482ee/sessions/42a5aaf5-c095-57eb-a950-ebe37cb5ca75/workspace/nova/NOVA/backend/.venv/bin/ruff format --check .
+111 files already formatted
+
+════════ mypy ════════
+$ /tmp/arena/tenants/80081190-ee6b-4607-8929-b702521482ee/sessions/42a5aaf5-c095-57eb-a950-ebe37cb5ca75/workspace/nova/NOVA/backend/.venv/bin/mypy app scripts
+Success: no issues found in 81 source files
+
+════════ content ════════
+$ /tmp/arena/tenants/80081190-ee6b-4607-8929-b702521482ee/sessions/42a5aaf5-c095-57eb-a950-ebe37cb5ca75/workspace/nova/NOVA/backend/.venv/bin/python scripts/validate_content.py --strict
+15 missions / 95 actions checked – 0 errors, 0 warnings
+
+════════ route audit ════════
+$ /tmp/arena/tenants/80081190-ee6b-4607-8929-b702521482ee/sessions/42a5aaf5-c095-57eb-a950-ebe37cb5ca75/workspace/nova/NOVA/backend/.venv/bin/python scripts/audit_routes.py --check
+NOVA route audit
+========================================================================
+  routes_total           75
+  http_published         67
+  operations             67
+  websockets             1
+  mounts                 1
+  guarded_operations     15
+  schemas                136
+  findings               {'info': 24}
+
+  · 24 operation(s) still expose free-form object fields
+
+0 error(s), 0 warning(s)
+
+════════ openapi ════════
+$ /tmp/arena/tenants/80081190-ee6b-4607-8929-b702521482ee/sessions/42a5aaf5-c095-57eb-a950-ebe37cb5ca75/workspace/nova/NOVA/backend/.venv/bin/python scripts/export_openapi.py --check
+✓ /tmp/arena/tenants/80081190-ee6b-4607-8929-b702521482ee/sessions/42a5aaf5-c095-57eb-a950-ebe37cb5ca75/workspace/nova/NOVA/backend/docs/openapi.json is up to date (67 operations)
+
+════════ pytest ════════
+$ /tmp/arena/tenants/80081190-ee6b-4607-8929-b702521482ee/sessions/42a5aaf5-c095-57eb-a950-ebe37cb5ca75/workspace/nova/NOVA/backend/.venv/bin/pytest --cov=app --cov-report=term-missing
+........................................................................ [ 16%]
+........................................................................ [ 32%]
+........................................................................ [ 48%]
+........................................................................ [ 64%]
+........................................................................ [ 80%]
+........................................................................ [ 96%]
+..............                                                           [100%]
+=============================== warnings summary ===============================
+.venv/lib/python3.11/site-packages/fastapi/testclient.py:1
+  /tmp/arena/tenants/80081190-ee6b-4607-8929-b702521482ee/sessions/42a5aaf5-c095-57eb-a950-ebe37cb5ca75/workspace/nova/NOVA/backend/.venv/lib/python3.11/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.11.2-final-0 ________________
+
+Name                                   Stmts   Miss  Cover   Missing
+--------------------------------------------------------------------
+app/api/legacy.py                         48      3    94%   75, 82, 89
+app/api/v1/content.py                     40      0   100%
+app/api/v1/earth.py                       29      0   100%
+app/api/v1/games.py                       56      1    98%   151
+app/api/v1/loadout.py                     25      3    88%   46, 58, 75
+app/api/v1/meta.py                        29      1    97%   47
+app/api/v1/missions.py                    29      0   100%
+app/api/v1/nasa.py                        25      0   100%
+app/api/v1/science.py                     27      0   100%
+app/api/v1/simulations.py                 30      0   100%
+app/api/v1/stream.py                     244     24    90%   124, 127-128, 161, 166-167, 257, 262-263, 289-290, 300-301, 307-308, 317-318, 323, 332, 334, 341, 352-354
+app/config.py                             68      1    99%   114
+app/core/cache.py                         42      0   100%
+app/core/cancellation.py                  32      1    97%   42
+app/core/errors.py                        97      0   100%
+app/core/locks.py                         28      1    96%   41
+app/core/logging.py                       42     10    76%   30-45
+app/core/middleware.py                    63      1    98%   91
+app/core/openapi.py                      100      4    96%   159, 231, 239, 271
+app/core/ratelimit.py                     37      9    76%   33, 48-54, 57
+app/core/routing.py                      108     15    86%   75, 101-103, 127-129, 137, 140, 201-204, 213-214
+app/core/security.py                      36      4    89%   53, 57-58, 61
+app/core/utils.py                         60      9    85%   41, 65-71, 95, 103
+app/db/base.py                             6      0   100%
+app/db/models.py                          92      0   100%
+app/db/repositories.py                   181     15    92%   45-46, 70, 167-170, 247-257, 286-287, 343, 535-538
+app/db/session.py                         85     10    88%   33, 41, 80, 93, 104-106, 113, 119-120
+app/dependencies.py                       55      5    91%   130, 143-146
+app/domain/catalog.py                     56      4    93%   24, 59-60, 65
+app/domain/enums.py                       63      0   100%
+app/domain/state.py                      107      0   100%
+app/integrations/nasa_client.py           75      0   100%
+app/missions/definitions.py              196     11    94%   110, 162, 252, 254, 272, 282, 288-289, 291, 295, 300
+app/missions/engine.py                   349     41    88%   58-63, 104-106, 214-220, 320, 353, 377, 400-403, 549-550, 571-573, 585, 593-600, 604, 606, 608, 610, 613-615, 618, 694-695, 846
+app/missions/registry.py                  27      2    93%   44-45
+app/missions/validation.py               339     77    77%   68, 73-76, 88, 137-146, 174, 176, 182, 202, 210, 218, 226, 234-244, 252, 271, 280, 288-289, 301, 314, 347, 350, 354, 358, 371, 379-389, 398, 412-419, 429, 449, 457, 465, 473, 481, 496, 505, 514, 524, 542-549, 561, 577, 587, 595, 599, 607, 648, 685-687, 691, 697, 712, 719, 727, 739-745, 748, 760, 768, 776, 785, 789, 797, 816
+app/schemas/common.py                     44      0   100%
+app/schemas/content.py                    51      0   100%
+app/schemas/earth.py                      84      0   100%
+app/schemas/events.py                     28      0   100%
+app/schemas/game.py                      133      0   100%
+app/schemas/legacy.py                     41      1    98%   25
+app/schemas/loadout.py                    65      0   100%
+app/schemas/mission.py                   137      0   100%
+app/schemas/nasa.py                       82      0   100%
+app/schemas/science.py                    86      0   100%
+app/schemas/simulation.py                 56      0   100%
+app/services/action_hooks.py              70      3    96%   74, 91, 135
+app/services/earth_service.py            126      5    96%   108-109, 132-134
+app/services/game_service.py             465     57    88%   75, 218, 243, 251, 337, 351-355, 428, 443-444, 447, 449-450, 484, 526, 556, 594, 601-604, 716, 840-844, 852-874, 881-885, 928-929
+app/services/science_service.py          145      9    94%   93, 101, 109, 232-234, 255, 288-289
+app/services/simulation_service.py        97      1    99%   99
+app/simulations/base.py                   52      2    96%   57, 61
+app/simulations/crew_vitals.py           108      2    98%   109, 180
+app/simulations/earth_trends.py          105      6    94%   40-41, 154, 178, 204, 206
+app/simulations/factory.py                33      2    94%   66-67
+app/simulations/lunar_lander.py          138      1    99%   129
+app/simulations/microgravity_fire.py     150      5    97%   89, 185, 264, 268, 270
+app/simulations/rover_traverse.py        151      6    96%   108, 117-118, 128, 177-178
+app/systems/achievements.py              212     26    88%   92, 94, 118-119, 123, 126, 139, 158, 182, 200-201, 219-223, 228, 239-241, 253-256, 294-295
+app/systems/continuity.py                117     14    88%   48, 123-126, 128-131, 141, 145, 158, 161, 185
+app/systems/event_bus.py                  74      0   100%
+app/systems/events.py                     20      1    95%   47
+app/systems/inventory_system.py          123     15    88%   38, 81, 106, 156-158, 162, 169-172, 174-176, 191
+app/systems/oxygen_system.py              55      0   100%
+app/systems/resource_manager.py           65      2    97%   96-97
+app/systems/scoring.py                    36      0   100%
+--------------------------------------------------------------------
+TOTAL                                   6075    410    93%
+446 passed, 1 warning in 176.31s (0:02:56)
+
+════════ campaign ════════
+$ /tmp/arena/tenants/80081190-ee6b-4607-8929-b702521482ee/sessions/42a5aaf5-c095-57eb-a950-ebe37cb5ca75/workspace/nova/NOVA/backend/.venv/bin/python scripts/playthrough.py --in-process --difficulty standard --seed 7 --json /tmp/arena/tenants/80081190-ee6b-4607-8929-b702521482ee/sessions/42a5aaf5-c095-57eb-a950-ebe37cb5ca75/workspace/nova/verification/2026-11-12/campaign.json
+/tmp/arena/tenants/80081190-ee6b-4607-8929-b702521482ee/sessions/42a5aaf5-c095-57eb-a950-ebe37cb5ca75/workspace/nova/NOVA/backend/.venv/lib/python3.11/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+NOVA – Beyond the Mission · Explore. Experience. Execute.
+▶ game nova_bcb8eb4f54b14cada498 (Autopilot)
+  ▸ training_prep
+     ✓ review_brief → Mission brief accepted. Stations unlocked.
+     ✓ collect_oxygen → Oxygen cylinder stowed (+20 O2).
+     ✓ take_repair_tools → Repair loadout collected.
+     ✓ take_scanner → Diagnostics tools collected.
+     ✓ inspect_rover → Rover checked and transponder installed.
+     ✓ suit_check → Suit sealed. CO2 filter nominal.
+     ✓ confirm_readiness → You are cleared for Earth Analog training.
+     ★ training_prep: 100.0% grade S (0 mistakes, 7 steps)
+  ▸ analog_systems_check
+     ✓ check_ventilation → Airflow nominal, scrubber at 92% capacity.
+     ✓ check_power_bus → Bus at 28.4 V – within tolerance.
+     ✓ check_water_loop → Pressure anomaly detected – a water leak is active.
+     ✓ log_system_report → Survey logged. Maintenance tasks unlocked.
+     ★ analog_systems_check: 100.0% grade S (0 mistakes, 4 steps)
+  ▸ analog_device_fault
+     ✓ scan_device → Regulator board running 30 C above nominal.
+     ✓ measure_circuit → Measure the regulator circuit
+     ✓ take_coolant → Take a coolant canister
+     ✓ cool_unit → Cool the unit down
+     ✓ replace_board → Replace the regulator board
+     ✓ calibrate_device → Analyser calibrated and back in service.
+     ★ analog_device_fault: 100.0% grade S (0 mistakes, 6 steps)
+  ▸ analog_emergency
+     ✓ acknowledge_alarm → Acknowledge the alarm
+     ✓ isolate_electrical → Isolate the electrical bay
+     ✓ open_emergency_locker → Open the emergency locker
+     ✓ don_protection → Don mask and gloves
+     ✓ suppress_smoke → Suppress the fire
+     ✓ evacuate_crew → Evacuate the crew
+     ✓ restore_systems → Restore ventilation and power
+     ✓ submit_training_report → Submit the training report
+     ★ analog_emergency: 100.0% grade S (0 mistakes, 8 steps)
+  ▸ analog_power_link
+     ✓ inspect_bus → Inspect the distribution bus
+     ✓ isolate_breaker → Bus isolated and tagged out.
+     ✓ fetch_power_module → Collect the power module and panel
+     ✓ connect_module → Connect the power module
+     ✓ deploy_solar → Deploy the solar panel
+     ✓ energise_bus → Bus online (+25 kWh).
+     ★ analog_power_link: 100.0% grade S (0 mistakes, 6 steps)
+  ▸ analog_comms_blackout
+     ✓ diagnose_link → Power is fine – the antenna is off-axis.
+     ✓ fetch_antenna_kit → Collect the antenna kit
+     ✓ realign_antenna → Realign the antenna
+     ✓ restore_link → Carrier locked. Control has you loud and clear.
+     ✓ send_status_report → Send the status report
+     ★ analog_comms_blackout: 100.0% grade S (0 mistakes, 5 steps)
+  ▸ analog_water_leak
+     ✓ scan_leak → Leak located at joint B-7, upstream of the valve.
+     ✓ close_valve → Valve closed. Branch pressure dropping to zero.
+     ✓ repair_pipe → Joint sealed. Leak stopped and 12 L recovered.
+     ✓ verify_pressure → Loop holds pressure. Water system certified.
+     ★ analog_water_leak: 100.0% grade S (0 mistakes, 4 steps)
+  ▸ analog_water_recycling
+     ✓ inspect_recycler → Inspect the recycler
+     ✓ take_filter → Take a filter cartridge
+     ✓ install_filter → Install the fresh filter
+     ✓ prime_pump → Prime the pump
+     ✓ start_recycling → Recycler online: +25 L recovered water.
+     ✓ verify_quality → Water within potable limits.
+     ★ analog_water_recycling: 100.0% grade S (0 mistakes, 6 steps)
+  ▸ mars_arrival
+     ✓ exit_lander → Boots on regolith. Welcome to Mars.
+     ✓ survey_area → Survey the landing zone
+     ✓ map_hazards → Hazard map written to your HUD.
+     ✓ unload_cargo → Unload the science cargo
+     ✓ measure_radiation → Measure surface radiation
+     ✓ select_base_site → Select the base site
+     ✓ deploy_antenna → Uplink established through the orbiter.
+     ✓ establish_base → Base online. Mars is now habitable – barely.
+     ★ mars_arrival: 100.0% grade S (0 mistakes, 8 steps)
+  ▸ mars_rover_traverse
+     ✓ board_rover → Board the rover
+     ✓ set_nav_target → Set the navigation target
+     ⚙ rover_traverse: succeeded score=85.82 reason=all_waypoints_reached
+     ✓ drive_traverse → Traverse logged. Both survey sites reached.
+     ✓ disembark_rover → Disembark at the site
+     ✓ deploy_transponder → Deploy the navigation beacon
+     ★ mars_rover_traverse: 100.0% grade S (0 mistakes, 6 steps)
+  ▸ crew_health
+     ✓ reach_medical_station → Reach the medical station
+     ✓ collect_medical_supplies → Collect supplies from the locker
+     ✓ attach_bio_monitor → Telemetry live: SpO2 low, heart rate elevated.
+     ✓ review_vitals → Review the vitals readout
+     ✓ administer_oxygen → Provide oxygen support
+     ✓ give_hydration_salts → Give hydration salts and rest
+     ⚙ crew_vitals: succeeded score=86.92 reason=crew_stable
+     ✓ stabilise_crew → Crew member stable. Simulation complete.
+     ✓ log_medical_report → Log the medical report
+     ★ crew_health: 100.0% grade S (0 mistakes, 9 steps)
+  ▸ freefall_fire
+     ✓ reach_incident_zone → Reach the incident zone
+     ✓ isolate_zone → Zone isolated, airflow stopped.
+     ✓ collect_fire_gear → Collect protection and extinguisher
+     ✓ equip_extinguisher → Equip extinguisher and gloves
+     ⚙ microgravity_fire: succeeded score=89.3 reason=fire_out_atmosphere_safe
+     ✓ suppress_fire → Fire out. Cabin atmosphere recovering.
+     ✓ restore_ventilation → Restore ventilation and scrubbers
+     ✓ verify_atmosphere → Cabin nominal. Fire alarm reset.
+     ★ freefall_fire: 100.0% grade S (0 mistakes, 8 steps)
+  ▸ martian_guide
+     ✓ drive_to_outcrop → Drive to the outcrop
+     ✓ disembark_at_site → Disembark at the site
+     ✓ scan_outcrop → Scan the rock and soil
+     ✓ collect_sample → Core sealed and labelled. Take it to the lab. Sample smp_aabe87f5a3994
+     ✓ return_to_lab → Return to the lab
+     ✓ analyse_sample → Analyse the sample
+     ✓ log_findings → Finding logged with provenance and interpretation.
+     ★ martian_guide: 100.0% grade S (0 mistakes, 7 steps)
+  ▸ lunar_landing
+     ✓ enter_simulator → Enter the landing simulator
+     ✓ review_landing_brief → Review altitude, speed and fuel
+     ✓ configure_descent → Choose a descent strategy
+     ⚙ lunar_lander: succeeded score=90.89 reason=nominal_landing
+     ✓ fly_descent → Contact light. Engine stop. You are on the pad.
+     ✓ evaluate_landing → Review the landing score
+     ✓ exit_simulator → Exit the simulator
+     ★ lunar_landing: 100.0% grade S (0 mistakes, 7 steps)
+  ▸ earth_trends
+     ✓ enter_observation_station → Enter the observation station
+     ✓ select_region → Select a region
+     ✓ enable_layer → Enable a data layer
+     ✓ compare_periods → Compare two periods
+     ✓ interpret_change → Interpret the change
+     ✓ save_report → Report archived with provenance. Campaign complete.
+     ★ earth_trends: 100.0% grade S (0 mistakes, 6 steps)
+
+→ report written to /tmp/arena/tenants/80081190-ee6b-4607-8929-b702521482ee/sessions/42a5aaf5-c095-57eb-a950-ebe37cb5ca75/workspace/nova/verification/2026-11-12/campaign.json
+
+──────────────────────────────────────────────────────────────────────────
+MISSION                        SCORE  GRADE  MISTAKES  STEPS
+──────────────────────────────────────────────────────────────────────────
+training_prep                 100.0%      S         0      7
+analog_systems_check          100.0%      S         0      4
+analog_device_fault           100.0%      S         0      6
+analog_emergency              100.0%      S         0      8
+analog_power_link             100.0%      S         0      6
+analog_comms_blackout         100.0%      S         0      5
+analog_water_leak             100.0%      S         0      4
+analog_water_recycling        100.0%      S         0      6
+mars_arrival                  100.0%      S         0      8
+mars_rover_traverse           100.0%      S         0      6
+crew_health                   100.0%      S         0      9
+freefall_fire                 100.0%      S         0      8
+martian_guide                 100.0%      S         0      7
+lunar_landing                 100.0%      S         0      7
+earth_trends                  100.0%      S         0      6
+──────────────────────────────────────────────────────────────────────────
+Missions completed : 15 / 15
+Readiness          : 100.0 (S)
+Average score      : 100.0%
+Playtime           : 259.5 s
+Actions            : 93 ok / 0 mistakes
+
+✓ campaign completed
+
+════════ socket probes ════════
+$ /tmp/arena/tenants/80081190-ee6b-4607-8929-b702521482ee/sessions/42a5aaf5-c095-57eb-a950-ebe37cb5ca75/workspace/nova/NOVA/backend/.venv/bin/python scripts/live_probes.py --json /tmp/arena/tenants/80081190-ee6b-4607-8929-b702521482ee/sessions/42a5aaf5-c095-57eb-a950-ebe37cb5ca75/workspace/nova/verification/2026-11-12/live-probes.json
+── NOVA live probes · http://127.0.0.1:47379
+  ✓ health                     status ok · version 4.0.0
+  ✓ ready                      database True · content True · 15 missions · 26 items
+  ✓ console                    200 · 47,278 bytes · 0 external asset(s)
+  ✓ write guard                token-less start → 401 unauthorized
+  ✓ training_prep              100.0% grade S · 7 steps · 0 mistakes
+  ✓ analog_systems_check       100.0% grade S · 4 steps · 0 mistakes
+  ✓ leak order enforced        repair before valve → 409 precondition_failed · unmet [{'type': 'objective', 'id': 'scan_leak', 'message': "Complete 'Locate the leak with the scanner' first.", 'hint': 'Follow the wet floor to the manifold and scan the joints.'}, {'type': 'objective', 'id': 'close_valve', 'message': "Complete 'Close the isolation valve' first.", 'hint': 'Use the wrench on valve B-7 to depressurise the branch.'}, {'type': 'world', 'id': 'leak.valve_closed', 'message': 'Close the isolation valve before repairing.'}]
+  ✓ movement tick              60 s run → 200 · oxygen 105 · water 88 (leak active)
+  ✓ websocket stream           frames ['stream.ready', 'events', 'events'] · events ['game.created', 'mission.started', 'action.succeeded', 'action.succeeded']
+  ✓ stream resume              reconnect after_seq=23 → stream.ready · event_seq 23
+  ✓ leak repaired              grade A (1 deliberate mistake) · water 100 → 88 → 100 L · leak_active False
+  ✓ NASA POWER                 provenance live · Δmean 0.8858 °C (4.06%) · degrading · 5 hotspots · MODIS MOD11A2 / MERRA-2 T2M
+  ✓ NASA APOD                  provenance bundled · Perseverance Selfie at Rochette · fallback: Server error '500 Internal Server Error' for url 'https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&thumbs=true' For more information check: https:
+  ✓ NASA POWER cache           provenance cache · same Δmean 0.8858 °C
+
+14 probes · 0 failure(s)
+report: /tmp/arena/tenants/80081190-ee6b-4607-8929-b702521482ee/sessions/42a5aaf5-c095-57eb-a950-ebe37cb5ca75/workspace/nova/verification/2026-11-12/live-probes.json

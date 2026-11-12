@@ -1,0 +1,131 @@
+{
+  "id": "earth_trends",
+  "stage": 8,
+  "title": {"en": "Earth Trends – Observation Station", "ar": "Earth Trends – Observation Station"},
+  "summary": {"en": "Pick a region, enable a data layer, compare two periods and publish the change report.", "ar": "Pick a region, enable a data layer, compare two periods and publish the change report."},
+  "environment": "earth_observation",
+  "estimated_minutes": 8,
+  "requires_missions": ["martian_guide", "lunar_landing"],
+  "briefing": [
+    {"en": "Studying other planets is how we learn to read our own.", "ar": "Studying other planets is how we learn to read our own."},
+    {"en": "Every layer states its NASA product and whether the numbers are live or simulated.", "ar": "Every layer states its NASA product and whether the numbers are live or simulated."}
+  ],
+  "objectives": [
+    {
+      "id": "enter_observation_station",
+      "title": {"en": "Enter the observation station", "ar": "Enter the observation station"},
+      "hint": {"en": "The globe wall lights up as you approach.", "ar": "The globe wall lights up as you approach."},
+      "target": "globe_wall",
+      "animation": "walk_to",
+      "duration_ms": 1400,
+      "effects": {"world": {"earth.at_station": true}, "resources": {"power": -1}},
+      "score": 6
+    },
+    {
+      "id": "select_region",
+      "title": {"en": "Select a region", "ar": "Select a region"},
+      "hint": {"en": "Choose one of the six study regions.", "ar": "Choose one of the six study regions."},
+      "target": "region_console",
+      "animation": "read_terminal",
+      "duration_ms": 1400,
+      "requires": [{"type": "objective", "id": "enter_observation_station"}],
+      "payload": [{"name": "region", "type": "string", "choices": ["nile_delta", "amazon_basin", "sahel", "ganges_plain", "great_barrier", "greenland_margin"], "required": true, "label": {"en": "Region", "ar": "Region"}}],
+      "effects": {"world": {"earth.region": "{{payload.region}}"}},
+      "score": 10
+    },
+    {
+      "id": "enable_layer",
+      "title": {"en": "Enable a data layer", "ar": "Enable a data layer"},
+      "hint": {"en": "NDVI, land temperature, precipitation, aerosol or night lights.", "ar": "NDVI, land temperature, precipitation, aerosol or night lights."},
+      "target": "layer_console",
+      "animation": "confirm",
+      "duration_ms": 1400,
+      "requires": [{"type": "objective", "id": "select_region"}],
+      "payload": [{"name": "layer", "type": "string", "choices": ["ndvi", "lst", "precipitation", "aerosol", "night_lights"], "required": true, "label": {"en": "Layer", "ar": "Layer"}}],
+      "effects": {"world": {"earth.layer": "{{payload.layer}}"}, "resources": {"power": -2}},
+      "score": 12
+    },
+    {
+      "id": "compare_periods",
+      "title": {"en": "Compare two periods", "ar": "Compare two periods"},
+      "hint": {"en": "The station computes per-cell deltas, hotspots and a verdict.", "ar": "The station computes per-cell deltas, hotspots and a verdict."},
+      "target": "analysis_console",
+      "animation": "analyse",
+      "duration_ms": 2600,
+      "requires": [{"type": "objective", "id": "enable_layer"}],
+      "payload": [
+        {"name": "before", "type": "string", "choices": ["2001-2005", "2006-2010", "2011-2015", "2016-2020", "2021-2025"], "default": "2001-2005", "label": {"en": "Baseline period", "ar": "Baseline period"}},
+        {"name": "after", "type": "string", "choices": ["2001-2005", "2006-2010", "2011-2015", "2016-2020", "2021-2025"], "default": "2021-2025", "label": {"en": "Comparison period", "ar": "Comparison period"}}
+      ],
+      "effects": {"world": {"earth.compared": true}, "resources": {"power": -3}},
+      "score": 18
+    },
+    {
+      "id": "interpret_change",
+      "title": {"en": "Interpret the change", "ar": "Interpret the change"},
+      "hint": {"en": "Read the narrative: direction, magnitude and how many cells degraded.", "ar": "Read the narrative: direction, magnitude and how many cells degraded."},
+      "target": "analysis_console",
+      "animation": "read_terminal",
+      "duration_ms": 1800,
+      "requires": [{"type": "world", "path": "earth.compared", "op": "eq", "value": true}],
+      "effects": {"flags_set": ["earth_interpreted"]},
+      "score": 12
+    },
+    {
+      "id": "save_report",
+      "title": {"en": "Save the observation report", "ar": "Save the observation report"},
+      "hint": {"en": "Publish it to the mission science archive.", "ar": "Publish it to the mission science archive."},
+      "target": "report_console",
+      "animation": "confirm",
+      "duration_ms": 1800,
+      "requires": [{"type": "flag", "id": "earth_interpreted"}, {"type": "item", "id": "data_core"}],
+      "effects": {"world": {"earth.report_saved": true}, "flags_set": ["earth_report_saved"], "readiness": 4.0},
+      "score": 14,
+      "success_message": {"en": "Report archived with provenance. Campaign complete.", "ar": "Report archived with provenance. Campaign complete."}
+    }
+  ],
+  "hazards": [
+    {
+      "action": "save_report",
+      "missing_any": ["earth_interpreted"],
+      "effects": {"resources": {"power": -2}},
+      "message": {"en": "An uninterpreted chart is not a report. Read the analysis first.", "ar": "An uninterpreted chart is not a report. Read the analysis first."},
+      "mistake_penalty": 5.0
+    }
+  ],
+  "scoring": {"mistake_penalty": 4.0, "time_target_seconds": 420.0, "time_bonus_max": 8.0, "pass_score_pct": 60.0},
+  "completion": {
+    "effects": {"flags_set": ["campaign_complete"], "world": {"campaign.complete": true}},
+    "unlocks": [],
+    "summary": {"en": "NOVA campaign complete: Explore. Experience. Execute.", "ar": "NOVA campaign complete: Explore. Experience. Execute."},
+    "continuity": [
+      {
+        "key": "earth_readiness",
+        "label": {"en": "Science reporting → final readiness", "ar": "Science reporting → final readiness"},
+        "kind": "readiness",
+        "metric": "score_pct",
+        "bands": [
+          {"min": 90, "value": 8, "reason": {"en": "Publication-quality analysis.", "ar": "Publication-quality analysis."}},
+          {"min": 0, "value": -3, "reason": {"en": "Analysis needs more rigour.", "ar": "Analysis needs more rigour."}}
+        ]
+      }
+    ]
+  },
+  "science_notes": [
+    {
+      "topic": {"en": "Reading Earth from orbit", "ar": "Reading Earth from orbit"},
+      "detail": {"en": "MODIS NDVI (MOD13Q1) tracks vegetation greenness, MODIS land surface temperature (MOD11) tracks heat, and GPM IMERG tracks precipitation. NASA POWER serves monthly aggregates of these climate variables without an API key.", "ar": "MODIS NDVI (MOD13Q1) tracks vegetation greenness, MODIS land surface temperature (MOD11) tracks heat, and GPM IMERG tracks precipitation. NASA POWER serves monthly aggregates of these climate variables without an API key."},
+      "source": "NASA – MODIS / GPM / POWER",
+      "url": "https://power.larc.nasa.gov/",
+      "simulated": false
+    }
+  ],
+  "world_objects": [
+    {"id": "globe_wall", "label": {"en": "Globe Wall", "ar": "Globe Wall"}, "kind": "display", "position": [0, 2, -8], "interactions": ["enter_observation_station"]},
+    {"id": "region_console", "label": {"en": "Region Console", "ar": "Region Console"}, "kind": "terminal", "position": [-4, 0, -6], "interactions": ["select_region"]},
+    {"id": "layer_console", "label": {"en": "Layer Console", "ar": "Layer Console"}, "kind": "terminal", "position": [4, 0, -6], "interactions": ["enable_layer"]},
+    {"id": "analysis_console", "label": {"en": "Analysis Console", "ar": "Analysis Console"}, "kind": "terminal", "position": [0, 0, -4], "interactions": ["compare_periods", "interpret_change"]},
+    {"id": "report_console", "label": {"en": "Report Console", "ar": "Report Console"}, "kind": "terminal", "position": [0, 0, -2], "interactions": ["save_report"]}
+  ],
+  "disclaimer": "Educational analysis. Bundled grids are clearly labelled 'simulated'; live NASA POWER data is labelled 'live'."
+}

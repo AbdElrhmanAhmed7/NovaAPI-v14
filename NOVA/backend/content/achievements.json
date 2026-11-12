@@ -1,0 +1,235 @@
+{
+  "version": 1,
+  "tiers": {
+    "bronze": 10,
+    "silver": 25,
+    "gold": 50,
+    "platinum": 100
+  },
+  "achievements": [
+    {
+      "id": "suit_up",
+      "tier": "bronze",
+      "icon": "helmet",
+      "name": {"en": "Suit Up", "ar": "Suit Up"},
+      "description": {
+        "en": "Finish every Training Facility station and confirm mission readiness.",
+        "ar": "Finish every Training Facility station and confirm mission readiness."
+      },
+      "criteria": {"type": "mission_completed", "mission_id": "training_prep"}
+    },
+    {
+      "id": "systems_nominal",
+      "tier": "bronze",
+      "icon": "gauge",
+      "name": {"en": "All Systems Nominal", "ar": "All Systems Nominal"},
+      "description": {
+        "en": "Check ventilation, power and water in the Earth Analog and log the report.",
+        "ar": "Check ventilation, power and water in the Earth Analog and log the report."
+      },
+      "criteria": {"type": "mission_completed", "mission_id": "analog_systems_check"}
+    },
+    {
+      "id": "leak_sealed",
+      "tier": "silver",
+      "icon": "valve",
+      "name": {"en": "Sealed First Try", "ar": "Sealed First Try"},
+      "description": {
+        "en": "Stop the water leak with zero mistakes: scan, close the valve, then repair.",
+        "ar": "Stop the water leak with zero mistakes: scan, close the valve, then repair."
+      },
+      "criteria": {"type": "flawless_mission", "mission_id": "analog_water_leak"}
+    },
+    {
+      "id": "power_engineer",
+      "tier": "bronze",
+      "icon": "bolt",
+      "name": {"en": "Power Engineer", "ar": "Power Engineer"},
+      "description": {
+        "en": "Connect the backup power unit and bring the bus back online.",
+        "ar": "Connect the backup power unit and bring the bus back online."
+      },
+      "criteria": {"type": "mission_completed", "mission_id": "analog_power_link"}
+    },
+    {
+      "id": "closed_loop",
+      "tier": "silver",
+      "icon": "recycle",
+      "name": {"en": "Closed Loop", "ar": "Closed Loop"},
+      "description": {
+        "en": "Bring the water recycling system online and recover usable water.",
+        "ar": "Bring the water recycling system online and recover usable water."
+      },
+      "criteria": {"type": "mission_completed", "mission_id": "analog_water_recycling"}
+    },
+    {
+      "id": "signal_restored",
+      "tier": "bronze",
+      "icon": "antenna",
+      "name": {"en": "Signal Restored", "ar": "Signal Restored"},
+      "description": {
+        "en": "Recover communications during the analog blackout.",
+        "ar": "Recover communications during the analog blackout."
+      },
+      "criteria": {"type": "mission_completed", "mission_id": "analog_comms_blackout"}
+    },
+    {
+      "id": "analog_graduate",
+      "tier": "silver",
+      "icon": "diploma",
+      "name": {"en": "Analog Graduate", "ar": "Analog Graduate"},
+      "description": {
+        "en": "Complete every Earth Analog mission, including the emergency drill.",
+        "ar": "Complete every Earth Analog mission, including the emergency drill."
+      },
+      "criteria": {"type": "stage_completed", "stage": 2}
+    },
+    {
+      "id": "first_footprint",
+      "tier": "bronze",
+      "icon": "boot",
+      "name": {"en": "First Footprint", "ar": "First Footprint"},
+      "description": {
+        "en": "Leave the lander, survey the terrain and stand up the Mars base.",
+        "ar": "Leave the lander, survey the terrain and stand up the Mars base."
+      },
+      "criteria": {"type": "mission_completed", "mission_id": "mars_arrival"}
+    },
+    {
+      "id": "long_haul",
+      "tier": "silver",
+      "icon": "rover",
+      "name": {"en": "Long Haul", "ar": "Long Haul"},
+      "description": {
+        "en": "Cover 500 metres of surveyed ground on foot and by rover.",
+        "ar": "Cover 500 metres of surveyed ground on foot and by rover."
+      },
+      "criteria": {"type": "distance_travelled", "value": 500}
+    },
+    {
+      "id": "crew_medic",
+      "tier": "silver",
+      "icon": "medkit",
+      "name": {"en": "Crew Medic", "ar": "Crew Medic"},
+      "description": {
+        "en": "Stabilise the crew member at the Medical Station (educational simulation).",
+        "ar": "Stabilise the crew member at the Medical Station (educational simulation)."
+      },
+      "criteria": {"type": "mission_completed", "mission_id": "crew_health"}
+    },
+    {
+      "id": "flame_out",
+      "tier": "gold",
+      "icon": "flame",
+      "name": {"en": "Flame Out, No Mistakes", "ar": "Flame Out, No Mistakes"},
+      "description": {
+        "en": "Extinguish the microgravity fire with zero mistakes: isolate, protect, suppress, verify.",
+        "ar": "Extinguish the microgravity fire with zero mistakes: isolate, protect, suppress, verify."
+      },
+      "criteria": {"type": "flawless_mission", "mission_id": "freefall_fire"}
+    },
+    {
+      "id": "field_geologist",
+      "tier": "silver",
+      "icon": "rock",
+      "name": {"en": "Field Geologist", "ar": "Field Geologist"},
+      "description": {
+        "en": "Drill and seal your first Martian core sample.",
+        "ar": "Drill and seal your first Martian core sample."
+      },
+      "criteria": {"type": "samples_collected", "count": 1}
+    },
+    {
+      "id": "science_record",
+      "tier": "gold",
+      "icon": "database",
+      "name": {"en": "Into the Record", "ar": "Into the Record"},
+      "description": {
+        "en": "Analyse and log two samples in the mission science database.",
+        "ar": "Analyse and log two samples in the mission science database."
+      },
+      "criteria": {"type": "samples_logged", "count": 2}
+    },
+    {
+      "id": "soft_touchdown",
+      "tier": "gold",
+      "icon": "lander",
+      "name": {"en": "Soft Touchdown", "ar": "Soft Touchdown"},
+      "description": {
+        "en": "Score 85% or better in the Lunar Landing Navigator simulator.",
+        "ar": "Score 85% or better in the Lunar Landing Navigator simulator."
+      },
+      "criteria": {"type": "simulation_score", "mission_id": "lunar_landing", "value": 85}
+    },
+    {
+      "id": "earth_observer",
+      "tier": "silver",
+      "icon": "globe",
+      "name": {"en": "Earth Observer", "ar": "Earth Observer"},
+      "description": {
+        "en": "Compare two periods at the Earth Observation Station and archive the report.",
+        "ar": "Compare two periods at the Earth Observation Station and archive the report."
+      },
+      "criteria": {"type": "mission_completed", "mission_id": "earth_trends"}
+    },
+    {
+      "id": "resource_steward",
+      "tier": "gold",
+      "icon": "droplet",
+      "name": {"en": "Resource Steward", "ar": "Resource Steward"},
+      "description": {
+        "en": "Hold at least 60 water and 60 power at the same time after the analog stage.",
+        "ar": "Hold at least 60 water and 60 power at the same time after the analog stage."
+      },
+      "criteria": {
+        "type": "resources_at_least",
+        "values": {"water": 60, "power": 60},
+        "min_missions": 8
+      }
+    },
+    {
+      "id": "tool_custodian",
+      "tier": "silver",
+      "icon": "wrench",
+      "name": {"en": "Tool Custodian", "ar": "Tool Custodian"},
+      "description": {
+        "en": "Keep every carried tool at 80% condition or better.",
+        "ar": "Keep every carried tool at 80% condition or better."
+      },
+      "criteria": {"type": "tool_condition", "value": 80, "min_tools": 3}
+    },
+    {
+      "id": "steady_hands",
+      "tier": "gold",
+      "icon": "target",
+      "name": {"en": "Steady Hands", "ar": "Steady Hands"},
+      "description": {
+        "en": "Finish eight missions with two mistakes or fewer in the whole campaign.",
+        "ar": "Finish eight missions with two mistakes or fewer in the whole campaign."
+      },
+      "criteria": {"type": "mistakes_at_most", "value": 2, "min_missions": 8}
+    },
+    {
+      "id": "high_readiness",
+      "tier": "gold",
+      "icon": "star",
+      "name": {"en": "Mission Ready", "ar": "Mission Ready"},
+      "description": {
+        "en": "Reach a Mission Continuity readiness of 85 or higher.",
+        "ar": "Reach a Mission Continuity readiness of 85 or higher."
+      },
+      "criteria": {"type": "readiness_at_least", "value": 85}
+    },
+    {
+      "id": "mission_commander",
+      "tier": "platinum",
+      "icon": "insignia",
+      "name": {"en": "Beyond the Mission", "ar": "Beyond the Mission"},
+      "description": {
+        "en": "Complete all 15 missions across the eight NOVA stages.",
+        "ar": "Complete all 15 missions across the eight NOVA stages."
+      },
+      "criteria": {"type": "campaign_completed"}
+    }
+  ]
+}

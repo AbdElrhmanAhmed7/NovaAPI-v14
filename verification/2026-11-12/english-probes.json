@@ -1,0 +1,65 @@
+{
+  "base_url": "http://127.0.0.1:36203",
+  "probes": [
+    {
+      "probe": "health",
+      "status": "PASS",
+      "detail": "status ok · version 4.0.0"
+    },
+    {
+      "probe": "ready",
+      "status": "PASS",
+      "detail": "database True · content True · 15 missions · 26 items"
+    },
+    {
+      "probe": "console",
+      "status": "PASS",
+      "detail": "200 · 47,278 bytes · 0 external asset(s)"
+    },
+    {
+      "probe": "write guard",
+      "status": "PASS",
+      "detail": "token-less start → 401 unauthorized"
+    },
+    {
+      "probe": "training_prep",
+      "status": "PASS",
+      "detail": "100.0% grade S · 7 steps · 0 mistakes"
+    },
+    {
+      "probe": "analog_systems_check",
+      "status": "PASS",
+      "detail": "100.0% grade S · 4 steps · 0 mistakes"
+    },
+    {
+      "probe": "leak order enforced",
+      "status": "PASS",
+      "detail": "repair before valve → 409 precondition_failed · unmet [{'type': 'objective', 'id': 'scan_leak', 'message': \"Complete 'Locate the leak with the scanner' first.\", 'hint': 'Follow the wet floor to the manifold and scan the joints.'}, {'type': 'objective', 'id': 'close_valve', 'message': \"Complete 'Close the isolation valve' first.\", 'hint': 'Use the wrench on valve B-7 to depressurise the branch.'}, {'type': 'world', 'id': 'leak.valve_closed', 'message': 'Close the isolation valve before repairing.'}]"
+    },
+    {
+      "probe": "movement tick",
+      "status": "PASS",
+      "detail": "60 s run → 200 · oxygen 105 · water 88 (leak active)"
+    },
+    {
+      "probe": "websocket stream",
+      "status": "PASS",
+      "detail": "frames ['stream.ready', 'events', 'events'] · events ['game.created', 'mission.started', 'action.succeeded', 'action.succeeded']"
+    },
+    {
+      "probe": "stream resume",
+      "status": "PASS",
+      "detail": "reconnect after_seq=23 → stream.ready · event_seq 23"
+    },
+    {
+      "probe": "leak repaired",
+      "status": "PASS",
+      "detail": "grade A (1 deliberate mistake) · water 100 → 88 → 100 L · leak_active False"
+    },
+    {
+      "probe": "NASA (skipped)",
+      "status": "PASS",
+      "detail": "--no-live: offline run"
+    }
+  ]
+}

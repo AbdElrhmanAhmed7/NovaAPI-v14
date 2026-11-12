@@ -1,0 +1,23 @@
+── NOVA live preview smoke test · http://127.0.0.1:8000 (the server the user opens)
+ready          200 · status ready · db True · 15 missions · 26 items
+console        200 · 47,278 bytes · external assets 0
+game created   201 · nova_3d31182fd1e84748b3c5
+training_prep  200 · 7 steps · score 100.0 · grade S
+analog_systems_check 200 · 4 steps · score 100.0 · grade S
+
+✗ repair BEFORE closing the valve → HTTP 409 precondition_failed
+  "The line is still pressurised – water sprays across the bay. Close the valve first."
+  unmet: ['scan_leak', 'close_valve', 'leak.valve_closed']
+  resources now: {"game_id": "nova_3d31182fd1e84748b3c5", "resources": {"water": 88, "oxygen": 105, "power": 78, "fuel": 40}, "caps": {"water": 150, "oxygen": 120, "po
+
+✓ correct order (scan → close valve → repair → verify):
+  scan_leak        → 200 · Leak located at joint B-7, upstream of the valve.
+  close_valve      → 200 · Valve closed. Branch pressure dropping to zero.
+  repair_pipe      → 200 · Joint sealed. Leak stopped and 12 L recovered.
+  verify_pressure  → 200 · Loop holds pressure. Water system certified.
+  report: score 88.89 · grade A · mistakes 1
+  resources after: {"game_id": "nova_3d31182fd1e84748b3c5", "resources": {"water": 100, "oxygen": 105, "power": 70, "fuel": 40}, "caps": {"water": 150, "oxygen": 120, "p
+
+events logged  200 · 27 events · next_seq 27
+
+✓ preview smoke: the running server plays the game and enforces the rules

@@ -1,0 +1,199 @@
+.venv/bin/ruff check .
+All checks passed!
+.venv/bin/ruff format --check .
+110 files already formatted
+.venv/bin/mypy app scripts
+Success: no issues found in 81 source files
+.venv/bin/python scripts/validate_content.py --strict
+15 missions / 95 actions checked – 0 errors, 0 warnings
+.venv/bin/python scripts/audit_routes.py --check
+NOVA route audit
+========================================================================
+  routes_total           75
+  http_published         67
+  operations             67
+  websockets             1
+  mounts                 1
+  guarded_operations     15
+  schemas                136
+  findings               {'info': 24}
+
+  · 24 operation(s) still expose free-form object fields
+
+0 error(s), 0 warning(s)
+.venv/bin/python scripts/export_openapi.py --check
+✓ /tmp/arena/tenants/80081190-ee6b-4607-8929-b702521482ee/sessions/42a5aaf5-c095-57eb-a950-ebe37cb5ca75/workspace/nova/NOVA/backend/docs/openapi.json is up to date (67 operations)
+.venv/bin/pytest -q
+........................................................................ [ 16%]
+........................................................................ [ 32%]
+........................................................................ [ 49%]
+........................................................................ [ 65%]
+........................................................................ [ 82%]
+........................................................................ [ 98%]
+.....                                                                    [100%]
+=============================== warnings summary ===============================
+.venv/lib/python3.11/site-packages/fastapi/testclient.py:1
+  /tmp/arena/tenants/80081190-ee6b-4607-8929-b702521482ee/sessions/42a5aaf5-c095-57eb-a950-ebe37cb5ca75/workspace/nova/NOVA/backend/.venv/lib/python3.11/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+.venv/bin/python scripts/playthrough.py --in-process
+/tmp/arena/tenants/80081190-ee6b-4607-8929-b702521482ee/sessions/42a5aaf5-c095-57eb-a950-ebe37cb5ca75/workspace/nova/NOVA/backend/.venv/lib/python3.11/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+NOVA – Beyond the Mission · Explore. Experience. Execute.
+▶ game nova_370bb2bb642a4caf901b (Autopilot)
+  ▸ training_prep
+     ✓ review_brief → Mission brief accepted. Stations unlocked.
+     ✓ collect_oxygen → Oxygen cylinder stowed (+20 O2).
+     ✓ take_repair_tools → Repair loadout collected.
+     ✓ take_scanner → Diagnostics tools collected.
+     ✓ inspect_rover → Rover checked and transponder installed.
+     ✓ suit_check → Suit sealed. CO2 filter nominal.
+     ✓ confirm_readiness → You are cleared for Earth Analog training.
+     ★ training_prep: 100.0% grade S (0 mistakes, 7 steps)
+  ▸ analog_systems_check
+     ✓ check_ventilation → Airflow nominal, scrubber at 92% capacity.
+     ✓ check_power_bus → Bus at 28.4 V – within tolerance.
+     ✓ check_water_loop → Pressure anomaly detected – a water leak is active.
+     ✓ log_system_report → Survey logged. Maintenance tasks unlocked.
+     ★ analog_systems_check: 100.0% grade S (0 mistakes, 4 steps)
+  ▸ analog_device_fault
+     ✓ scan_device → Regulator board running 30 C above nominal.
+     ✓ measure_circuit → Measure the regulator circuit
+     ✓ take_coolant → Take a coolant canister
+     ✓ cool_unit → Cool the unit down
+     ✓ replace_board → Replace the regulator board
+     ✓ calibrate_device → Analyser calibrated and back in service.
+     ★ analog_device_fault: 100.0% grade S (0 mistakes, 6 steps)
+  ▸ analog_emergency
+     ✓ acknowledge_alarm → Acknowledge the alarm
+     ✓ isolate_electrical → Isolate the electrical bay
+     ✓ open_emergency_locker → Open the emergency locker
+     ✓ don_protection → Don mask and gloves
+     ✓ suppress_smoke → Suppress the fire
+     ✓ evacuate_crew → Evacuate the crew
+     ✓ restore_systems → Restore ventilation and power
+     ✓ submit_training_report → Submit the training report
+     ★ analog_emergency: 100.0% grade S (0 mistakes, 8 steps)
+  ▸ analog_power_link
+     ✓ inspect_bus → Inspect the distribution bus
+     ✓ isolate_breaker → Bus isolated and tagged out.
+     ✓ fetch_power_module → Collect the power module and panel
+     ✓ connect_module → Connect the power module
+     ✓ deploy_solar → Deploy the solar panel
+     ✓ energise_bus → Bus online (+25 kWh).
+     ★ analog_power_link: 100.0% grade S (0 mistakes, 6 steps)
+  ▸ analog_comms_blackout
+     ✓ diagnose_link → Power is fine – the antenna is off-axis.
+     ✓ fetch_antenna_kit → Collect the antenna kit
+     ✓ realign_antenna → Realign the antenna
+     ✓ restore_link → Carrier locked. Control has you loud and clear.
+     ✓ send_status_report → Send the status report
+     ★ analog_comms_blackout: 100.0% grade S (0 mistakes, 5 steps)
+  ▸ analog_water_leak
+     ✓ scan_leak → Leak located at joint B-7, upstream of the valve.
+     ✓ close_valve → Valve closed. Branch pressure dropping to zero.
+     ✓ repair_pipe → Joint sealed. Leak stopped and 12 L recovered.
+     ✓ verify_pressure → Loop holds pressure. Water system certified.
+     ★ analog_water_leak: 100.0% grade S (0 mistakes, 4 steps)
+  ▸ analog_water_recycling
+     ✓ inspect_recycler → Inspect the recycler
+     ✓ take_filter → Take a filter cartridge
+     ✓ install_filter → Install the fresh filter
+     ✓ prime_pump → Prime the pump
+     ✓ start_recycling → Recycler online: +25 L recovered water.
+     ✓ verify_quality → Water within potable limits.
+     ★ analog_water_recycling: 100.0% grade S (0 mistakes, 6 steps)
+  ▸ mars_arrival
+     ✓ exit_lander → Boots on regolith. Welcome to Mars.
+     ✓ survey_area → Survey the landing zone
+     ✓ map_hazards → Hazard map written to your HUD.
+     ✓ unload_cargo → Unload the science cargo
+     ✓ measure_radiation → Measure surface radiation
+     ✓ select_base_site → Select the base site
+     ✓ deploy_antenna → Uplink established through the orbiter.
+     ✓ establish_base → Base online. Mars is now habitable – barely.
+     ★ mars_arrival: 100.0% grade S (0 mistakes, 8 steps)
+  ▸ mars_rover_traverse
+     ✓ board_rover → Board the rover
+     ✓ set_nav_target → Set the navigation target
+     ⚙ rover_traverse: succeeded score=85.82 reason=all_waypoints_reached
+     ✓ drive_traverse → Traverse logged. Both survey sites reached.
+     ✓ disembark_rover → Disembark at the site
+     ✓ deploy_transponder → Deploy the navigation beacon
+     ★ mars_rover_traverse: 100.0% grade S (0 mistakes, 6 steps)
+  ▸ crew_health
+     ✓ reach_medical_station → Reach the medical station
+     ✓ collect_medical_supplies → Collect supplies from the locker
+     ✓ attach_bio_monitor → Telemetry live: SpO2 low, heart rate elevated.
+     ✓ review_vitals → Review the vitals readout
+     ✓ administer_oxygen → Provide oxygen support
+     ✓ give_hydration_salts → Give hydration salts and rest
+     ⚙ crew_vitals: succeeded score=86.92 reason=crew_stable
+     ✓ stabilise_crew → Crew member stable. Simulation complete.
+     ✓ log_medical_report → Log the medical report
+     ★ crew_health: 100.0% grade S (0 mistakes, 9 steps)
+  ▸ freefall_fire
+     ✓ reach_incident_zone → Reach the incident zone
+     ✓ isolate_zone → Zone isolated, airflow stopped.
+     ✓ collect_fire_gear → Collect protection and extinguisher
+     ✓ equip_extinguisher → Equip extinguisher and gloves
+     ⚙ microgravity_fire: succeeded score=89.3 reason=fire_out_atmosphere_safe
+     ✓ suppress_fire → Fire out. Cabin atmosphere recovering.
+     ✓ restore_ventilation → Restore ventilation and scrubbers
+     ✓ verify_atmosphere → Cabin nominal. Fire alarm reset.
+     ★ freefall_fire: 100.0% grade S (0 mistakes, 8 steps)
+  ▸ martian_guide
+     ✓ drive_to_outcrop → Drive to the outcrop
+     ✓ disembark_at_site → Disembark at the site
+     ✓ scan_outcrop → Scan the rock and soil
+     ✓ collect_sample → Core sealed and labelled. Take it to the lab. Sample smp_dce119f03c534
+     ✓ return_to_lab → Return to the lab
+     ✓ analyse_sample → Analyse the sample
+     ✓ log_findings → Finding logged with provenance and interpretation.
+     ★ martian_guide: 100.0% grade S (0 mistakes, 7 steps)
+  ▸ lunar_landing
+     ✓ enter_simulator → Enter the landing simulator
+     ✓ review_landing_brief → Review altitude, speed and fuel
+     ✓ configure_descent → Choose a descent strategy
+     ⚙ lunar_lander: succeeded score=90.89 reason=nominal_landing
+     ✓ fly_descent → Contact light. Engine stop. You are on the pad.
+     ✓ evaluate_landing → Review the landing score
+     ✓ exit_simulator → Exit the simulator
+     ★ lunar_landing: 100.0% grade S (0 mistakes, 7 steps)
+  ▸ earth_trends
+     ✓ enter_observation_station → Enter the observation station
+     ✓ select_region → Select a region
+     ✓ enable_layer → Enable a data layer
+     ✓ compare_periods → Compare two periods
+     ✓ interpret_change → Interpret the change
+     ✓ save_report → Report archived with provenance. Campaign complete.
+     ★ earth_trends: 100.0% grade S (0 mistakes, 6 steps)
+
+──────────────────────────────────────────────────────────────────────────
+MISSION                        SCORE  GRADE  MISTAKES  STEPS
+──────────────────────────────────────────────────────────────────────────
+training_prep                 100.0%      S         0      7
+analog_systems_check          100.0%      S         0      4
+analog_device_fault           100.0%      S         0      6
+analog_emergency              100.0%      S         0      8
+analog_power_link             100.0%      S         0      6
+analog_comms_blackout         100.0%      S         0      5
+analog_water_leak             100.0%      S         0      4
+analog_water_recycling        100.0%      S         0      6
+mars_arrival                  100.0%      S         0      8
+mars_rover_traverse           100.0%      S         0      6
+crew_health                   100.0%      S         0      9
+freefall_fire                 100.0%      S         0      8
+martian_guide                 100.0%      S         0      7
+lunar_landing                 100.0%      S         0      7
+earth_trends                  100.0%      S         0      6
+──────────────────────────────────────────────────────────────────────────
+Missions completed : 15 / 15
+Readiness          : 100.0 (S)
+Average score      : 100.0%
+Playtime           : 259.5 s
+Actions            : 93 ok / 0 mistakes
+
+✓ campaign completed
+MAKE_CHECK_EXIT=0

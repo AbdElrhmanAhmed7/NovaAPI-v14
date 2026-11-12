@@ -1,0 +1,15 @@
+NOVA – Beyond the Mission · player-facing text audit
+responses scanned : 996
+strings scanned   : 56578
+player strings    : 475
+operations        : 67/67
+  campaign           780 responses
+  catalogues          36 responses
+  console              1 responses
+  failures            42 responses
+  legacy               9 responses
+  player-views       120 responses
+  save-transfer        2 responses
+  websocket            6 responses
+
+✓ every player-facing string is English

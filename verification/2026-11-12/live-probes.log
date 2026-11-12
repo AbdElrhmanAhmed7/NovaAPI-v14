@@ -1,0 +1,19 @@
+.venv/bin/python scripts/live_probes.py
+── NOVA live probes · http://127.0.0.1:34611
+  ✓ health                     status ok · version 4.0.0
+  ✓ ready                      database True · content True · 15 missions · 26 items
+  ✓ console                    200 · 47,278 bytes · 0 external asset(s)
+  ✓ write guard                token-less start → 401 unauthorized
+  ✓ training_prep              100.0% grade S · 7 steps · 0 mistakes
+  ✓ analog_systems_check       100.0% grade S · 4 steps · 0 mistakes
+  ✓ leak order enforced        repair before valve → 409 precondition_failed · unmet [{'type': 'objective', 'id': 'scan_leak', 'message': "Complete 'Locate the leak with the scanner' first.", 'hint': 'Follow the wet floor to the manifold and scan the joints.'}, {'type': 'objective', 'id': 'close_valve', 'message': "Complete 'Close the isolation valve' first.", 'hint': 'Use the wrench on valve B-7 to depressurise the branch.'}, {'type': 'world', 'id': 'leak.valve_closed', 'message': 'Close the isolation valve before repairing.'}]
+  ✓ movement tick              60 s run → 200 · oxygen 105 · water 88 (leak active)
+  ✓ websocket stream           frames ['stream.ready', 'events', 'events'] · events ['game.created', 'mission.started', 'action.succeeded', 'action.succeeded']
+  ✓ stream resume              reconnect after_seq=23 → stream.ready · event_seq 23
+  ✓ leak repaired              grade A (1 deliberate mistake) · water 100 → 88 → 100 L · leak_active False
+  ✓ NASA POWER                 provenance live · Δmean 0.8858 °C (4.06%) · degrading · 5 hotspots · MODIS MOD11A2 / MERRA-2 T2M
+  ✓ NASA APOD                  provenance bundled · Perseverance Selfie at Rochette · fallback: Server error '500 Internal Server Error' for url 'https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&thumbs=true' For more information check: https:
+  ✓ NASA POWER cache           provenance cache · same Δmean 0.8858 °C
+
+14 probes · 0 failure(s)
+PROBES_EXIT=0

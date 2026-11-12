@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NOVA · Mission Control</title>
+<!--
+  Mission Control – a dependency-free console for the NOVA gameplay backend.
+  Everything (CSS, JS, icons) is inline so the page works offline, inside a
+  sandboxed iframe, and behind a reverse proxy. It talks to the public API only:
+  whatever this page can do, the React Three Fiber client can do too.
+-->
+<style>
+  :root {
+    --bg: #070b14;
+    --panel: #0e1524;
+    --panel-2: #131c2e;
+    --line: #1e2a42;
+    --text: #dce6f5;
+    --muted: #7d8ca6;
+    --accent: #ff7a45;
+    --accent-2: #4cc9f0;
+    --ok: #3ddc97;
+    --warn: #ffc857;
+    --bad: #ff5d73;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 14px; line-height: 1.5;
+  }
+  body::before {
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(900px 500px at 12% -10%, rgba(255,122,69,.13), transparent 60%),
+      radial-gradient(800px 480px at 95% 0%, rgba(76,201,240,.10), transparent 55%);
+  }
+  header, main, footer { position: relative; z-index: 1; }
+  header {
+    display: flex; flex-wrap: wrap; gap: 14px; align-items: center;
+    padding: 14px 20px; border-bottom: 1px solid var(--line);
+    background: rgba(9,14,24,.86); backdrop-filter: blur(6px);
+    position: sticky; top: 0; z-index: 20;
+  }
+  .brand { display: flex; align-items: center; gap: 11px; margin-right: auto; }
+  .logo {
+    width: 34px; height: 34px; border-radius: 9px; flex: none;
+    background: linear-gradient(140deg, var(--accent), #b8452a);
+    display: grid; place-items: center; font-weight: 800; color: #150803;
+  }
+  .brand h1 { font-size: 16px; margin: 0; letter-spacing: .3px; }
+  .brand p { margin: 0; font-size: 11px; color: var(--muted); letter-spacing: 1.6px; text-transform: uppercase; }
+  main { padding: 18px 20px 40px; display: grid; gap: 16px; grid-template-columns: 320px minmax(0,1fr) 340px; align-items: start; }
+  @media (max-width: 1250px) { main { grid-template-columns: 300px minmax(0,1fr); } .col-right { grid-column: 1 / -1; } }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+  .col { display: grid; gap: 16px; align-content: start; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .card > h2 {
+    margin: 0; padding: 10px 14px; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--muted); border-bottom: 1px solid var(--line); background: var(--panel-2);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card > h2 .spacer { margin-left: auto; }
+  .body { padding: 14px; display: grid; gap: 12px; }
+  label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .8px; display: block; margin-bottom: 4px; }
+  input, select, textarea, button {
+    font-family: inherit; font-size: 13px; color: var(--text);
+    background: #0a1120; border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px;
+  }
+  input, select, textarea { width: 100%; }
+  textarea { font-family: var(--mono); font-size: 12px; resize: vertical; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent-2); }
+  button { cursor: pointer; background: #17233a; transition: .15s; white-space: nowrap; }
+  button:hover:not(:disabled) { border-color: var(--accent-2); background: #1d2c48; }
+  button:disabled { opacity: .42; cursor: not-allowed; }
+  button.primary { background: linear-gradient(140deg, var(--accent), #d1552c); border-color: transparent; color: #180903; font-weight: 650; }
+  button.primary:hover:not(:disabled) { filter: brightness(1.1); background: linear-gradient(140deg, var(--accent), #d1552c); }
+  button.tiny { padding: 4px 8px; font-size: 11px; border-radius: 6px; }
+  .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .mono { font-family: var(--mono); font-size: 12px; }
+  .muted { color: var(--muted); }
+  .pill {
+    font-size: 10px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line);
+    text-transform: uppercase; letter-spacing: .8px; color: var(--muted); white-space: nowrap;
+  }
+  .pill.ok { color: var(--ok); border-color: rgba(61,220,151,.4); background: rgba(61,220,151,.09); }
+  .pill.warn { color: var(--warn); border-color: rgba(255,200,87,.4); background: rgba(255,200,87,.09); }
+  .pill.bad { color: var(--bad); border-color: rgba(255,93,115,.4); background: rgba(255,93,115,.09); }
+  .pill.info { color: var(--accent-2); border-color: rgba(76,201,240,.4); background: rgba(76,201,240,.09); }
+  .bar { height: 7px; border-radius: 4px; background: #0a1120; overflow: hidden; border: 1px solid var(--line); }
+  .bar > i { display: block; height: 100%; background: var(--accent-2); transition: width .35s; }
+  .bar.low > i { background: var(--bad); }
+  .bar.mid > i { background: var(--warn); }
+  .meter { display: grid; gap: 4px; }
+  .meter .top { display: flex; justify-content: space-between; font-size: 12px; }
+  .meter .top b { font-weight: 600; }
+  .list { display: grid; gap: 6px; max-height: 340px; overflow: auto; }
+  .item {
+    display: flex; gap: 8px; align-items: center; padding: 8px 10px; border-radius: 8px;
+    border: 1px solid var(--line); background: #0a1120; cursor: pointer; transition: .15s;
+  }
+  .item:hover { border-color: var(--accent-2); }
+  .item.active { border-color: var(--accent); background: rgba(255,122,69,.09); }
+  .item.locked { opacity: .5; }
+  .item .grow { flex: 1; min-width: 0; }
+  .item .t { font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .item .s { font-size: 11px; color: var(--muted); }
+  .obj { border: 1px solid var(--line); border-radius: 9px; padding: 10px; background: #0a1120; display: grid; gap: 7px; }
+  .obj.done { border-color: rgba(61,220,151,.35); background: rgba(61,220,151,.06); }
+  .obj.blocked { opacity: .72; }
+  .obj .head { display: flex; gap: 8px; align-items: flex-start; }
+  .obj .head .grow { flex: 1; }
+  .obj .hint { font-size: 12px; color: var(--muted); }
+  .obj .unmet { font-size: 11px; color: var(--warn); font-family: var(--mono); }
+  .kv { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; font-family: var(--mono); font-size: 12px; }
+  .kv .k { color: var(--muted); }
+  .kv .v { text-align: right; }
+  pre {
+    margin: 0; padding: 10px; background: #060a12; border: 1px solid var(--line); border-radius: 8px;
+    font-family: var(--mono); font-size: 11.5px; max-height: 260px; overflow: auto; white-space: pre-wrap; word-break: break-word;
+  }
+  .log { display: grid; gap: 4px; max-height: 300px; overflow: auto; font-family: var(--mono); font-size: 11.5px; }
+  .log div { padding: 4px 7px; border-left: 2px solid var(--line); background: #0a1120; border-radius: 0 6px 6px 0; }
+  .log .ok { border-left-color: var(--ok); }
+  .log .bad { border-left-color: var(--bad); }
+  .log .warn { border-left-color: var(--warn); }
+  .log .info { border-left-color: var(--accent-2); }
+  .empty { color: var(--muted); font-size: 12px; text-align: center; padding: 18px 8px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--bad); flex: none; }
+  .dot.on { background: var(--ok); box-shadow: 0 0 8px rgba(61,220,151,.7); }
+  .stage { font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); margin: 8px 0 2px; }
+  .toast {
+    position: fixed; right: 18px; bottom: 18px; z-index: 60; display: grid; gap: 8px; max-width: 380px;
+  }
+  .toast div {
+    padding: 10px 14px; border-radius: 9px; border: 1px solid var(--line); background: var(--panel-2);
+    box-shadow: 0 10px 30px rgba(0,0,0,.5); font-size: 13px; animation: slide .2s ease-out;
+  }
+  .toast .bad { border-color: rgba(255,93,115,.5); }
+  .toast .ok { border-color: rgba(61,220,151,.5); }
+  @keyframes slide { from { opacity: 0; transform: translateY(8px); } }
+  footer { padding: 14px 20px 28px; color: var(--muted); font-size: 11.5px; border-top: 1px solid var(--line); }
+  a { color: var(--accent-2); }
+  .disclaimer { font-size: 11px; color: var(--warn); border: 1px dashed rgba(255,200,87,.35); border-radius: 8px; padding: 8px 10px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <div class="logo">N</div>
+    <div>
+      <h1>NOVA &ndash; Beyond the Mission</h1>
+      <p>Explore · Experience · Execute</p>
+    </div>
+  </div>
+  <div class="row">
+    <span class="dot" id="dot"></span>
+    <span class="mono muted" id="conn">offline</span>
+  </div>
+  <div class="row">
+    <span class="pill" id="gamePill">no session</span>
+    <a href="docs" target="_blank"><button class="tiny">API docs</button></a>
+    <a href="api/v1/health" target="_blank"><button class="tiny">health</button></a>
+  </div>
+</header>
+
+<main>
+  <!-- ───────────────────────── LEFT: session + HUD ───────────────────────── -->
+  <div class="col">
+    <section class="card">
+      <h2>Campaign</h2>
+      <div class="body">
+        <div>
+          <label for="player">Commander name</label>
+          <input id="player" value="Commander" maxlength="50" />
+        </div>
+        <div class="grid2">
+          <div>
+            <label for="difficulty">Difficulty</label>
+            <select id="difficulty">
+              <option value="cadet">cadet</option>
+              <option value="standard" selected>standard</option>
+              <option value="veteran">veteran</option>
+            </select>
+          </div>
+          <div>
+            <label for="seed">Seed</label>
+            <input id="seed" type="number" value="7" />
+          </div>
+        </div>
+        <div class="row">
+          <button class="primary" id="btnNew">New campaign</button>
+          <button id="btnSaves">Load save</button>
+        </div>
+        <div id="saves" class="list" hidden></div>
+        <div>
+          <label for="gid">Resume by game id</label>
+          <div class="row">
+            <input id="gid" class="mono" placeholder="nova_..." style="flex:1" />
+            <button id="btnResume">Resume</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Life support <span class="spacer"></span><span class="pill" id="envPill">—</span></h2>
+      <div class="body">
+        <div id="resources" class="meter"><div class="empty">No session yet.</div></div>
+        <div class="meter">
+          <div class="top"><span>Suit integrity</span><b id="suitVal">—</b></div>
+          <div class="bar" id="suitBar"><i style="width:0%"></i></div>
+        </div>
+        <div class="meter">
+          <div class="top"><span>Readiness</span><b id="readyVal">—</b></div>
+          <div class="bar" id="readyBar"><i style="width:0%"></i></div>
+        </div>
+        <div class="grid2">
+          <div>
+            <label for="activity">Activity (WASD)</label>
+            <select id="activity">
+              <option value="idle">idle</option>
+              <option value="walk" selected>walk</option>
+              <option value="run">run (Shift)</option>
+              <option value="eva">eva</option>
+              <option value="rover">rover</option>
+            </select>
+          </div>
+          <div>
+            <label>EVA mode</label>
+            <button id="btnEva" style="width:100%">Toggle EVA</button>
+          </div>
+        </div>
+        <div class="row">
+          <button id="btnLoop">Start life-support loop</button>
+          <button id="btnTick" class="tiny">Tick 1s</button>
+        </div>
+        <div class="muted mono" id="tickInfo">1 Hz · server-authoritative oxygen drain</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Inventory <span class="spacer"></span><span class="pill" id="massPill">0 kg</span></h2>
+      <div class="body"><div id="inventory" class="list"><div class="empty">Empty.</div></div></div>
+    </section>
+  </div>
+
+  <!-- ───────────────────────── CENTRE: missions ───────────────────────── -->
+  <div class="col">
+    <section class="card">
+      <h2>Missions <span class="spacer"></span><span class="pill" id="progressPill">0 / 15</span></h2>
+      <div class="body"><div id="missions" class="list" style="max-height:300px"><div class="empty">Create a campaign to begin.</div></div></div>
+    </section>
+
+    <section class="card">
+      <h2 id="missionTitle">Mission detail</h2>
+      <div class="body">
+        <div id="missionMeta" class="row"></div>
+        <div id="missionSummary" class="muted"></div>
+        <div class="row">
+          <button class="primary" id="btnStart">Enter mission (E)</button>
+          <button id="btnRefresh">Refresh</button>
+          <button id="btnInteractions">World objects</button>
+          <button id="btnReport">Debrief</button>
+        </div>
+        <div id="objectives" class="list" style="max-height:none"><div class="empty">Select a mission.</div></div>
+        <div id="missionExtra"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Simulation <span class="spacer"></span><span class="pill" id="simPill">none</span></h2>
+      <div class="body">
+        <div class="row">
+          <button id="btnSimStart">Start run</button>
+          <button id="btnSimTick">Tick 0.5s</button>
+          <button class="primary" id="btnAutopilot">Autopilot</button>
+          <button id="btnSimReset">Reset</button>
+          <button id="btnScene" class="tiny">Scene</button>
+        </div>
+        <div>
+          <label for="command">Command payload (player intent)</label>
+          <textarea id="command" rows="3">{"throttle": 0.4}</textarea>
+        </div>
+        <div id="simTelemetry"><div class="empty">This mission has no simulation, or it has not started.</div></div>
+        <div id="simNote" class="disclaimer" hidden></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ───────────────────────── RIGHT: telemetry ───────────────────────── -->
+  <div class="col col-right">
+    <section class="card">
+      <h2>Event stream <span class="spacer"></span><span class="pill" id="wsPill">ws off</span></h2>
+      <div class="body">
+        <div class="row">
+          <button id="btnStream" class="tiny">Connect</button>
+          <button id="btnClearLog" class="tiny">Clear</button>
+          <span class="muted mono" id="seqInfo">seq 0</span>
+        </div>
+        <div class="muted mono" id="fanoutInfo">fan-out: not probed</div>
+        <div id="events" class="log"><div class="empty">No events.</div></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Service <span class="spacer"></span><span class="pill" id="svcPill">unknown</span></h2>
+      <div class="body">
+        <div class="row">
+          <button id="btnReady" class="tiny">Probe readiness</button>
+          <span class="muted mono" id="svcInfo">not probed</span>
+        </div>
+        <div id="service" class="kv"><span class="k">database</span><span class="v">—</span></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Continuity</h2>
+      <div class="body"><div id="continuity"><div class="empty">No modifiers yet.</div></div></div>
+    </section>
+
+    <section class="card">
+      <h2>Inspector <span class="spacer"></span>
+        <select id="inspectWhat" style="width:auto;padding:3px 6px;font-size:11px">
+          <option value="snapshot">snapshot</option>
+          <option value="mission">mission</option>
+          <option value="report">campaign report</option>
+          <option value="science">science db</option>
+          <option value="earth">earth catalogue</option>
+          <option value="validation">content validation</option>
+          <option value="ready">service readiness</option>
+          <option value="last">last response</option>
+        </select>
+      </h2>
+      <div class="body">
+        <div class="row"><button id="btnInspect" class="tiny">Fetch</button><span class="muted mono" id="inspectInfo"></span></div>
+        <pre id="inspector">{}</pre>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  Mission Control talks to the public API only (<span class="mono">/api/v1</span>) &mdash; the same contract the
+  React&nbsp;Three&nbsp;Fiber client uses. Simulated vitals, fire and resource numbers are educational simplifications,
+  never real medical, engineering or mission-planning guidance.
+</footer>
+
+<div class="toast" id="toasts"></div>
+
+<script>
+"use strict";
+// ---------------------------------------------------------------------------
+// Tiny API client. Relative URLs keep the console working behind any proxy.
+// ---------------------------------------------------------------------------
+const BASE = new URL(".", window.location.href).pathname.replace(/\/$/, "");
+const API = BASE + "/api/v1";
+const $ = (id) => document.getElementById(id);
+const state = { gameId: null, token: null, mission: null, view: null, blueprint: null,
+                loop: null, ws: null, seq: 0, last: null, autopilot: false, eva: false };
+
+function toast(msg, kind) {
+  const el = document.createElement("div");
+  el.className = kind || ""; el.textContent = msg;
+  $("toasts").appendChild(el);
+  setTimeout(() => el.remove(), 5200);
+}
+
+async function api(path, opts) {
+  const o = Object.assign({ headers: {} }, opts || {});
+  o.headers = Object.assign({ "Content-Type": "application/json" }, o.headers);
+  if (state.token) o.headers["X-Session-Token"] = state.token;
+  if (o.json !== undefined) { o.body = JSON.stringify(o.json); delete o.json; }
+  const url = path.startsWith("http") ? path : API + path;
+  const res = await fetch(url, o);
+  const text = await res.text();
+  let body = null;
+  try { body = text ? JSON.parse(text) : null; } catch (e) { body = { raw: text }; }
+  state.last = body;
+  if (!res.ok) {
+    const err = (body && body.error) || {};
+    const detail = err.details ? " " + JSON.stringify(err.details).slice(0, 220) : "";
+    throw new Error((err.code || res.status) + ": " + (err.message || res.statusText) + detail);
+  }
+  return body;
+}
+
+const esc = (s) => String(s == null ? "" : s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const loc = (t) => (t && (t.en || t.ar)) || String(t || "");
+const fmt = (n, d) => (typeof n === "number" ? n.toFixed(d === undefined ? 1 : d) : n);
+
+function statusPill(s) {
+  const map = { completed: "ok", active: "info", available: "", locked: "", failed: "bad",
+                running: "info", succeeded: "ok", ready: "", paused: "warn" };
+  return '<span class="pill ' + (map[s] || "") + '">' + esc(s) + "</span>";
+}
+
+// ---------------------------------------------------------------------------
+// Session
+// ---------------------------------------------------------------------------
+function persist() {
+  try { localStorage.setItem("nova.session", JSON.stringify({ gameId: state.gameId, token: state.token })); } catch (e) {}
+}
+function restore() {
+  try {
+    const s = JSON.parse(localStorage.getItem("nova.session") || "null");
+    if (s && s.gameId) { state.gameId = s.gameId; state.token = s.token; $("gid").value = s.gameId; }
+  } catch (e) {}
+}
+
+async function newGame() {
+  const body = await api("/games", { method: "POST", json: {
+    player_name: $("player").value || "Commander",
+    difficulty: $("difficulty").value,
+    seed: Number($("seed").value) || 0 } });
+  adopt(body);
+  toast("Campaign created: " + body.game_id, "ok");
+}
+
+function adopt(body) {
+  state.gameId = body.game_id; state.token = body.session_token || null;
+  state.mission = null; state.view = null; state.seq = 0;
+  $("gid").value = body.game_id;
+  persist(); connectStream(); refreshAll();
+}
+
+async function resume(id) {
+  const gid = (id || $("gid").value || "").trim();
+  if (!gid) return toast("Enter a game id first.", "bad");
+  const body = await api("/games/" + encodeURIComponent(gid) + "/resume", { method: "POST" });
+  adopt(body); toast("Resumed " + gid, "ok");
+}
+
+async function listSaves() {
+  const rows = await api("/games?limit=25");
+  const box = $("saves"); box.hidden = false;
+  if (!rows.length) { box.innerHTML = '<div class="empty">No saved campaigns.</div>'; return; }
+  box.innerHTML = rows.map((r) =>
+    '<div class="item" data-resume="' + esc(r.game_id) + '"><div class="grow">' +
+    '<div class="t">' + esc(r.player_name) + " · " + fmt(r.readiness) + "%</div>" +
+    '<div class="s mono">' + esc(r.game_id) + " · " + r.missions_completed + "/15</div></div>" +
+    statusPill(r.finished ? "completed" : "active") + "</div>").join("");
+  box.querySelectorAll("[data-resume]").forEach((el) =>
+    el.addEventListener("click", () => guard(() => resume(el.dataset.resume))));
+}
+
+// ---------------------------------------------------------------------------
+// HUD
+// ---------------------------------------------------------------------------
+const RES_COLOR = { water: "#4cc9f0", oxygen: "#3ddc97", power: "#ffc857", fuel: "#ff7a45" };
+
+function meter(name, value, cap) {
+  const pct = cap > 0 ? Math.max(0, Math.min(100, (value / cap) * 100)) : 0;
+  const cls = pct < 20 ? "low" : pct < 45 ? "mid" : "";
+  return '<div class="meter"><div class="top"><span>' + esc(name) + "</span><b>" + value + " / " + cap +
+    '</b></div><div class="bar ' + cls + '"><i style="width:' + pct + "%;background:" +
+    (RES_COLOR[name] || "var(--accent-2)") + '"></i></div></div>';
+}
+
+async function refreshHud() {
+  const s = await api("/games/" + state.gameId + "?event_limit=0");
+  state.snapshot = s;
+  $("gamePill").textContent = s.player_name + " · " + s.difficulty;
+  $("gamePill").className = "pill info";
+  $("envPill").textContent = s.environment;
+  $("resources").innerHTML = Object.keys(s.resources)
+    .map((k) => meter(k, s.resources[k], s.resource_caps[k] || 100)).join("");
+  const suit = s.suit || {};
+  state.eva = !!suit.eva_active;
+  $("btnEva").textContent = state.eva ? "EVA: ON" : "EVA: off";
+  $("suitVal").textContent = fmt(suit.integrity, 0) + "%";
+  $("suitBar").firstElementChild.style.width = (suit.integrity || 0) + "%";
+  $("suitBar").className = "bar " + (suit.integrity < 40 ? "low" : suit.integrity < 75 ? "mid" : "");
+  const rd = (s.continuity || {}).readiness || 0;
+  $("readyVal").textContent = fmt(rd) + "% (" + ((s.continuity || {}).readiness_grade || "-") + ")";
+  $("readyBar").firstElementChild.style.width = rd + "%";
+  $("progressPill").textContent = (s.stats || {}).missions_completed + " / " + s.missions_catalogue.length;
+  $("seqInfo").textContent = "seq " + s.event_seq;
+  renderContinuity(s.continuity);
+  renderInventory(s);
+  return s;
+}
+
+function renderInventory(s) {
+  const inv = s.inventory || {}, eq = s.equipment || {};
+  const keys = Object.keys(inv);
+  $("massPill").textContent = keys.length + " types";
+  if (!keys.length) { $("inventory").innerHTML = '<div class="empty">Empty. Visit the Equipment Station.</div>'; return; }
+  $("inventory").innerHTML = keys.map((k) => {
+    const cond = eq[k] && eq[k].condition;
+    const worn = typeof cond === "number" && cond < 60;
+    return '<div class="item"><div class="grow"><div class="t">' + esc(k) + " ×" + inv[k] + "</div>" +
+      (cond === undefined ? "" : '<div class="s">condition ' + cond + "%</div>") + "</div>" +
+      (worn ? '<span class="pill warn">worn</span>' : "") +
+      '<button class="tiny" data-use="' + esc(k) + '">F</button>' +
+      (cond === undefined ? "" : '<button class="tiny" data-fix="' + esc(k) + '">Service</button>') + "</div>";
+  }).join("");
+  $("inventory").querySelectorAll("[data-use]").forEach((b) =>
+    b.addEventListener("click", () => guard(async () => {
+      const r = await api("/games/" + state.gameId + "/inventory/use", { method: "POST", json: { item_id: b.dataset.use } });
+      toast(r.message || "Used " + b.dataset.use, "ok"); refreshAll();
+    })));
+  $("inventory").querySelectorAll("[data-fix]").forEach((b) =>
+    b.addEventListener("click", () => guard(async () => {
+      const r = await api("/games/" + state.gameId + "/inventory/maintain", { method: "POST", json: { item_id: b.dataset.fix } });
+      toast("Serviced " + r.item + " → " + r.condition + "% (" + r.method + ")", "ok"); refreshAll();
+    })));
+}
+
+function renderContinuity(c) {
+  if (!c) return;
+  const mods = c.modifiers || [];
+  $("continuity").innerHTML =
+    '<div class="kv"><span class="k">readiness</span><span class="v">' + fmt(c.readiness) + "% " + esc(c.readiness_grade || "") +
+    '</span><span class="k">applied</span><span class="v">' + (c.applied_missions || []).length + " missions</span></div>" +
+    (mods.length ? '<div class="list" style="max-height:180px">' + mods.map((m) =>
+      '<div class="item" style="cursor:default"><div class="grow"><div class="t mono">' + esc(m.kind) + " · " + esc(m.key) +
+      '</div><div class="s">' + esc(m.reason || "") + '</div></div><span class="pill ' +
+      (m.value < 0 ? "bad" : "ok") + '">' + (m.value > 0 ? "+" : "") + fmt(m.value) + "</span></div>").join("") + "</div>"
+      : '<div class="empty">No pending carry-over modifiers.</div>');
+}
+
+async function tick(dt) {
+  const r = await api("/games/" + state.gameId + "/tick", {
+    method: "POST", json: { dt_seconds: dt || 1, activity: $("activity").value } });
+  const t = r.telemetry || {};
+  $("tickInfo").textContent = "O₂ " + t.oxygen_before + " → " + t.oxygen_after +
+    " · " + fmt(t.rate_per_second, 4) + "/s" + (t.alarm ? " · ⚠ " + t.alarm : "");
+  if (t.alarm) toast("Oxygen alarm: " + t.alarm, "bad");
+  await refreshHud();
+}
+
+// ---------------------------------------------------------------------------
+// Missions
+// ---------------------------------------------------------------------------
+async function refreshMissions() {
+  const rows = await api("/games/" + state.gameId + "/missions");
+  let html = "", stage = -1;
+  rows.sort((a, b) => a.stage - b.stage || a.id.localeCompare(b.id));
+  for (const m of rows) {
+    if (m.stage !== stage) { stage = m.stage; html += '<div class="stage">Stage ' + stage + "</div>"; }
+    const cls = "item " + (m.status === "locked" ? "locked " : "") + (state.mission === m.id ? "active" : "");
+    html += '<div class="' + cls + '" data-mission="' + esc(m.id) + '"><div class="grow">' +
+      '<div class="t">' + esc(loc(m.title)) + "</div>" +
+      '<div class="s">' + m.objectives_done + "/" + m.objectives_total + " objectives" +
+      (m.simulation ? " · " + esc(m.simulation) : "") + (m.grade ? " · " + esc(m.grade) : "") + "</div></div>" +
+      statusPill(m.status) + "</div>";
+  }
+  $("missions").innerHTML = html;
+  $("missions").querySelectorAll("[data-mission]").forEach((el) =>
+    el.addEventListener("click", () => guard(() => openMission(el.dataset.mission))));
+}
+
+async function openMission(id) {
+  state.mission = id;
+  const [view, blueprint] = await Promise.all([
+    api("/games/" + state.gameId + "/missions/" + id),
+    api("/content/missions/" + id),
+  ]);
+  state.view = view; state.blueprint = blueprint;
+  $("missionTitle").textContent = "Stage " + view.stage + " · " + loc(view.title);
+  $("missionSummary").textContent = loc(view.summary);
+  $("missionMeta").innerHTML = statusPill(view.status) +
+    '<span class="pill">' + esc(view.environment) + "</span>" +
+    '<span class="pill">attempts ' + view.attempts + "</span>" +
+    '<span class="pill ' + (view.mistakes ? "bad" : "") + '">mistakes ' + view.mistakes + "</span>" +
+    (view.score != null ? '<span class="pill ok">' + fmt(view.score) + "% " + esc(view.grade) + "</span>" : "");
+  $("btnStart").disabled = view.status === "completed" || view.status === "locked";
+  renderObjectives(view, blueprint);
+  const sim = view.simulation;
+  $("simPill").textContent = sim || "none";
+  $("simPill").className = "pill " + (sim ? "info" : "");
+  ["btnSimStart", "btnSimTick", "btnAutopilot", "btnSimReset", "btnScene"].forEach((b) => { $(b).disabled = !sim; });
+  if (sim) {
+    $("command").value = JSON.stringify(defaultCommand(sim), null, 0);
+    if (view.simulation_state) renderTelemetry(view.simulation_state);
+    else $("simTelemetry").innerHTML = '<div class="empty">Run not started.</div>';
+  } else {
+    $("simTelemetry").innerHTML = '<div class="empty">This mission is pure world interaction.</div>';
+  }
+  $("simNote").hidden = !view.disclaimer;
+  if (view.disclaimer) $("simNote").textContent = view.disclaimer;
+  refreshMissions();
+}
+
+function renderObjectives(view, blueprint) {
+  const specs = {};
+  (blueprint.objectives || []).concat(blueprint.side_actions || []).forEach((o) => { specs[o.id] = o; });
+  // `side_actions` is a list of ids; `side_objectives` carries the live views
+  // (title, availability, unmet). Fall back to the blueprint for older servers.
+  const done = view.completed_objectives || [];
+  const sideViews = view.side_objectives || (view.side_actions || []).map((id) => {
+    const spec = specs[id] || {};
+    return { id: id, title: spec.title, hint: spec.hint, target: spec.target,
+             animation: spec.animation, duration_ms: spec.duration_ms, optional: true,
+             points: spec.score, completed: done.indexOf(id) >= 0,
+             available: done.indexOf(id) < 0, unmet: [] };
+  });
+  const all = (view.objectives || []).map((o) => Object.assign({ side: false }, o))
+    .concat(sideViews.map((o) => Object.assign({ side: true }, o)));
+  if (!all.length) { $("objectives").innerHTML = '<div class="empty">No objectives.</div>'; return; }
+  $("objectives").innerHTML = all.map((o) => {
+    const cls = "obj " + (o.completed ? "done" : o.available ? "" : "blocked");
+    const unmet = (o.unmet || []).map((u) => "• " + (u.message || u.type + " " + (u.id || ""))).join("<br>");
+    const spec = specs[o.id] || {};
+    const fields = (spec.payload || []).map((f) => f.name + ":" + f.type).join(", ");
+    return '<div class="' + cls + '"><div class="head"><div class="grow">' +
+      "<div>" + (o.completed ? "✔ " : o.side ? "◇ " : "▸ ") + esc(loc(o.title)) + "</div>" +
+      '<div class="hint">' + esc(loc(o.hint)) + "</div></div>" +
+      (o.optional ? '<span class="pill">optional</span>' : "") +
+      (o.side ? '<span class="pill">side</span>' : "") +
+      '<span class="pill">' + fmt(o.points, 0) + " pts</span></div>" +
+      (unmet ? '<div class="unmet">' + unmet + "</div>" : "") +
+      (o.target ? '<div class="muted mono" style="font-size:11px">target ' + esc(o.target) +
+        " · anim " + esc(o.animation || "-") + " · " + (o.duration_ms || 0) + "ms" +
+        (fields ? " · payload " + esc(fields) : "") + "</div>" : "") +
+      '<div class="row"><button class="tiny" data-act="' + esc(o.id) + '"' +
+      (o.completed || !o.available ? " disabled" : "") + ">Execute (E)</button>" +
+      (spec.payload && spec.payload.length ? '<button class="tiny" data-edit="' + esc(o.id) + '">payload…</button>' : "") +
+      "</div></div>";
+  }).join("");
+  $("objectives").querySelectorAll("[data-act]").forEach((b) =>
+    b.addEventListener("click", () => guard(() => doAction(b.dataset.act))));
+  $("objectives").querySelectorAll("[data-edit]").forEach((b) =>
+    b.addEventListener("click", () => guard(() => doAction(b.dataset.edit, true))));
+}
+
+function payloadFor(actionId, interactive) {
+  const specs = {};
+  (state.blueprint.objectives || []).concat(state.blueprint.side_actions || []).forEach((o) => { specs[o.id] = o; });
+  const fields = (specs[actionId] || {}).payload || [];
+  if (!fields.length) return {};
+  const suggested = {};
+  for (const f of fields) {
+    if (f.default !== undefined && f.default !== null) suggested[f.name] = f.default;
+    else if (f.choices && f.choices.length) suggested[f.name] = f.choices[0];
+    else if (f.type === "boolean") suggested[f.name] = true;
+    else if (f.type === "number" || f.type === "integer") suggested[f.name] = f.minimum || 0;
+    else suggested[f.name] = "";
+  }
+  if (!interactive) return suggested;
+  const answer = window.prompt("Payload for " + actionId + " (JSON)", JSON.stringify(suggested));
+  if (answer === null) return null;
+  try { return JSON.parse(answer); } catch (e) { toast("Invalid JSON payload.", "bad"); return null; }
+}
+
+async function doAction(actionId, interactive) {
+  const payload = payloadFor(actionId, interactive);
+  if (payload === null) return;
+  const r = await api("/games/" + state.gameId + "/missions/" + state.mission + "/actions",
+    { method: "POST", json: { action: actionId, payload: payload } });
+  toast((r.success ? "✔ " : "✖ ") + (r.message || actionId), r.success ? "ok" : "bad");
+  pushEvent({ type: r.event || "action", payload: { action: actionId, message: r.message } });
+  if (r.completed) {
+    toast("Mission complete: " + fmt((r.report || {}).score_pct) + "% " + ((r.report || {}).grade || ""), "ok");
+  }
+  await openMission(state.mission);
+  await refreshHud();
+}
+
+// ---------------------------------------------------------------------------
+// Simulations
+// ---------------------------------------------------------------------------
+function defaultCommand(kind) {
+  return { lunar_lander: { throttle: 0.4, attitude: 0.0 },
+           microgravity_fire: { co2: 0.0, ventilation: false, scrubber: true },
+           crew_vitals: { monitored: true, oxygen_support: true, salts_administered: true,
+                          resting: true, cooling_applied: true },
+           rover_traverse: { throttle: 0.8 } }[kind] || {};
+}
+
+function renderTelemetry(t) {
+  if (!t) return;
+  const flat = {};
+  Object.keys(t).forEach((k) => {
+    const v = t[k];
+    if (v === null || typeof v !== "object") flat[k] = v;
+    else if (!Array.isArray(v)) Object.keys(v).forEach((k2) => {
+      const v2 = v[k2];
+      if (v2 === null || typeof v2 !== "object") flat[k + "." + k2] = v2;
+    });
+  });
+  const warn = (t.warnings || []).concat(t.out_of_band || []);
+  $("simTelemetry").innerHTML =
+    '<div class="row">' + statusPill(t.status || "?") +
+    '<span class="pill">t ' + fmt(t.elapsed) + "s</span>" +
+    warn.map((w) => '<span class="pill warn">' + esc(typeof w === "string" ? w : JSON.stringify(w)) + "</span>").join("") +
+    "</div>" +
+    '<div class="kv" style="margin-top:8px">' + Object.keys(flat).map((k) =>
+      '<span class="k">' + esc(k) + '</span><span class="v">' +
+      esc(typeof flat[k] === "number" ? fmt(flat[k], 2) : flat[k]) + "</span>").join("") + "</div>" +
+    (t.result ? "<pre>" + esc(JSON.stringify(t.result, null, 1)) + "</pre>" : "");
+}
+
+const simPath = () => "/games/" + state.gameId + "/missions/" + state.mission + "/simulation";
+
+async function simStart() {
+  const r = await api(simPath() + "/start", { method: "POST", json: {} });
+  renderTelemetry(r.telemetry); toast("Simulation started.", "ok"); refreshHud();
+}
+async function simTick(command) {
+  const cmd = command !== undefined ? command : JSON.parse($("command").value || "{}");
+  const r = await api(simPath() + "/tick", { method: "POST", json: { dt_seconds: 0.5, command: cmd } });
+  renderTelemetry(r.telemetry);
+  return r;
+}
+async function simReset() {
+  const r = await api(simPath() + "/reset", { method: "POST", json: {} });
+  renderTelemetry(r.telemetry); toast("Run reset.", "ok");
+}
+
+// Autopilots mirror scripts/autopilot.py so the console can prove a mission is winnable.
+const CONTROLLERS = {
+  lunar_lander(t) {
+    const alt = t.altitude_agl != null ? t.altitude_agl : t.altitude;
+    const vs = t.vertical_speed, hs = t.horizontal_speed, dx = t.distance_to_pad;
+    let throttle = 0.0;
+    const brake = (vs * vs) / (2 * Math.max(alt - 2, 1)) / 3.0;
+    if (vs < -3 || alt < 400) throttle = Math.min(1, 0.35 + brake);
+    if (alt < 60) throttle = Math.min(1, 0.42 + Math.max(0, -vs - 1.2) * 0.22);
+    let attitude = 0;
+    if (Math.abs(dx) > 6) attitude = Math.max(-1, Math.min(1, (dx > 0 ? 1 : -1) * Math.min(1, Math.abs(hs) / 6 + 0.25)));
+    if (Math.abs(hs) < 0.4 && Math.abs(dx) < 12) attitude = 0;
+    return { throttle: Number(throttle.toFixed(3)), attitude: Number(attitude.toFixed(3)) };
+  },
+  microgravity_fire(t) {
+    const f = t.fire || {}, cabin = t.cabin || {}, sys = t.systems || {};
+    if (!f.suppressed && f.intensity > 0.02 && sys.co2_charges > 0.05) {
+      const needed = f.intensity / 1.15;
+      const byO2 = Math.max(0, (cabin.oxygen_pct - 19.0) / 1.9);
+      const byCo2 = Math.max(0, (4800 - cabin.co2_ppm) / 9000);
+      const dose = Math.min(needed, byO2, byCo2, sys.co2_charges);
+      if (dose > 0.005) return { co2: Number(Math.min(1, dose / 0.5).toFixed(3)), ventilation: false, scrubber: false };
+    }
+    return { co2: 0, ventilation: false, scrubber: true };
+  },
+  crew_vitals() {
+    return { monitored: true, oxygen_support: true, salts_administered: true, resting: true, cooling_applied: true };
+  },
+  rover_traverse(t) {
+    const wps = t.waypoints || [];
+    for (const w of wps) if (w.required !== false && !w.reached) return { target: w.id, throttle: 0.85 };
+    return { throttle: 0.4 };
+  },
+};
+
+async function autopilot() {
+  if (state.autopilot) { state.autopilot = false; $("btnAutopilot").textContent = "Autopilot"; return; }
+  const kind = state.view && state.view.simulation;
+  const controller = CONTROLLERS[kind];
+  if (!controller) return toast("No autopilot for " + kind, "bad");
+  state.autopilot = true; $("btnAutopilot").textContent = "Stop autopilot";
+  try {
+    let r;
+    try { r = await api(simPath(), {}); }
+    catch (e) { r = null; }            // 404 = no run yet, start one below
+    if (!r || !r.telemetry || r.telemetry.status !== "running") {
+      await simStart();
+      r = await api(simPath(), {});
+    }
+    for (let i = 0; i < 1400 && state.autopilot; i++) {
+      const t = r.telemetry || {};
+      if (t.status && t.status !== "running") break;
+      r = await simTick(controller(t));
+    }
+    const t = r.telemetry || {};
+    toast("Run " + t.status + (t.result ? " · " + fmt(t.result.score_pct) + "% " + (t.result.grade || "") : ""),
+          t.status === "succeeded" ? "ok" : "warn");
+  } finally {
+    state.autopilot = false; $("btnAutopilot").textContent = "Autopilot";
+    if (state.mission) await openMission(state.mission);
+    await refreshHud();
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Events (WebSocket with polling fallback)
+// ---------------------------------------------------------------------------
+function pushEvent(e) {
+  const box = $("events");
+  if (box.querySelector(".empty")) box.innerHTML = "";
+  const kind = /fail|error|mistake|critical/.test(e.type || "") ? "bad"
+    : /succeed|complete|success/.test(e.type || "") ? "ok"
+    : /warn|alarm|degrad/.test(e.type || "") ? "warn" : "info";
+  const el = document.createElement("div");
+  el.className = kind;
+  const payload = e.payload ? JSON.stringify(e.payload) : "";
+  el.textContent = (e.seq != null ? "#" + e.seq + " " : "") + (e.type || "event") +
+    (payload ? " " + payload.slice(0, 160) : "");
+  box.prepend(el);
+  while (box.children.length > 120) box.lastElementChild.remove();
+}
+
+function connectStream() {
+  if (state.ws) { try { state.ws.close(); } catch (e) {} state.ws = null; }
+  if (!state.gameId) return;
+  const proto = window.location.protocol === "https:" ? "wss:" : "ws:";
+  let url = proto + "//" + window.location.host + API + "/games/" + state.gameId + "/stream?after_seq=" + state.seq;
+  if (state.token) url += "&token=" + encodeURIComponent(state.token);
+  let ws;
+  try { ws = new WebSocket(url); } catch (e) { $("wsPill").textContent = "ws unavailable"; return; }
+  state.ws = ws;
+  ws.onopen = () => { $("wsPill").textContent = "ws live"; $("wsPill").className = "pill ok"; };
+  ws.onmessage = (ev) => {
+    let msg; try { msg = JSON.parse(ev.data); } catch (e) { return; }
+    if (msg.type === "stream.ready") {
+      state.seq = msg.event_seq || 0;
+      guard(refreshService);  // the socket is registered server-side by now
+      return;
+    }
+    if (msg.type === "heartbeat") return;
+    const events = msg.events || (msg.event ? [msg.event] : [msg]);
+    events.forEach((e) => { pushEvent(e); if (e.seq) state.seq = Math.max(state.seq, e.seq); });
+    $("seqInfo").textContent = "seq " + state.seq;
+  };
+  ws.onclose = () => {
+    $("wsPill").textContent = "ws off"; $("wsPill").className = "pill"; state.ws = null;
+    guard(refreshService);
+  };
+  ws.onerror = () => { $("wsPill").textContent = "ws error"; $("wsPill").className = "pill bad"; };
+}
+
+// ---------------------------------------------------------------------------
+// Service diagnostics (GET /ready) – the operator's view of the fan-out
+// ---------------------------------------------------------------------------
+async function refreshService() {
+  let r;
+  // A degraded backend answers 503 with the same body: render it, do not hide it.
+  try { r = await api("/ready"); }
+  catch (e) { r = state.last; if (!r || !r.status) throw e; }
+  const s = r.stream || {};
+  const cache = r.nasa_cache || {};
+  $("svcPill").textContent = r.status || "unknown";
+  $("svcPill").className = "pill " + (r.status === "ready" ? "ok" : "bad");
+  const rows = [
+    ["database", r.database ? "reachable" : "unreachable"],
+    ["content", r.content ? r.missions_loaded + " missions · " + r.items_loaded + " items" : "not loaded"],
+    ["sockets", (s.subscribers || 0) + " on " + (s.games_watched || 0) + " save(s)"],
+    ["published", (s.published_events || 0) + " events / " + (s.published_batches || 0) + " batches"],
+    ["db in flight", r.db_calls_in_flight || 0],
+    ["nasa cache", (cache.entries || 0) + " entries · " + (cache.hits || 0) + " hits"]
+  ];
+  $("service").innerHTML = rows.map((row) =>
+    '<span class="k">' + esc(row[0]) + '</span><span class="v">' + esc(row[1]) + "</span>").join("");
+  $("fanoutInfo").textContent = "fan-out: " + (s.subscribers || 0) + " sockets · " +
+    (s.published_events || 0) + " events published";
+  $("svcInfo").textContent = "probed " + new Date().toLocaleTimeString();
+  return r;
+}
+
+// ---------------------------------------------------------------------------
+// Inspector / misc
+// ---------------------------------------------------------------------------
+async function inspect() {
+  const what = $("inspectWhat").value;
+  const g = "/games/" + state.gameId;
+  const paths = { snapshot: g, mission: g + "/missions/" + state.mission, report: g + "/reports",
+                  science: g + "/science", earth: "/earth/catalogue", validation: "/content/validation",
+                  ready: "/ready" };
+  let body;
+  if (what === "last") body = state.last;
+  else {
+    const sessionless = ["earth", "validation", "ready"];
+    if (!state.gameId && sessionless.indexOf(what) === -1) return toast("No session.", "bad");
+    if (what === "mission" && !state.mission) return toast("Select a mission.", "bad");
+    body = await api(paths[what]);
+  }
+  $("inspector").textContent = JSON.stringify(body, null, 1);
+  $("inspectInfo").textContent = what + " · " + new Date().toLocaleTimeString();
+}
+
+async function refreshAll() {
+  if (!state.gameId) return;
+  await Promise.all([refreshHud(), refreshMissions()]);
+  if (state.mission) await openMission(state.mission);
+}
+
+async function guard(fn) {
+  try { await fn(); }
+  catch (e) { toast(e.message || String(e), "bad"); pushEvent({ type: "client.error", payload: { message: String(e.message || e) } }); }
+}
+
+// ---------------------------------------------------------------------------
+// Wiring
+// ---------------------------------------------------------------------------
+$("btnNew").addEventListener("click", () => guard(newGame));
+$("btnResume").addEventListener("click", () => guard(() => resume()));
+$("btnSaves").addEventListener("click", () => guard(listSaves));
+$("btnTick").addEventListener("click", () => guard(() => tick(1)));
+$("btnLoop").addEventListener("click", () => {
+  if (state.loop) { clearInterval(state.loop); state.loop = null; $("btnLoop").textContent = "Start life-support loop"; return; }
+  if (!state.gameId) return toast("Create a campaign first.", "bad");
+  state.loop = setInterval(() => guard(() => tick(1)), 1000);
+  $("btnLoop").textContent = "Stop life-support loop";
+});
+$("btnEva").addEventListener("click", () => guard(async () => {
+  const r = await api("/games/" + state.gameId + "/suit/eva", { method: "POST", json: { active: !state.eva } });
+  state.eva = !state.eva;
+  toast("EVA " + (state.eva ? "active – oxygen drains faster" : "off"), state.eva ? "warn" : "ok");
+  await refreshHud();
+}));
+$("btnStart").addEventListener("click", () => guard(async () => {
+  if (!state.mission) return toast("Select a mission.", "bad");
+  await api("/games/" + state.gameId + "/missions/" + state.mission + "/start", { method: "POST" });
+  toast("Entered " + state.mission, "ok"); await openMission(state.mission); await refreshHud();
+}));
+$("btnRefresh").addEventListener("click", () => guard(() => state.mission ? openMission(state.mission) : refreshAll()));
+$("btnInteractions").addEventListener("click", () => guard(async () => {
+  if (!state.mission) return toast("Select a mission.", "bad");
+  const r = await api("/games/" + state.gameId + "/missions/" + state.mission + "/interactions");
+  $("missionExtra").innerHTML = "<pre>" + esc(JSON.stringify(r, null, 1)) + "</pre>";
+}));
+$("btnReport").addEventListener("click", () => guard(async () => {
+  if (!state.mission) return toast("Select a mission.", "bad");
+  const r = await api("/games/" + state.gameId + "/missions/" + state.mission + "/report");
+  $("missionExtra").innerHTML = "<pre>" + esc(JSON.stringify(r, null, 1)) + "</pre>";
+}));
+$("btnSimStart").addEventListener("click", () => guard(simStart));
+$("btnSimTick").addEventListener("click", () => guard(() => simTick()));
+$("btnSimReset").addEventListener("click", () => guard(simReset));
+$("btnAutopilot").addEventListener("click", () => guard(autopilot));
+$("btnScene").addEventListener("click", () => guard(async () => {
+  const r = await api(simPath() + "/scene");
+  $("missionExtra").innerHTML = "<pre>" + esc(JSON.stringify(r, null, 1).slice(0, 20000)) + "</pre>";
+}));
+$("btnStream").addEventListener("click", () => guard(async () => connectStream()));
+$("btnClearLog").addEventListener("click", () => { $("events").innerHTML = '<div class="empty">No events.</div>'; });
+$("btnInspect").addEventListener("click", () => guard(inspect));
+$("btnReady").addEventListener("click", () => guard(refreshService));
+
+(async function boot() {
+  restore();
+  try {
+    const h = await api("/health");
+    $("dot").classList.add("on");
+    $("conn").textContent = "online · v" + (h.version || "?");
+  } catch (e) { $("conn").textContent = "backend unreachable"; }
+  guard(refreshService);
+  if (state.gameId) {
+    try { await refreshAll(); connectStream(); }
+    catch (e) { state.gameId = null; $("gamePill").textContent = "session expired"; }
+  }
+})();
+</script>
+</body>
+</html>

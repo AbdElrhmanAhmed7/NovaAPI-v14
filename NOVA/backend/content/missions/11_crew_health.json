@@ -1,0 +1,166 @@
+{
+  "id": "crew_health",
+  "stage": 4,
+  "title": {"en": "Health Monitoring", "ar": "Health Monitoring"},
+  "summary": {"en": "Monitor a crew member's simulated vitals, fetch the right supplies and stabilise them.", "ar": "Monitor a crew member's simulated vitals, fetch the right supplies and stabilise them."},
+  "environment": "medical_bay",
+  "estimated_minutes": 8,
+  "requires_missions": ["mars_arrival"],
+  "simulation": "crew_vitals",
+  "briefing": [
+    {"en": "SIMULATION ONLY: invented numbers, no medical advice.", "ar": "SIMULATION ONLY: invented numbers, no medical advice."},
+    {"en": "Monitor first, treat second. Never the other way round.", "ar": "Monitor first, treat second. Never the other way round."}
+  ],
+  "objectives": [
+    {
+      "id": "reach_medical_station",
+      "title": {"en": "Reach the medical station", "ar": "Reach the medical station"},
+      "hint": {"en": "The crew specialist is resting in the medical bay.", "ar": "The crew specialist is resting in the medical bay."},
+      "target": "medical_bed",
+      "animation": "walk_to",
+      "duration_ms": 1200,
+      "effects": {"world": {"medical.at_station": true}},
+      "score": 6
+    },
+    {
+      "id": "collect_medical_supplies",
+      "title": {"en": "Collect supplies from the locker", "ar": "Collect supplies from the locker"},
+      "hint": {"en": "Equipment locker: bio-monitor, oxygen mask, hydration salts, medkit.", "ar": "Equipment locker: bio-monitor, oxygen mask, hydration salts, medkit."},
+      "target": "medical_locker",
+      "animation": "pickup",
+      "duration_ms": 1800,
+      "require_previous": false,
+      "effects": {"items": {"bio_monitor": 1, "oxygen_mask": 1, "hydration_salts": 1, "medkit": 1}},
+      "score": 8
+    },
+    {
+      "id": "attach_bio_monitor",
+      "title": {"en": "Attach the bio-monitor", "ar": "Attach the bio-monitor"},
+      "hint": {"en": "Clip the monitor to the crew member and start telemetry.", "ar": "Clip the monitor to the crew member and start telemetry."},
+      "target": "crew_member",
+      "animation": "attach_sensor",
+      "duration_ms": 2200,
+      "requires": [{"type": "item", "id": "bio_monitor"}, {"type": "objective", "id": "reach_medical_station"}],
+      "effects": {"sim": {"monitored": true}, "world": {"medical.monitored": true}, "equipment_wear": {"bio_monitor": 2}},
+      "score": 14,
+      "success_message": {"en": "Telemetry live: SpO2 low, heart rate elevated.", "ar": "Telemetry live: SpO2 low, heart rate elevated."}
+    },
+    {
+      "id": "review_vitals",
+      "title": {"en": "Review the vitals readout", "ar": "Review the vitals readout"},
+      "hint": {"en": "Read the simulated values and identify the pattern.", "ar": "Read the simulated values and identify the pattern."},
+      "target": "vitals_display",
+      "animation": "read_terminal",
+      "duration_ms": 1600,
+      "requires": [{"type": "sim", "path": "monitored", "op": "eq", "value": true, "hint": {"en": "Attach the monitor first.", "ar": "Attach the monitor first."}}],
+      "effects": {"world": {"medical.reviewed": true}, "flags_set": ["medical.reviewed"]},
+      "score": 10
+    },
+    {
+      "id": "administer_oxygen",
+      "title": {"en": "Provide oxygen support", "ar": "Provide oxygen support"},
+      "hint": {"en": "Fit the oxygen mask (simulated intervention).", "ar": "Fit the oxygen mask (simulated intervention)."},
+      "target": "crew_member",
+      "animation": "treat",
+      "duration_ms": 2400,
+      "requires": [{"type": "item", "id": "oxygen_mask"}, {"type": "flag", "id": "medical.reviewed"}],
+      "effects": {"items": {"oxygen_mask": -1}, "sim": {"oxygen_support": true}, "resources": {"oxygen": -5}},
+      "score": 16
+    },
+    {
+      "id": "give_hydration_salts",
+      "title": {"en": "Give hydration salts and rest", "ar": "Give hydration salts and rest"},
+      "hint": {"en": "Simulated rehydration and a rest period.", "ar": "Simulated rehydration and a rest period."},
+      "target": "crew_member",
+      "animation": "treat",
+      "duration_ms": 2400,
+      "requires": [{"type": "item", "id": "hydration_salts"}, {"type": "flag", "id": "medical.reviewed"}],
+      "effects": {"items": {"hydration_salts": -1}, "sim": {"salts_administered": true, "resting": true}, "resources": {"water": -3}},
+      "score": 16
+    },
+    {
+      "id": "stabilise_crew",
+      "title": {"en": "Keep the crew member stable", "ar": "Keep the crew member stable"},
+      "hint": {"en": "Run the vitals simulation until all values stay in band for 30 s.", "ar": "Run the vitals simulation until all values stay in band for 30 s."},
+      "target": "vitals_display",
+      "animation": "monitor",
+      "duration_ms": 1500,
+      "requires": [{"type": "sim", "path": "status", "op": "eq", "value": "succeeded", "hint": {"en": "Run the vitals simulation to a stable result.", "ar": "Run the vitals simulation to a stable result."}}],
+      "effects": {"world": {"medical.stabilised": true}, "flags_set": ["crew_stable"]},
+      "score": 20,
+      "success_message": {"en": "Crew member stable. Simulation complete.", "ar": "Crew member stable. Simulation complete."}
+    },
+    {
+      "id": "log_medical_report",
+      "title": {"en": "Log the medical report", "ar": "Log the medical report"},
+      "hint": {"en": "Write the simulated outcome to the crew log.", "ar": "Write the simulated outcome to the crew log."},
+      "target": "medical_terminal",
+      "animation": "read_terminal",
+      "duration_ms": 1400,
+      "requires": [{"type": "item", "id": "data_core"}, {"type": "flag", "id": "crew_stable"}],
+      "effects": {"flags_set": ["medical_logged"], "world": {"medical.logged": true}, "readiness": 2.0},
+      "score": 10
+    }
+  ],
+  "hazards": [
+    {
+      "action": "administer_oxygen",
+      "missing_any": ["medical.reviewed"],
+      "effects": {"resources": {"oxygen": -4}, "readiness": -3.0},
+      "message": {"en": "Never treat before monitoring – you wasted oxygen guessing.", "ar": "Never treat before monitoring – you wasted oxygen guessing."},
+      "mistake_penalty": 8.0
+    },
+    {
+      "action": "give_hydration_salts",
+      "missing_any": ["medical.reviewed"],
+      "effects": {"resources": {"water": -3}, "readiness": -3.0},
+      "message": {"en": "Without a reading you cannot know what the crew member needs.", "ar": "Without a reading you cannot know what the crew member needs."},
+      "mistake_penalty": 8.0
+    }
+  ],
+  "scoring": {"mistake_penalty": 6.0, "time_target_seconds": 480.0, "time_bonus_max": 8.0, "pass_score_pct": 60.0},
+  "completion": {
+    "effects": {"world": {"medical.done": true}},
+    "unlocks": ["freefall_fire"],
+    "summary": {"en": "Crew stabilised inside the simulation. Emergency response training unlocked.", "ar": "Crew stabilised inside the simulation. Emergency response training unlocked."},
+    "continuity": [
+      {
+        "key": "medical:water",
+        "label": {"en": "Medical discipline → water reserve", "ar": "Medical discipline → water reserve"},
+        "kind": "resource",
+        "metric": "score_pct",
+        "bands": [
+          {"min": 90, "value": 6, "reason": {"en": "No wasted consumables.", "ar": "No wasted consumables."}},
+          {"min": 0, "value": -6, "reason": {"en": "Guesswork wasted water and oxygen.", "ar": "Guesswork wasted water and oxygen."}}
+        ]
+      },
+      {
+        "key": "medical_readiness",
+        "label": {"en": "Crew care → readiness", "ar": "Crew care → readiness"},
+        "kind": "readiness",
+        "metric": "sim:result.score_pct",
+        "bands": [
+          {"min": 80, "value": 6, "reason": {"en": "Fast, correct stabilisation.", "ar": "Fast, correct stabilisation."}},
+          {"min": 0, "value": -4, "reason": {"en": "Slow stabilisation.", "ar": "Slow stabilisation."}}
+        ]
+      }
+    ]
+  },
+  "science_notes": [
+    {
+      "topic": {"en": "Physiology changes in spaceflight", "ar": "Physiology changes in spaceflight"},
+      "detail": {"en": "Microgravity shifts body fluids headward, reduces plasma volume and deconditions the cardiovascular system; hydration and exercise are standard countermeasures.", "ar": "Microgravity shifts body fluids headward, reduces plasma volume and deconditions the cardiovascular system; hydration and exercise are standard countermeasures."},
+      "source": "NASA – Human Research Program (curated summary)",
+      "url": "https://www.nasa.gov/hrp/",
+      "simulated": true
+    }
+  ],
+  "world_objects": [
+    {"id": "medical_bed", "label": {"en": "Medical Bed", "ar": "Medical Bed"}, "kind": "station", "position": [0, 0, 4], "interactions": ["reach_medical_station"]},
+    {"id": "medical_locker", "label": {"en": "Equipment Locker", "ar": "Equipment Locker"}, "kind": "locker", "position": [-4, 0, 2], "interactions": ["collect_medical_supplies"]},
+    {"id": "crew_member", "label": {"en": "Crew Specialist", "ar": "Crew Specialist"}, "kind": "npc", "position": [0, 0.6, 4], "interactions": ["attach_bio_monitor", "administer_oxygen", "give_hydration_salts"], "prompt": {"en": "E – Interact (simulation only)", "ar": "E – Interact (simulation only)"}},
+    {"id": "vitals_display", "label": {"en": "Vitals Display", "ar": "Vitals Display"}, "kind": "terminal", "position": [1.6, 1.2, 4], "interactions": ["review_vitals", "stabilise_crew"]},
+    {"id": "medical_terminal", "label": {"en": "Medical Terminal", "ar": "Medical Terminal"}, "kind": "terminal", "position": [4, 0, 2], "interactions": ["log_medical_report"]}
+  ],
+  "disclaimer": "Educational game simulation with invented vital signs. This is NOT medical guidance and must never be used for real health decisions."
+}

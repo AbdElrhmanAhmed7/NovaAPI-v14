@@ -1,0 +1,8 @@
+-r requirements.txt
+pytest>=8.0,<10.0
+pytest-asyncio>=0.23
+pytest-cov>=5.0
+# A WebSocket suite must fail, not hang, when a frame never arrives.
+pytest-timeout>=2.3
+ruff>=0.6
+mypy>=1.10
